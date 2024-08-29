@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model
+   href="http://download.ros.org/schema/package_format3.xsd"
+   schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>turtlebot2i_safety</name>
+  <version>0.0.0</version>
+  <description>Safety nodes for Turtlebot2i</description>
+  <maintainer email="larissa.silva@virtus.ufcg.edu.br">larissa</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_python</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>geometry_msgs</depend>
+  <depend>example_interfaces</depend>
+  <depend>message_filters</depend>
+  <depend>nav_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>kobuki_ros_interfaces</depend>
+  <depend>rosidl_default_runtime</depend>
+  <depend>turtlebot2i_interfaces</depend> 
+  
+  
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

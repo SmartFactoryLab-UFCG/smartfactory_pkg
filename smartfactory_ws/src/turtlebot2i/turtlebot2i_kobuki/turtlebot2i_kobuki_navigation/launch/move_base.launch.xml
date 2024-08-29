@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<launch>
+  
+  <arg name="odom_frame_id"   default="odom"/>
+  <arg name="base_frame_id"   default="base_footprint"/>
+  <arg name="global_frame_id" default="map"/>
+  <arg name="odom_topic"      default="odom" />
+  <arg name="laser_topic"     default="scan" />
+  <!-- <arg name="custom_param_file" default="$(find-pkg-share turtlebot2i_navigation)/param/dummy.yaml"/> -->
+
+  <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py" >
+  <param from="$(find-pkg-share turtlebot2i_navigation)/param/dummy.yaml"  />
+  </include>
+    
+  <!-- <node pkg="nav2_bringup" exec="move_base" name="move_base" >
+    <param from="$(find-pkg-share turtlebot2i_navigation)/config/costmap_common_params.yaml"/>
+    <param from="$(find-pkg-share turtlebot2i_navigation)/config/costmap_common_params.yaml" name="local_costmap" />
+    <param from="$(find-pkg-share turtlebot2i_navigation)/config/global_costmap_params.yaml" />
+    <param from="$(find-pkg-share turtlebot2i_navigation)/config/local_costmap_params.yaml" />
+    <param from="$(find-pkg-share turtlebot2i_navigation)/config/base_local_planner_params.yaml" />
+    
+
+    reset frame_id parameters using user input data
+    <param name="global_costmap/global_frame" value="$(var global_frame_id)"/>
+    <param name="global_costmap/robot_base_frame" value="$(var base_frame_id)"/>
+    <param name="local_costmap/global_frame" value="$(var odom_frame_id)"/>
+    <param name="local_costmap/robot_base_frame" value="$(var base_frame_id)"/>
+    <param name="DWAPlannerROS/global_frame_id" value="$(var odom_frame_id)"/>
+
+    <remap from="cmd_vel" to="navigation_velocity_smoother/raw_cmd_vel"/>
+    <remap from="odom" to="$(var odom_topic)"/>
+    <remap from="scan" to="$(var laser_topic)"/>
+  </node> -->
+
+<!--  </group>-->
+  
+</launch>

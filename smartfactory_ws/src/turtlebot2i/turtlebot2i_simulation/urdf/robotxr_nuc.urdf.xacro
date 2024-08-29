@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robotxr_nuc">
+    <!-- Properties of the power bank -->
+    <xacro:property name="length_nuc" value="0.115" />
+    <xacro:property name="width_nuc" value="0.111" />
+    <xacro:property name="height_nuc" value="0.051" />
+    <xacro:property name="mass_nuc" value="1.0" />
+    <!-- Adjust mass_nuc as needed -->
+
+    <xacro:macro name="robotxr_nuc" params="parent">
+        <!-- Base link for the power bank -->
+        <link name="robotxr_nuc_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${length_nuc} ${width_nuc} ${height_nuc}" />
+                </geometry>
+                <material name="black">
+                    <color rgba="0 0 0 1" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${length_nuc} ${width_nuc} ${height_nuc}" />
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="${mass_nuc}" />
+                <inertia ixx="${mass_nuc/12.0 * (width_nuc*width_nuc + height_nuc*height_nuc)}" ixy="0" ixz="0" iyy="${mass_nuc/12.0 * (height_nuc*height_nuc + length_nuc*length_nuc)}" iyz="0" izz="${mass_nuc/12.0 * (width_nuc*width_nuc + length_nuc*length_nuc)}" />
+            </inertial>
+        </link>
+        <gazebo reference="robotxr_nuc_link">
+            <material>Gazebo/Black</material>
+            <!-- <selfCollide>true</selfCollide> -->
+            <gravity>true</gravity>
+        </gazebo>
+
+        <!-- Assuming there is a parent link to attach this power bank -->
+        <joint name="robotxr_nuc_joint" type="fixed">
+            <origin xyz="-0.05 0.0 0.166" rpy="0 0 0"/>
+            <!-- Correct the origin as necessary -->
+            <parent link="${parent}"/>
+            <child link="robotxr_nuc_link" />
+        </joint>
+    </xacro:macro>
+
+</robot>

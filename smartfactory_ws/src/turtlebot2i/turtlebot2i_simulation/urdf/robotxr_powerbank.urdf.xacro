@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robotxr_powerbank">
+  <!-- Properties of the power bank -->
+  <xacro:property name="length" value="0.17" />
+  <xacro:property name="width" value="0.15" />
+  <xacro:property name="height" value="0.05" />
+  <xacro:property name="mass" value="1.0" /> <!-- Adjust mass as needed -->
+
+  <xacro:macro name="robotxr_powerbank" params="parent">
+    <!-- Base link for the power bank -->
+    <link name="robotxr_powerbank_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}" />
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="${mass}" />
+        <inertia 
+          ixx="${mass/12.0 * (width*width + height*height)}" 
+          ixy="0" 
+          ixz="0" 
+          iyy="${mass/12.0 * (height*height + length*length)}" 
+          iyz="0" 
+          izz="${mass/12.0 * (width*width + length*length)}" />
+      </inertial>
+    </link>
+    <gazebo reference="robotxr_powerbank_link">
+        <material>Gazebo/Black</material>
+        <!-- <selfCollide>true</selfCollide> -->
+        <gravity>true</gravity>
+    </gazebo>
+
+    <!-- Assuming there is a parent link to attach this power bank -->
+    <joint name="robotxr_powerbank_joint" type="fixed">
+      <origin xyz="-0.05 0.0 0.220" rpy="0 0 0"/> <!-- Correct the origin as necessary -->
+      <parent link="${parent}"/>
+      <child link="robotxr_powerbank_link" />
+    </joint>
+  </xacro:macro>
+
+</robot>

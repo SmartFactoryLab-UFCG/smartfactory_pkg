@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+    - Base      : kobuki
+    - Stacks    : interbotix
+    - 3d Sensor : astra
+    - Lidar     : rplidar
+
+    - arm : TODO: supported arms?
+-->    
+<robot name="turtlebot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="gazebo_plugins" default="true"/>
+  <xacro:arg name="use_nominal_extrinsics" default="false" />
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/turtlebot_library.urdf.xacro" />
+  <xacro:kobuki/>
+
+  <xacro:robotxr_stack_interbotix parent="base_link"/>
+  <xacro:robotxr_sensor_astra parent="base_link"/>
+  <xacro:sensor_rplidar parent="base_link"/>
+  <xacro:robotxr_powerbank parent="base_link"/>
+  <xacro:robotxr_nuc parent="base_link"/>
+
+</robot>

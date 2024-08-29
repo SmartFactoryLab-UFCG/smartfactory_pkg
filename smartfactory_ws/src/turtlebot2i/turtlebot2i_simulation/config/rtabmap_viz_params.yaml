@@ -1,0 +1,32 @@
+# Configuration parameters for RTAB-Map visualization from the demo_turtlebot2i_mapping.launch of the PoC.
+rtabmap_viz:  # Name of the executable package.
+  ros__parameters:
+    # PoC parameters
+    subscribe_depth: false  # Subscribes to the depth image topic.
+    subscribe_scan: true  # Subscribes to the laser scan topic.
+    frame_id: "base_footprint"  # Fixed reference frame ID, typically associated with the sensor.
+    wait_for_transform: 0.2  # Maximum wait time for a TF transformation before failing.
+    # RTAB-Map parameters for ROS Humble
+    subscribe_rgb: false  # If true, subscribes to the RGB image topics.
+    subscribe_stereo: false  # If true, subscribes to the stereo image topics.
+    subscribe_rgbd: true  # If true, subscribes to the RGB-D image topics.
+    rgbd_cameras: 1  # Number of RGB-D cameras to subscribe to.
+    subscribe_sensor_data: false  # Subscribes to the sensor data topic.
+    subscribe_odom_info: true  # Subscribes to the odometry information topic.
+    subscribe_user_data: false  # Subscribes to the user data topic.
+    subscribe_scan_cloud: false  # Subscribes to the scan cloud topic.
+    subscribe_scan_descriptor: false  # Subscribes to the scan descriptor topic.
+    queue_size: 40  # Queue size for topic messages.
+    qos_image: 2  # Quality of Service level for image topics.
+    qos_camera_info: 2  # Quality of Service level for camera information topics.
+    qos_scan: 2  # Quality of Service level for scan topics.
+    qos_odom: 2  # Quality of Service level for odometry topics.
+    qos_user_data: 2  # Quality of Service level for user data topics.
+    approx_sync: True  # If true, uses approximate synchronization for input topics.
+    # Additional described parameters
+    Reg/Strategy: "0"  # Registration strategy used for localization. Value "0" indicates the default method.
+    Reg/Force3DoF: "true"  # Forces mapping to be in 3 DoF (2D + rotation around the Z axis).
+    RGBD/NeighborLinkRefining: "true"  # Refines links between neighboring nodes to improve map quality.
+    Grid/RangeMin: "0.2"  # Defines the minimum range for the grid/laser sensor.
+    Optimizer/GravitySigma: "0"  # Disables IMU constraints in optimization by setting gravity variance to zero.
+    Odom/Strategy: "1"  # Odometry strategy. Value "0" indicates standard odometry without using external methods.

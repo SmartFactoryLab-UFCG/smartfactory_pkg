@@ -1,0 +1,27 @@
+# Parameters for RGB-D synchronization
+/rgbd_sync:
+  ros__parameters:
+    approx_sync: true # Use approximate synchronization for the input topics. If false, the RGB and depth images and the camera info must have the same timestamp.
+    approx_sync_max_interval: 0.01 # Max interval (sec) between topics to be synchronized (when approx_sync is false). 0 means infinite.
+    compressed_rate: 0.0 # Throttling rate at which rgbd_image/compressed topic will be published. 0 means no throttling.
+    decimation: 1 # Decimate resolution of the image while adjusting camera info values.
+    depth_scale: 1.0 # Can be used to re-scale the depth values of the depth image.
+    diagnostic_updater:
+      period: 1.0
+    qos: 1 # qos (Quality of Service) argument should match the published topics QoS (1=RELIABLE, 2=BEST EFFORT). ROS1 was always RELIABLE.
+    qos_camera_info: 2
+    qos_overrides:
+      /clock:
+        subscription:
+          depth: 1
+          durability: volatile
+          history: keep_last
+          reliability: best_effort
+      /parameter_events:
+        publisher:
+          depth: 1000
+          durability: volatile
+          history: keep_last
+          reliability: reliable
+    queue_size: 40 # Size of message queue for each synchronized topic.
+    use_sim_time: false

@@ -1,0 +1,49 @@
+# This configuration file sets parameters for the RTAB-Map node used in the TurtleBot2i mapping process.
+# The parameters include general settings, point cloud and mapping settings, synchronization settings,
+# and registration strategies.
+sllidar_node: 
+  ros__parameters:
+    # General settings
+    database_path: "~/.ros/rtabmap.db"  # Path to the database where RTAB-Map data is saved.
+    frame_id: "base_footprint"  # Reference frame ID for sensor data association.
+    subscribe_depth: true  # Subscribes to depth topics for 3D data.
+    subscribe_scan: true  # Subscribes to laser scan topics.
+    subscribe_rgb: true  # Subscribes to RGB image topics.
+    odom_frame_id: ""  # Odom frame ID; leave blank to use internal odometry.
+    latch: true  # Latches the last message until a new subscriber connects.
+    map_cleanup: true  # Enables automatic map cleanup to remove unnecessary data.
+
+    # Point cloud and mapping settings
+    cloud_output_voxelized: true  # Point cloud output will be voxelized to reduce the number of points.
+    octomap_tree_depth: 16  # OctoMap tree depth for 3D map detailing.
+
+    LaserScan/MaxRange: "10"  # Maximum range for laser readings.
+    LaserScan/MinRange: "0.1"  # Minimum range for laser readings.
+    odom_tf_linear_variance: 0.001  # Linear variance for odometry transformations, affecting confidence.
+    odom_tf_angular_variance: 0.001  # Angular variance for odometry transformations, affecting confidence.
+    map_filter_radius: 0.0  # Filter radius applied to the map; "0.0" means no filter.
+    map_filter_angle: 30.0  # Filter angle applied to the map; "30.0" might be a typo, as it is not formatted correctly.
+
+    map_always_update: false  # Updates the map at each iteration regardless of changes.
+    map_empty_ray_tracing: true  # Enables ray tracing in empty areas to improve the map.
+    cloud_subtract_filtering: true  # Filters point clouds by subtracting static areas between scans.
+    cloud_subtract_filtering_min_neighbors: 2  # Minimum number of neighbors for a point to be retained in filtering.
+
+    RGBD/NeighborLinkRefining: "true"  # Refines neighbor links to improve mapping.
+    Grid/RangeMin: "0.2"  # Sets the effective minimum range for the grid sensor.
+
+    # Synchronization settings
+    tf_delay: 0.05  # Delay considered for TF transformations for synchronization.
+    tf_tolerance: 0.1  # Time tolerance for TF transformations.
+    queue_size: 40  # Queue size for topic messages.
+    approx_sync: true  # Uses approximate synchronization for input topics.
+
+    # Registration strategies
+    Reg/Strategy: "1"  # Registration strategy for localization, "1" for ICP (Iterative Closest Point).
+    RGBD/Force3DoF: "true"  # Forces mapping to be in 3 degrees of freedom (planar, no elevation).
+    qos_image: 2  # QoS settings for image topics.
+    qos_camera_info: 2  # QoS settings for camera info topics.
+    qos_scan: 2  # QoS settings for scan topics.
+    qos_odom: 2  # QoS settings for odometry topics.
+    qos_user_data: 2  # QoS settings for user data topics.
+  

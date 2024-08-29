@@ -1,0 +1,75 @@
+# Configuration file for TurtleBot2i mapping using RTAB-Map. This file contains parameters 
+# for the point cloud processing and synchronization of RGBD images.
+/point_cloud_xyzrgb:
+  ros__parameters:
+    StereoBM/BlockSize: '15' # See cv::StereoBM - Block size used in stereo block matching algorithm
+    StereoBM/Disp12MaxDiff: '-1' # See cv::StereoBM - Maximum allowed difference in the left-right disparity check
+    StereoBM/MinDisparity: '0' # See cv::StereoBM - Minimum disparity value for stereo matching
+    StereoBM/NumDisparities: '128' # See cv::StereoBM - Number of disparities to search (must be divisible by 16)
+    StereoBM/PreFilterCap: '31' # See cv::StereoBM - Cap value used in the pre-filtering step
+    StereoBM/PreFilterSize: '9' # See cv::StereoBM - Size of the pre-filter window
+    StereoBM/SpeckleRange: '4' # See cv::StereoBM - Maximum allowed speckle size to remove small regions of noise
+    StereoBM/SpeckleWindowSize: '100' # See cv::StereoBM - Size of the window used to detect speckle noise
+    StereoBM/TextureThreshold: '10' # See cv::StereoBM - Threshold for texture filtering
+    StereoBM/UniquenessRatio: '15' # See cv::StereoBM - Uniqueness ratio used to filter out bad matches
+    approx_sync: true # Use approximate time synchronization of the input topics. If false, the input topics must have the same timestamp (set to "false" for stereo images).
+    approx_sync_max_interval: 0.0
+    decimation: 4 # Decimation of the images before creating the point cloud. Set to 1 to not decimate the images.
+    filter_nans: false # Remove NaNs points from output cloud (convert organized to dense point cloud)
+    max_depth: 0.0 # Max depth (m) of the generated cloud. Set 0.0 to deactivate depth filtering.
+    min_depth: 0.0 # Min depth (m) of the generated cloud.
+    noise_filter_min_neighbors: 5 # Minimum neighbors of a point to keep it.
+    noise_filter_radius: 0.0 # Max radius (m) for searching point neighbors. Set 0.0 to deactivate noise filtering.
+    normal_k: 0 # Compute normals using k nearest neighbors (0=disabled).
+    normal_radius: 0.0 # Compute normals using nearest neighbors inside the radius (m) (0=disabled).
+    qos: 1 # qos (Quality of Service) argument should match the published topics QoS (1=RELIABLE, 2=BEST EFFORT). ROS1 was always RELIABLE.
+    qos_camera_info: 2 # qos (Quality of Service) argument should match the published topics QoS (1=RELIABLE, 2=BEST EFFORT). ROS1 was always RELIABLE.
+    qos_overrides:
+      /clock:
+        subscription:
+          depth: 1
+          durability: volatile
+          history: keep_last
+          reliability: best_effort
+      /parameter_events:
+        publisher:
+          depth: 1000
+          durability: volatile
+          history: keep_last
+          reliability: reliable
+    queue_size: 40 # Size of message queue for each synchronized topic.
+    roi_ratios: '' # Region of interest ratios [left, right, top, bottom] (e.g., "0 0 0 0.2" will cut 20% of the bottom of the image).
+    use_sim_time: false
+    voxel_size: 0.0 # Voxel size (m) of the generated cloud. Set 0.0 to deactivate voxel filtering.
+
+# Parameters for point cloud assembling
+/point_cloud_assembler:
+  ros__parameters:
+    angular_update: 0.052 # If rotation between the last cloud and the new cloud received is under this value (rad), the new cloud is skipped. If circular_buffer is enabled, the assembled cloud is still published with the new cloud, but the new cloud is removed from the circular buffer instead of the oldest one. 0 means disabled.
+    assembling_time: 10.0 # The assembled cloud is published after the assembling time (seconds). max_clouds or assembling_time should be set.
+    circular_buffer: true # Instead of accumulating all the clouds before publishing the assembled cloud, the input clouds are kept in a circular buffer (of size max_clouds or a assembling_time) and the assebmled cloud is published every time a new scan is received. When circular_buffer is false, the temporary buffer to accumulate the clouds is cleared after each publishing.
+    fixed_frame_id: odom # The fixed frame used to estimate displacement between assembled clouds. If not set, an odometry topic will be required.
+    frame_id: '' # Frame id of the output assembled cloud. If not set, same frame id as input cloud is used.
+    linear_update: 0.05 # If displacement between the last cloud and the new cloud received is under this value (meters), the new cloud is skipped. If circular_buffer is enabled, the assembled cloud is still published with the new cloud, but the new cloud is removed from the circular buffer instead of the oldest one. 0 means disabled.
+    max_clouds: 0 # The assembled cloud is published after reaching this number of input clouds received. max_clouds or assembling_time should be set.
+    noise_min_neighbors: 5 # Apply radius outlier filter to output assembled cloud (minimum number of neighbors of a point in noise_radius to keep it). 0 means disabled, noise_radius should also be set.
+    noise_radius: 0.2 # Apply radius outlier filter to output assembled cloud (meters). 0 means disabled.
+    qos: 1 # qos (Quality of Service) argument should match the published topics QoS (1=RELIABLE, 2=BEST EFFORT). ROS1 was always RELIABLE.
+    qos_odom: 2 # qos (Quality of Service) argument should match the published topics QoS (1=RELIABLE, 2=BEST EFFORT). ROS1 was always RELIABLE.
+    qos_overrides:
+      /parameter_events:
+        publisher:
+          depth: 1000
+          durability: volatile
+          history: keep_last
+          reliability: reliable
+    queue_size: 10 # Size of message queue for each synchronized topic.
+    range_max: 0.0 # Filter input clouds with a maximum range. 0 means disabled.
+    range_min: 0.0 # Filter input clouds with a minimum range. 0 means disabled.
+    remove_z: false # Remove z field from assembled cloud before publishing it to make it 2D. Useful if you are assembling laser scans created with laser_geometry scan to cloud (or hector_laserscan_to_pointcloud).
+    skip_clouds: 0 # Number of input clouds to skip.
+    subscribe_odom_info: false
+    use_sim_time: false
+    voxel_size: 0.0 # Apply voxel filter to output assembled cloud. 0 means disabled.
+    wait_for_transform: 0.1 # Time to wait to get TF value between fixed frame and cloud frame at the stamp of the input cloud.
+

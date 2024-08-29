@@ -1,0 +1,2 @@
+rosbag record rostopic echo /camera_d435i/accel/imu_info /camera_d435i/imu /camera_d435i/aligned_depth_to_color/camera_info /camera_d435i/aligned_depth_to_color/image_raw /camera_d435i/color/camera_info /camera_d435i/color/image_raw /camera_d435i/depth/camera_info /camera_d435i/depth/color/points /camera_d435i/depth/camera_info /camera_d435i/depth/image_rect_raw /scan /odom /tf_static/mobile_base/sensors/*
+

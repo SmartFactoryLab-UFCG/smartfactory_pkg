@@ -1,0 +1,22 @@
+<package format="3">
+  <name>turtlebot2i_interfaces</name>
+  <version>0.0.0</version>
+  <description>Interface definitions for Turtlebot2i</description>
+
+  <maintainer email="larissa.silva@virtus.ufcg.edu.br">robotxr</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>std_msgs</depend>
+  
+  <build_depend>rosidl_default_generators</build_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <test_depend>ament_lint_common</test_depend>
+  
+  <member_of_group>rosidl_interface_packages</member_of_group>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

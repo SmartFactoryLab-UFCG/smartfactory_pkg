@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find-pkg-share astra_camera)/launch/astra_pro.launch.xml"/>
+
+</launch>

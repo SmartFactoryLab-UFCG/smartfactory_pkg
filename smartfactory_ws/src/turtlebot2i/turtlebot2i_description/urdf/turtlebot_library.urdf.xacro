@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+  The complete turtlebot library of xacros for easy reference
+ -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:arg name="gazebo_plugins" default="true"/>
+  <!-- General -->
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/common_properties.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/turtlebot_properties.urdf.xacro"/>
+  <xacro:if value="$(arg gazebo_plugins)">
+    <xacro:include filename="$(find turtlebot2i_description)/urdf/turtlebot_gazebo_plugin.urdf.xacro"/>
+  </xacro:if>
+  <!-- Bases -->
+  <!-- <xacro:include filename="$(find kobuki_description)/urdf/kobuki.urdf.xacro" /> -->
+  <!-- Stacks -->
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/stacks/interbotix.urdf.xacro"/>
+  <!-- 3D Sensors -->
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/sensors/astra.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/sensors/sr300.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/sensors/zr300.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/sensors/hokuyo_ust10.urdf.xacro"/>
+  <!-- RobotXR Extra -->
+  <xacro:include filename="$(find turtlebot2i_simulation)/urdf/robotxr_powerbank.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_simulation)/urdf/robotxr_nuc.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_simulation)/urdf/sensors/robotxr_astra.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_simulation)/urdf/stacks/interbotix_robotxr.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_simulation)/urdf/sensors/rplidar.urdf.xacro"/>
+  <xacro:include filename="$(find turtlebot2i_simulation)/urdf/kobuki.urdf.xacro" /> 
+  <!-- Arms -->
+  <!-- <xacro:include filename="$(find turtlebot2i_description)/urdf/arms/phantomx_pincher_arm.urdf.xacro"/> -->
+
+</robot>

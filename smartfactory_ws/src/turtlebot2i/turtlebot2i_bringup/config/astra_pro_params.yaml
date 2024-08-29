@@ -1,0 +1,58 @@
+# Configuration parameters for the Astra Pro camera node used in the TurtleBot2i
+camera_node:
+  ros__parameters:
+    camera_name: "camera"  # Name of the camera
+    depth_registration: true  # Enable depth registration
+    device_num: 1  # Device number
+    vendor_id: "0x2bc5"  # Vendor ID for the camera
+    product_id: ""  # "0x0501" # Product ID for the camera (optional)
+    enable_point_cloud: true  # Enable point cloud
+    enable_colored_point_cloud: true  # Enable colored point cloud
+    point_cloud_qos: "SENSOR_DATA"  # QoS setting for point cloud data
+    connection_delay: 100  # Delay in connection
+    color_width: 640  # Width of the color image
+    color_height: 480  # Height of the color image
+    color_fps: 30  # Frames per second for color image
+    enable_color: true  # Enable color image
+    flip_color: false  # Flip the color image
+    color_qos: "SENSOR_DATA"  # QoS setting for color image
+    color_camera_info_qos: "SENSOR_DATA"  # QoS setting for color camera info
+    depth_width: 640  # Width of the depth image
+    depth_height: 480  # Height of the depth image
+    depth_fps: 30  # Frames per second for depth image
+    enable_depth: true  # Enable depth image
+    flip_depth: false  # Flip the depth image
+    depth_qos: "SENSOR_DATA"  # QoS setting for depth image
+    depth_camera_info_qos: "SENSOR_DATA"  # QoS setting for depth camera info
+    ir_width: 640  # Width of the IR image
+    ir_height: 480  # Height of the IR image
+    ir_fps: 30  # Frames per second for IR image
+    enable_ir: true  # Enable IR image
+    flip_ir: false  # Flip the IR image
+    ir_qos: "SENSOR_DATA"  # QoS setting for IR image
+    ir_camera_info_qos: "SENSOR_DATA"  # QoS setting for IR camera info
+    publish_tf: true  # Publish TF data
+    tf_publish_rate: 10.0  # TF publish rate
+    ir_info_url: ""  # URL for IR camera info (optional)
+    color_info_url: ""  # URL for color camera info (optional)
+    color_roi_x: -1  # Region of interest X-coordinate for color image
+    color_roi_y: -1  # Region of interest Y-coordinate for color image
+    color_roi_width: -1  # Width of ROI for color image
+    color_roi_height: -1  # Height of ROI for color image
+    depth_roi_x: -1  # Region of interest X-coordinate for depth image
+    depth_roi_y: -1  # Region of interest Y-coordinate for depth image
+    depth_roi_width: -1  # Width of ROI for depth image
+    depth_roi_height: -1  # Height of ROI for depth image
+    depth_scale: 1  # Depth scale factor
+    color_depth_synchronization: false  # Synchronize color and depth images
+    use_uvc_camera: true  # Use UVC camera
+    uvc_vendor_id: "0x2bc5"  # UVC vendor ID
+    uvc_product_id: "0x0501"  # UVC product ID
+    uvc_retry_count: 100  # UVC retry count
+    uvc_camera_format: "mjpeg"  # UVC camera format
+    uvc_flip: false  # Flip UVC image
+    oni_log_level: "verbose"  # Log level for OpenNI
+    oni_log_to_console: false  # Log OpenNI to console
+    oni_log_to_file: false  # Log OpenNI to file
+    enable_d2c_viewer: false  # Enable depth-to-color viewer
+    enable_publish_extrinsic: false  # Enable publishing extrinsic parameters

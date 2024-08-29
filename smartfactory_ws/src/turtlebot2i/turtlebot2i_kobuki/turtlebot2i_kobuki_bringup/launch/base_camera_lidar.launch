@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find turtlebot2i_bringup)/launch/minimal.launch"/>
+
+  <!--include file="$(find rplidar_ros)/launch/rplidar_a3.launch"/-->
+  <include file="$(find turtlebot2i_bringup)/launch/lidar_sensor.launch"/>
+
+  <!-- 3D Sensor(s) -->
+  <include file="$(find turtlebot2i_bringup)/launch/3dsensor.launch">
+    <arg name="scan_processing" value="false"/>
+    <arg name="ir_processing" value="false"/>
+    <arg name="disparity_processing" value="false"/>
+    <arg name="disparity_registered_processing" value="false"/>
+  </include>
+
+  <!-- Teleop -->  
+  <node pkg="turtlebot_teleop" type="turtlebot_teleop_joy" name="turtlebot_teleop_joystick">
+    <param name="scale_angular" value="1.0"/>
+    <param name="scale_linear" value="0.1"/>
+    <param name="axis_deadman" value="5"/>
+    <param name="axis_linear" value="1"/>
+    <param name="axis_angular" value="0"/>
+    <remap from="turtlebot_teleop_joystick/cmd_vel" to="/mobile_base/commands/velocity"/>
+  </node>
+  
+  <node pkg="joy" type="joy_node" name="joystick"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-f base_footprint -d $(find turtlebot2i_bringup)/rviz/turtlebot2i_base_astra_rplidar.rviz" />
+
+</launch>

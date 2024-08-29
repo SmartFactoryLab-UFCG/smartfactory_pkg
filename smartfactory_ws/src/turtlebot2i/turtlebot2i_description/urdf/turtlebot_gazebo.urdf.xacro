@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<robot name="turtlebot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Microsoft Kinect / ASUS Xtion PRO Live for simulation -->
+  <xacro:macro name="turtlebot_sim_3dsensor">
+    <gazebo reference="camera_link">
+      <sensor type="depth" name="camera">
+        <always_on>true</always_on>
+        <update_rate>20.0</update_rate>
+        <camera>
+            <horizontal_fov>${66.1*M_PI/180.0}</horizontal_fov>
+            <vertical_fov>${40.2*M_PI/180.0}</vertical_fov>
+            <image>
+                <format>B8G8R8</format>
+                <width>1920</width>
+                <height>1080</height>
+            </image>
+            <clip>
+                <near>0.4</near>
+                <far>8.0</far>
+            </clip>
+        </camera>
+        <depth_camera>
+            <horizontal_fov>${58.4*M_PI/180.0}</horizontal_fov>
+            <vertical_fov>${45.5*M_PI/180.0}</vertical_fov>
+            <clip>
+                <near>0.4</near>
+                <far>8.0</far>
+            </clip>
+        </depth_camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <camera_name>camera</camera_name>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>10</updateRate>
+          <frame_name>camera_depth_optical_frame</frame_name>
+          <baseline>0.1</baseline>
+          <distortion_k1>0.0</distortion_k1>
+          <distortion_k2>0.0</distortion_k2>
+          <distortion_k3>0.0</distortion_k3>
+          <distortion_t1>0.0</distortion_t1>
+          <distortion_t2>0.0</distortion_t2>
+          <pointCloudCutoff>0.4</pointCloudCutoff>
+          <ros>
+            <namespace>/</namespace>
+            <argument>/camera/camera_info:=/color/camera_info</argument>
+            <argument>/camera/image_raw:=/color/image_raw</argument>
+            <argument>/camera/image_raw/compressed:=/color/compressed</argument>
+            <argument>/camera/image_raw/compressedDepth:=/color/compressedDepth</argument>
+            <argument>/camera/image_raw/theora:=/color/theora</argument>
+            <argument>/camera/depth/camera_info:=/depth/camera_info</argument>
+            <argument>/camera/depth/image_raw:=/depth/image_raw</argument>
+            <argument>/camera/depth/image_raw/compressed:=/depth/compressed</argument>
+            <argument>/camera/depth/image_raw/compressedDepth:=/depth/compressedDepth</argument>
+            <argument>/camera/depth/image_raw/theora:=/depth/theora</argument>
+            <argument>/camera/points:=/depth/points</argument>
+          </ros>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <!-- RpLidar A3 using CPU -->
+    <gazebo reference="lidar_link">
+      <sensor type="ray" name="head_rplidar_sensor">
+        <pose>10 0 0 0 0 0</pose>
+        <always_on>true</always_on>
+        <visualize>false</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>720</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.14159265</min_angle>
+              <max_angle>3.14159265</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.2</min>
+            <max>25.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="lidar" filename="libgazebo_ros_ray_sensor.so">
+          <frame_name>lidar_link</frame_name>
+          <output_type>sensor_msgs/LaserScan</output_type>
+          <ros>
+            <argument>/lidar/out:=/lidar_scan</argument>
+          </ros>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro> 
+</robot>
