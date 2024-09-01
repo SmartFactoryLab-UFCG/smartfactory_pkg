@@ -13,4 +13,4 @@ cd smartfactory_ws
 source /opt/ros/humble/setup.bash
 rosdep update
 rosdep install --from-paths src --ignore-src -r -y
-colcon build --symlink-install --executor sequential
+colcon build --symlink-install --executor sequential --cmake-args -DCMAKE_BUILD_TYPE=Release
