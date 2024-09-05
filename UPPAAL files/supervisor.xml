@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>
+    chan start_pick, start_place, done, start_move, stop; // Declaração de canais
+    int robot_arm_state = 0; // 0: Idle, 1: Picking, 2: Placing
+    int conveyor_belt_state = 0; // 0: Stopped, 1: Moving
+  </declaration>
+	<template>
+		<name>RobotArm</name>
+		<location id="id0" x="2" y="5">
+			<name x="-8" y="-25">Idle</name>
+		</location>
+		<location id="id1" x="161" y="-68">
+			<name x="127" y="-102">Picking</name>
+		</location>
+		<location id="id2" x="306" y="0">
+			<name x="296" y="-30">Placing</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id3">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="0" y="-68">start_pick!</label>
+			<label kind="assignment" x="-68" y="-85">robot_arm_state = 1</label>
+		</transition>
+		<transition id="id4">
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="212" y="-68">start_place!</label>
+			<label kind="assignment" x="212" y="-85">robot_arm_state = 2</label>
+		</transition>
+		<transition id="id5">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="144" y="-17">done!</label>
+			<label kind="assignment" x="93" y="8">robot_arm_state = 0</label>
+		</transition>
+	</template>
+	<template>
+		<name>ConveyorBelt</name>
+		<location id="id6" x="0" y="0">
+			<name x="-85" y="-8">Stopped</name>
+		</location>
+		<location id="id7" x="150" y="0">
+			<name x="178" y="-17">Moving</name>
+		</location>
+		<init ref="id6"/>
+		<transition id="id8">
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="127" y="42">start_move!</label>
+			<label kind="assignment" x="127" y="59">conveyor_belt_state = 1</label>
+			<nail x="76" y="85"/>
+		</transition>
+		<transition id="id9">
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="51" y="-34">stop!</label>
+			<label kind="assignment" x="-102" y="-51">conveyor_belt_state = 0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Supervisor</name>
+		<location id="id10" x="136" y="-119">
+			<name x="119" y="-153">Idle</name>
+		</location>
+		<location id="id11" x="136" y="102">
+			<name x="34" y="93">PermitPick</name>
+		</location>
+		<location id="id12" x="323" y="102">
+			<name x="331" y="-25">PermitPlace</name>
+		</location>
+		<location id="id13" x="323" y="-119">
+			<name x="314" y="-153">StartMoving</name>
+		</location>
+		<init ref="id10"/>
+		<transition id="id14">
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-280" y="-68">robot_arm_state == 0 &amp;&amp; conveyor_belt_state == 0</label>
+			<label kind="synchronisation" x="34" y="-17">start_pick?</label>
+		</transition>
+		<transition id="id15">
+			<source ref="id11"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-280" y="-42">robot_arm_state == 1 &amp;&amp; conveyor_belt_state == 0</label>
+			<label kind="synchronisation" x="187" y="110">start_place?</label>
+		</transition>
+		<transition id="id16">
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="331" y="-42">done?</label>
+		</transition>
+		<transition id="id17">
+			<source ref="id13"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="178" y="-153">start_move!</label>
+		</transition>
+	</template>
+	<system>
+    robot_arm = RobotArm();
+    conveyor_belt = ConveyorBelt();
+    supervisor = Supervisor();
+    system robot_arm, conveyor_belt, supervisor;
+  </system>
+	<queries>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>
