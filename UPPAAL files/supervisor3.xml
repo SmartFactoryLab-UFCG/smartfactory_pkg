@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>    // Astra Câmera
+    chan start_astra_camera, astra_detect, aruco_not_detected, aruco_detected, send_aruco_infos;
+
+    // UR10
+    chan start_ur10, aruco_pose_received, enable_suction, send_joint_angle_to_aruco, send_joint_angle_to_conveyor, disable_suction, infos_not_received;
+
+    // Supervisor
+
+
+
+  </declaration>
+	<template>
+		<name>UR10</name>
+		<location id="id0" x="-272" y="-238">
+			<name x="-306" y="-289">Idle_UR10</name>
+		</location>
+		<location id="id1" x="-442" y="-238">
+			<name x="-476" y="-221">Off_UR10</name>
+		</location>
+		<location id="id2" x="-34" y="-238">
+			<name x="-85" y="-221">CalculatingIK</name>
+		</location>
+		<location id="id3" x="204" y="-374">
+			<name x="170" y="-425">PickingAruco</name>
+		</location>
+		<location id="id4" x="-34" y="-374">
+			<name x="-187" y="-391">EE_Ready_To_Pick</name>
+		</location>
+		<location id="id5" x="510" y="-374">
+			<name x="450" y="-425">GoingToConveyor</name>
+		</location>
+		<location id="id6" x="510" y="-238">
+			<name x="527" y="-255">PlaceAruco</name>
+		</location>
+		<init ref="id1"/>
+		<transition id="id7">
+			<source ref="id6"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="59" y="-161">infos_not_received!</label>
+			<nail x="510" y="-136"/>
+			<nail x="-272" y="-136"/>
+		</transition>
+		<transition id="id8">
+			<source ref="id6"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="136" y="-263">aruco_pose_received!</label>
+		</transition>
+		<transition id="id9">
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="374" y="-323">disable_suction?</label>
+		</transition>
+		<transition id="id10">
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="238" y="-399">send_joint_angle_to_conveyor!</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-25" y="-399">send_joint_angle_to_aruco!</label>
+		</transition>
+		<transition id="id12">
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-25" y="-323">enable_suction?</label>
+		</transition>
+		<transition id="id13">
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-238" y="-263">aruco_pose_received!</label>
+		</transition>
+		<transition id="id14">
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-408" y="-263">start_ur10?</label>
+		</transition>
+	</template>
+	<template>
+		<name>AC</name>
+		<location id="id15" x="-68" y="-272">
+			<name x="-85" y="-306">ProcessingArucoInfos</name>
+		</location>
+		<location id="id16" x="-714" y="-272">
+			<name x="-782" y="-289">Off_AC</name>
+		</location>
+		<location id="id17" x="-306" y="-272">
+			<name x="-433" y="-263">DetectingAruco</name>
+		</location>
+		<location id="id18" x="-510" y="-272">
+			<name x="-535" y="-306">Idle_AC</name>
+		</location>
+		<init ref="id16"/>
+		<transition id="id19">
+			<source ref="id15"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-263" y="-170">send_aruco_infos!</label>
+			<nail x="-68" y="-170"/>
+			<nail x="-306" y="-170"/>
+		</transition>
+		<transition id="id20">
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-459" y="-297">astra_detect?</label>
+		</transition>
+		<transition id="id21">
+			<source ref="id16"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-697" y="-297">start_astra_camera?</label>
+		</transition>
+		<transition id="id22">
+			<source ref="id17"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-382" y="-365">aruco_not_detected!</label>
+			<nail x="-272" y="-340"/>
+			<nail x="-340" y="-340"/>
+		</transition>
+		<transition id="id23">
+			<source ref="id17"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-246" y="-297">aruco_detected!</label>
+		</transition>
+	</template>
+	<template>
+		<name>Supervisor</name>
+		<location id="id24" x="-1258" y="-170">
+			<name x="-1268" y="-200">Idle</name>
+		</location>
+		<location id="id25" x="-1020" y="-170">
+			<name x="-1030" y="-204">AC_On</name>
+		</location>
+		<location id="id26" x="-782" y="-170">
+			<name x="-816" y="-204">UR10_On</name>
+		</location>
+		<location id="id27" x="-782" y="-34">
+			<name x="-850" y="-25">Waiting_Aruco_Infos</name>
+		</location>
+		<init ref="id24"/>
+		<transition id="id28">
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-773" y="-119">astra_detect!</label>
+		</transition>
+		<transition id="id29">
+			<source ref="id25"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-935" y="-195">start_ur10!</label>
+		</transition>
+		<transition id="id30">
+			<source ref="id24"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-1198" y="-195">start_astra_camera!</label>
+		</transition>
+	</template>
+	<system>
+    ac = AC();
+    //tb = TB();
+    ur10 = UR10();
+    //c = C();
+    //ce = CE();
+    supervisor = Supervisor();
+    system ac, ur10, supervisor;
+  </system>
+	<queries>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>

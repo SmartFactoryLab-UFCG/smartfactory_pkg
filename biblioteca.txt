@@ -1,0 +1,35 @@
+1. Astra Câmera
+Eventos:
+ - start_astra_camera: Ligar a câmera Astra (ENVIADO PELO SUPERVISOR)
+ - astra_detect: Iniciar o launch para detecção de aruco (ENVIADO PELO SUPERVISOR)
+ - aruco_not_detected: Não tem nenhum aruco no range a câmera.
+ - aruco_detected: Um aruco foi detectado pela câmera.
+ - send_aruco_infos: Enviando as informações de Pose e de ID do aruco para o supervisor através de um tópico do ROS.
+
+Estados:
+ - Off_AC: Câmera Desligada (ESTADO INICIAL)
+ - Idle_AC: Câmera ligada, esperando o launch para iniciar o processo de detecção de Arucos.
+ - DetectingAruco: Câmera detectando Aruco.
+ - ProcessingArucoInfos: Irá processar as informações de Pose e de ID do Aruco detectado.
+
+2. UR10
+Eventos:
+ - start_ur10: Ligar a câmera Astra (ENVIADO PELO SUPERVISOR)
+ - aruco_pose_received: O UR10 recebeu do supervisor, a informação da pose do Aruco.
+ - enable_suction: Ativando a ventosa para que o UR10 pegue o objeto.
+ - send_joint_angle_to_aruco: Enviando para o UR10, através do ROS, as informações de junta para chegar até o aruco.
+ - send_joint_angle_to_conveyor: Enviando para o UR10, através do ROS, as informações de junta para chegar até a esteira.
+ - disable_suction: Desativando a ventosa.
+ - infos_not_received: O UR10 não está recebendo nenhuma informações sobre os arucos.
+
+
+Estados:
+ - Off_UR10: UR10 Desligado (ESTADO INICIAL)
+ - Idle_UR10: UR10 ligado, esperando o launch para iniciar o pacote do ROS para o UR10, na posição Home.
+ - CalculatingIK: O UR10 está calculando a Cinematica Inversa para encontrar os ângulos de junta necessário para chegar até o Aruco.
+ - EE_Ready_To_Pick: Ventosa ligada, pronta pra pegar o objeto.
+ - PickingAruco: O UR10 está pegando o Aruco
+ - GoingToConveyor: O UR10 está indo para a esteira.
+ - PlaceAruco: A ventosa desligou, então o objeto já está na esteira.
+
+3. Supervisor (por enquanto)
