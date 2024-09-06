@@ -14,19 +14,18 @@ Estados:
 
 2. UR10
 Eventos:
- - start_ur10: Ligar a câmera Astra (ENVIADO PELO SUPERVISOR)
- - aruco_pose_received: O UR10 recebeu do supervisor, a informação da pose do Aruco.
+ - start_ur10: Ligar o UR10 (ENVIADO PELO SUPERVISOR)
  - enable_suction: Ativando a ventosa para que o UR10 pegue o objeto.
  - send_joint_angle_to_aruco: Enviando para o UR10, através do ROS, as informações de junta para chegar até o aruco.
  - send_joint_angle_to_conveyor: Enviando para o UR10, através do ROS, as informações de junta para chegar até a esteira.
  - disable_suction: Desativando a ventosa.
- - infos_not_received: O UR10 não está recebendo nenhuma informações sobre os arucos.
+ - back_home_position: O UR10 deve retornar para a posição HOME.
+
 
 
 Estados:
  - Off_UR10: UR10 Desligado (ESTADO INICIAL)
  - Idle_UR10: UR10 ligado, esperando o launch para iniciar o pacote do ROS para o UR10, na posição Home.
- - CalculatingIK: O UR10 está calculando a Cinematica Inversa para encontrar os ângulos de junta necessário para chegar até o Aruco.
  - EE_Ready_To_Pick: Ventosa ligada, pronta pra pegar o objeto.
  - PickingAruco: O UR10 está pegando o Aruco
  - GoingToConveyor: O UR10 está indo para a esteira.

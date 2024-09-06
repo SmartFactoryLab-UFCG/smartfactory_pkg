@@ -88,9 +88,12 @@
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
-Process = Template();
+Esteira_inst = Esteira();
+Turtlebot_inst = Turtlebot();
+UR10_inst = UR10();
 // List one or more processes to be composed into a system.
-system Process;
+
+system Esteira_inst, Turtlebot_inst, UR10_inst;
 </system>
 	<queries>
 		<query>
