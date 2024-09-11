@@ -119,155 +119,171 @@
 	</template>
 	<template>
 		<name>Supervisor</name>
-		<location id="id22" x="-2720" y="-3093">
-			<name x="-2730" y="-3123">Idle</name>
+		<location id="id22" x="-3332" y="-3196">
+			<name x="-3342" y="-3226">Idle</name>
 		</location>
-		<location id="id23" x="-2473" y="-3093">
-			<name x="-2483" y="-3127">AC_On</name>
+		<location id="id23" x="-3085" y="-3196">
+			<name x="-3095" y="-3230">AC_On</name>
 		</location>
-		<location id="id24" x="-2235" y="-3093">
-			<name x="-2269" y="-3127">UR10_On</name>
+		<location id="id24" x="-2890" y="-3196">
+			<name x="-2924" y="-3230">UR10_On</name>
 		</location>
-		<location id="id25" x="-2235" y="-2957">
-			<name x="-2431" y="-2949">WaitingArucoDetection</name>
+		<location id="id25" x="-2584" y="-3196">
+			<name x="-2728" y="-3187">WaitingArucoDetection</name>
 		</location>
-		<location id="id26" x="-2482" y="-2958">
-			<name x="-2626" y="-2949">WaitingArucoInfos</name>
+		<location id="id26" x="-2278" y="-3196">
+			<name x="-2346" y="-3230">WaitingArucoInfos</name>
 		</location>
-		<location id="id27" x="-2720" y="-2957">
-			<name x="-2907" y="-2966">ProcessingArucoInfos</name>
+		<location id="id27" x="-2278" y="-2992">
+			<name x="-2261" y="-3009">ProcessingArucoInfos</name>
 		</location>
-		<location id="id28" x="-2720" y="-2788">
-			<name x="-2907" y="-2796">ArucoTypeIdentified</name>
+		<location id="id28" x="-2686" y="-2992">
+			<name x="-2873" y="-3000">ArucoTypeIdentified</name>
 		</location>
-		<location id="id29" x="-2584" y="-2788">
-			<name x="-2652" y="-2762">PreparingURToPick</name>
+		<location id="id29" x="-2584" y="-2822">
+			<name x="-2652" y="-2796">PreparingURToPick</name>
 		</location>
-		<location id="id30" x="-2414" y="-2788">
-			<name x="-2465" y="-2762">SuctionReady</name>
+		<location id="id30" x="-2414" y="-2822">
+			<name x="-2465" y="-2796">SuctionReady</name>
 		</location>
-		<location id="id31" x="-2142" y="-2788">
-			<name x="-2168" y="-2822">ObjectPicked</name>
+		<location id="id31" x="-2142" y="-2822">
+			<name x="-2193" y="-2805">ObjectPicked</name>
 		</location>
-		<location id="id32" x="-2142" y="-2686">
-			<name x="-2304" y="-2695">URArrivedConveyor</name>
+		<location id="id32" x="-1870" y="-2822">
+			<name x="-1853" y="-2839">URArrivedConveyor</name>
 		</location>
-		<location id="id33" x="-1904" y="-2686">
-			<name x="-1947" y="-2669">ObjectPlaced</name>
+		<location id="id33" x="-1870" y="-3196">
+			<name x="-1853" y="-3213">ObjectPlaced</name>
 		</location>
-		<location id="id34" x="-2720" y="-2652">
+		<location id="id34" x="-2788" y="-2822">
+			<name x="-2771" y="-2839">TurtlebotIsEmpty</name>
 		</location>
-		<location id="id35" x="-2482" y="-2652">
-			<name x="-2533" y="-2635">URHomePosition</name>
+		<location id="id35" x="-2788" y="-2686">
+			<name x="-2839" y="-2669">URHomePosition</name>
 		</location>
 		<init ref="id22"/>
 		<transition id="id36">
-			<source ref="id34"/>
-			<target ref="id26"/>
-			<label kind="synchronisation" x="-2762" y="-3026">aruco_detected?</label>
-			<nail x="-2958" y="-2652"/>
-			<nail x="-2958" y="-3026"/>
-			<nail x="-2482" y="-3026"/>
+			<source ref="id35"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-2966" y="-3153">aruco_not_detected?</label>
+			<nail x="-3060" y="-2686"/>
+			<nail x="-3060" y="-3128"/>
+			<nail x="-2618" y="-3128"/>
 		</transition>
 		<transition id="id37">
-			<source ref="id34"/>
-			<target ref="id25"/>
-			<label kind="synchronisation" x="-2626" y="-3060">aruco_not_detected?</label>
-			<nail x="-2720" y="-2618"/>
-			<nail x="-2992" y="-2618"/>
+			<source ref="id35"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-2533" y="-3085">aruco_detected?</label>
+			<nail x="-2992" y="-2686"/>
 			<nail x="-2992" y="-3060"/>
-			<nail x="-2312" y="-3060"/>
+			<nail x="-2346" y="-3060"/>
 		</transition>
 		<transition id="id38">
 			<source ref="id34"/>
-			<target ref="id35"/>
-			<label kind="synchronisation" x="-2677" y="-2677">back_home_position!</label>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-2550" y="-3051">aruco_detected?</label>
+			<nail x="-2890" y="-2822"/>
+			<nail x="-2890" y="-3026"/>
+			<nail x="-2346" y="-3026"/>
 		</transition>
-		<transition id="id39" controllable="false">
-			<source ref="id28"/>
-			<target ref="id34"/>
-			<label kind="comments" x="-2839" y="-2728">O aruco não 
-é um objeto</label>
+		<transition id="id39">
+			<source ref="id34"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-2788" y="-3111">aruco_not_detected?</label>
+			<nail x="-2788" y="-2788"/>
+			<nail x="-2924" y="-2788"/>
+			<nail x="-2924" y="-3094"/>
+			<nail x="-2584" y="-3094"/>
 		</transition>
 		<transition id="id40">
-			<source ref="id33"/>
-			<target ref="id26"/>
-			<label kind="synchronisation" x="-2116" y="-2915">aruco_detected?</label>
-			<nail x="-1972" y="-2890"/>
-			<nail x="-2482" y="-2890"/>
+			<source ref="id34"/>
+			<target ref="id35"/>
+			<label kind="synchronisation" x="-2779" y="-2737">back_home_position!</label>
+			<label kind="comments" x="-2958" y="-2745">Duvida nesse evento.</label>
 		</transition>
-		<transition id="id41">
-			<source ref="id33"/>
-			<target ref="id25"/>
-			<label kind="synchronisation" x="-2100" y="-2949">aruco_not_detected?</label>
-			<nail x="-1904" y="-2924"/>
-			<nail x="-2235" y="-2924"/>
+		<transition id="id41" controllable="false">
+			<source ref="id28"/>
+			<target ref="id34"/>
+			<label kind="comments" x="-2856" y="-2932">O aruco não 
+é um objeto</label>
 		</transition>
 		<transition id="id42">
-			<source ref="id32"/>
-			<target ref="id33"/>
-			<label kind="synchronisation" x="-2074" y="-2677">disable_suction!</label>
+			<source ref="id33"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-2184" y="-3221">aruco_detected?</label>
 		</transition>
 		<transition id="id43">
-			<source ref="id31"/>
-			<target ref="id32"/>
-			<label kind="synchronisation" x="-2380" y="-2745">send_joint_angle_to_conveyor!</label>
+			<source ref="id33"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-2278" y="-3289">aruco_not_detected?</label>
+			<nail x="-1972" y="-3264"/>
+			<nail x="-2516" y="-3264"/>
 		</transition>
 		<transition id="id44">
-			<source ref="id30"/>
-			<target ref="id31"/>
-			<label kind="synchronisation" x="-2371" y="-2838">send_joint_angle_to_aruco!</label>
+			<source ref="id32"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="-2006" y="-3009">disable_suction!</label>
 		</transition>
 		<transition id="id45">
+			<source ref="id31"/>
+			<target ref="id32"/>
+			<label kind="synchronisation" x="-2116" y="-2847">send_joint_angle_to_conveyor!</label>
+		</transition>
+		<transition id="id46">
+			<source ref="id30"/>
+			<target ref="id31"/>
+			<label kind="synchronisation" x="-2371" y="-2847">send_joint_angle_to_aruco!</label>
+		</transition>
+		<transition id="id47">
 			<source ref="id29"/>
 			<target ref="id30"/>
-			<label kind="synchronisation" x="-2550" y="-2838">enable_suction!</label>
+			<label kind="synchronisation" x="-2567" y="-2847">enable_suction!</label>
 		</transition>
-		<transition id="id46" controllable="false">
+		<transition id="id48" controllable="false">
 			<source ref="id28"/>
 			<target ref="id29"/>
-			<label kind="comments" x="-2711" y="-2839">O aruco é 
+			<label kind="comments" x="-2618" y="-2932">O aruco é 
 de um objeto.</label>
 		</transition>
-		<transition id="id47" controllable="false">
+		<transition id="id49" controllable="false">
 			<source ref="id27"/>
 			<target ref="id28"/>
-			<label kind="comments" x="-2924" y="-2924">O supervisor 
+			<label kind="comments" x="-2482" y="-2983">O supervisor 
 terminou de 
 processar as 
 informações do Aruco.</label>
 		</transition>
-		<transition id="id48">
-			<source ref="id25"/>
-			<target ref="id25"/>
-			<label kind="synchronisation" x="-2167" y="-2975">aruco_not_detected?</label>
-			<nail x="-2176" y="-2992"/>
-			<nail x="-2176" y="-2924"/>
-		</transition>
-		<transition id="id49">
-			<source ref="id26"/>
-			<target ref="id27"/>
-			<label kind="synchronisation" x="-2668" y="-2982">send_aruco_infos?</label>
-		</transition>
 		<transition id="id50">
 			<source ref="id25"/>
-			<target ref="id26"/>
-			<label kind="synchronisation" x="-2413" y="-2982">aruco_detected?</label>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-2652" y="-3289">aruco_not_detected?</label>
+			<nail x="-2618" y="-3264"/>
+			<nail x="-2550" y="-3264"/>
 		</transition>
 		<transition id="id51">
-			<source ref="id24"/>
-			<target ref="id25"/>
-			<label kind="synchronisation" x="-2226" y="-3042">astra_detect!</label>
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-2278" y="-3111">send_aruco_infos?</label>
 		</transition>
 		<transition id="id52">
-			<source ref="id23"/>
-			<target ref="id24"/>
-			<label kind="synchronisation" x="-2388" y="-3118">start_ur10!</label>
+			<source ref="id25"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-2482" y="-3187">aruco_detected?</label>
 		</transition>
 		<transition id="id53">
+			<source ref="id24"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-2788" y="-3221">astra_detect!</label>
+		</transition>
+		<transition id="id54">
+			<source ref="id23"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-3026" y="-3221">start_ur10!</label>
+		</transition>
+		<transition id="id55">
 			<source ref="id22"/>
 			<target ref="id23"/>
-			<label kind="synchronisation" x="-2668" y="-3118">start_astra_camera!</label>
+			<label kind="synchronisation" x="-3280" y="-3221">start_astra_camera!</label>
 		</transition>
 	</template>
 	<system>
