@@ -1,6 +1,6 @@
-turtlebot2i_ws/install
-turtlebot2i_ws/build
-turtlebot2i_ws/log
+smartfactory_ws/install
+smartfactory_ws/build
+smartfactory_ws/log
 *.pyc
 .vscode/settings.json
-turtlebot2i_ws/rosbags
+smartfactory_ws/rosbags
