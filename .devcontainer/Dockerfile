@@ -203,7 +203,18 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-tf2 \
     ros-${ROS_DISTRO}-tf2-eigen \
     ros-${ROS_DISTRO}-tf2-sensor-msgs \
+    ros-${ROS_DISTRO}-tf-transformations \
     ros-${ROS_DISTRO}-cv-bridge && \
+    rm -rf /var/lib/apt/lists/*
+
+# Kinecy prerequisites
+
+RUN apt-get update && apt-get install -y \
+    libturbojpeg0-dev \
+    libglfw3-dev   \
+    freenect \
+    libfreenect-dev \
+    libfreenect-demos && \
     rm -rf /var/lib/apt/lists/*
  
 # Copy the libuvc directory from your host to the Docker image
@@ -217,20 +228,30 @@ RUN cd /libuvc && \
     make && \
     make install
 
+COPY dependencies/libfreenect /libfreenect
+
+RUN cd /libfreenect && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install && \
+    ldconfig
+
 # Update the library path
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # Aruco prerequisites
 
 RUN apt-get update && \
-    pip3 install opencv-contrib-python transforms3d && \
+    pip3 install opencv-python opencv-contrib-python transforms3d && \
     apt-get install -y \
     ros-${ROS_DISTRO}-cv-bridge \
     ros-${ROS_DISTRO}-image-transport && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
-    pip install scikit-fuzzy && \
+    pip install scikit-fuzzy &&\
     rm -rf /var/lib/apt/lists/*
 
 # Standard init procedure
