@@ -13,7 +13,7 @@ def generate_launch_description():
     
     # Process the xacro file to generate the URDF
     urdf = (xacro.process_file(os.path.join(turtlebot2i_description,
-                                            "robots/kobuki_interbotix_astra_pro_rplidar.urdf.xacro"),
+                                            "robots/sim_kobuki_interbotix_astra_pro_rplidar.urdf.xacro"),
                               ))
     pretty_urdf = urdf.toprettyxml(indent='   ')
 
@@ -64,6 +64,7 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
+        namespace="turtlebot",
         parameters=[{
             "robot_description": pretty_urdf,
             "use_sim_time": True,
@@ -81,7 +82,7 @@ def generate_launch_description():
                 "-entity",
                 "mobile_base",
                 "-topic",
-                "robot_description",
+                "/turtlebot/robot_description",
                 "-x",
                 "0",
                 "-y",

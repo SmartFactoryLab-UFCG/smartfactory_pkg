@@ -1,9 +1,0 @@
-turtlebot2i_safety_node:
-  ros__parameters:
-    subscribers:
-      - name: "Keyboard Controller"
-        topic: "/commands/velocity"
-        timeout: 0.1
-        priority: 1
-        short_desc: "Velocity coming from the keyop"
-    publisher: "/safety/velocity"

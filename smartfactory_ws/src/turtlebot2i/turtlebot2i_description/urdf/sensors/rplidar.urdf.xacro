@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot name="sensor_rplidar" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/turtlebot_properties.urdf.xacro"/>
+
+  <!-- Xacro properties -->
+  <xacro:property name="rplidar_px" value="-0.085"/>
+  <xacro:property name="rplidar_py" value="0"/>
+  <xacro:property name="rplidar_pz" value="0.385"/>
+
+  <!-- Parameterised in part by properties above -->
+  <xacro:macro name="sensor_rplidar" params="parent">
+    <joint name="rplidar_joint" type="fixed">
+      <origin xyz="${rplidar_px} ${rplidar_py} ${rplidar_pz}" rpy="0 0 2.8885"/>
+      <parent link="${parent}"/>
+      <child link="lidar_link" />
+    </joint>
+
+    <link name="lidar_link">
+      <visual>
+        <origin xyz="-0.052 0.05 -0.0295" rpy="1.5708 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot2i_description/meshes/sensors/rplidar.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <xacro:insert_block name="material_black"/>
+      </visual>
+      <collision>
+        <origin xyz="-0.052 0.05 -0.0295" rpy="1.5708 0 0"/>
+        <geometry>
+        <mesh filename="package://turtlebot2i_description/meshes/sensors/rplidar.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.3" />
+        <origin xyz="-0.052 0.05 -0.0295" />
+        <inertia ixx="0.003881243" ixy="0.0" ixz="0.0"
+                 iyy="0.000498940" iyz="0.0"
+                 izz="0.003879257" />
+      </inertial>
+    </link>
+  </xacro:macro>
+</robot>

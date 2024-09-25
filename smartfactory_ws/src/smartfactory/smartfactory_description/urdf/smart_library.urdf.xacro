@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--
+  The complete turtlebot library of xacros for easy reference
+ -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- General -->
+  <xacro:include filename="$(find smartfactory_description)/urdf/smartfactory_world.urdf.xacro"/>
+  <xacro:include filename="$(find smartfactory_description)/urdf/kinect.urdf.xacro"/>
+  <xacro:include filename="$(find smartfactory_description)/urdf/basler.urdf.xacro"/>
+
+</robot>

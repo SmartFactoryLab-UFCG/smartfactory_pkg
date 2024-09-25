@@ -8,7 +8,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     # Find the path to the RViz scene file
-    rviz_path = os.path.join(get_package_share_directory('turtlebot2i_simulation'), 'rviz', 'turtlebot2i.rviz')
+    rviz_path = os.path.join(get_package_share_directory('turtlebot2i_description'), 'rviz', 'turtlebot2i.rviz')
 
     # Declare a launch argument for the RViz scene file
     rviz_scene_arg = DeclareLaunchArgument('rviz_cfg', default_value=rviz_path, description='RViz scene file path.')

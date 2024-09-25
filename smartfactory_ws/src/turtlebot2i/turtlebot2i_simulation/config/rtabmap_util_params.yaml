@@ -1,8 +1,0 @@
-# Configuration parameters for point cloud utility in RTAB-Map.
-point_cloud_xyzrgb:
-  ros__parameters:
-    decimation: 4  # Define the decimation factor for the point cloud; a value of '4' reduces the data amount by 1/4.
-    voxel_size: 0.0  # Voxel size for point cloud voxelization, in meters; used to reduce detail and save processing.
-    approx_sync: True  # Enables approximate synchronization of input messages, allowing some variation in message arrival times.
-    qos: 2  # Quality of Service level for topic communication.
-    queue_size: 40  # Queue size for topic messages.

@@ -56,8 +56,11 @@ def generate_launch_description():
     declare_start_3d = DeclareLaunchArgument('Start_3d', default_value='true', 
                               description='Start the 3d sensor node.')
     
-    declare_unity_metrics= DeclareLaunchArgument('metrics_unity', default_value='true',  
-                              description='Launch Network metrics for unity (camera, odometry and mapping topics).'),
+    declare_backup= DeclareLaunchArgument('backup', default_value='false',  
+                              description='Launch Mapping Backup Monitor.')
+
+    declare_safety= DeclareLaunchArgument('safety', default_value='false',  
+                              description='safety')
     
     def launch_robotxr(context, *args, **kwargs):
         # Define path to package
@@ -88,6 +91,11 @@ def generate_launch_description():
             actions.append(IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(turtlebot2i_bringup, 'launch', 'base.launch.py')]),
                 condition=IfCondition(LaunchConfiguration("Start_base").perform(context)),
+            ))
+            actions.append(IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(turtlebot2i_bringup, 'launch', 'kobuki.launch.py')]),
+                launch_arguments={'safety': LaunchConfiguration('safety')}.items(),
+                condition=IfCondition(LaunchConfiguration('safety'))
             ))
         else:
             logAction.append(LogInfo(msg='Base cannot be none: {type_base}.'))
@@ -127,18 +135,23 @@ def generate_launch_description():
         if type_arm != 'none':
             logAction.append(LogInfo(msg='No launch defined for arm: {type_arm}'))
 
-        # Node to monitor Unity-specific topics, conditionally launched based on metrics_unity argument
-        Node(
-            package='turtlebot2i_topic_monitor',
-            condition= IfCondition(LaunchConfiguration("metrics_unity")),
-            executable='topic_monitor_unity.py',  
-            name='topic_monitor_node',
+        actions.append(Node(
+            package='turtlebot2i_backup',
+            condition=IfCondition(LaunchConfiguration("backup")),
+            executable='turtlebot2i_monitor',
+            name='turtlebot2i_monitor',
             output='screen'
-        ),
-        
+        ))
+    
         return actions + logAction
     
     return LaunchDescription([
+        # Node(
+        #     package='turtlebot2i_mapping',
+        #     executable='list_maps_server.py',
+        #     name='list_maps_server',
+        #     output='screen'
+        # ),
         declare_3D_sensor,
         declare_3D_sensor2,
         declare_arm,
@@ -148,6 +161,7 @@ def generate_launch_description():
         declare_start_base,
         declare_start_lidar,
         declare_start_3d,
-        declare_unity_metrics,
+        declare_backup,
+        declare_safety,
         OpaqueFunction(function=launch_robotxr)
     ])

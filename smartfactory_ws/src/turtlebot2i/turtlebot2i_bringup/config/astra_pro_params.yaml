@@ -15,22 +15,22 @@ camera_node:
     color_fps: 30  # Frames per second for color image
     enable_color: true  # Enable color image
     flip_color: false  # Flip the color image
-    color_qos: "SENSOR_DATA"  # QoS setting for color image
-    color_camera_info_qos: "SENSOR_DATA"  # QoS setting for color camera info
+    color_qos: "DEFAULT"  # QoS setting for color image
+    color_camera_info_qos: "DEFAULT"  # QoS setting for color camera info
     depth_width: 640  # Width of the depth image
     depth_height: 480  # Height of the depth image
     depth_fps: 30  # Frames per second for depth image
     enable_depth: true  # Enable depth image
     flip_depth: false  # Flip the depth image
-    depth_qos: "SENSOR_DATA"  # QoS setting for depth image
-    depth_camera_info_qos: "SENSOR_DATA"  # QoS setting for depth camera info
+    depth_qos: "DEFAULT"  # QoS setting for depth image
+    depth_camera_info_qos: "DEFAULT"  # QoS setting for depth camera info
     ir_width: 640  # Width of the IR image
     ir_height: 480  # Height of the IR image
     ir_fps: 30  # Frames per second for IR image
     enable_ir: true  # Enable IR image
     flip_ir: false  # Flip the IR image
-    ir_qos: "SENSOR_DATA"  # QoS setting for IR image
-    ir_camera_info_qos: "SENSOR_DATA"  # QoS setting for IR camera info
+    ir_qos: "DEFAULT"  # QoS setting for IR image
+    ir_camera_info_qos: "DEFAULT"  # QoS setting for IR camera info
     publish_tf: true  # Publish TF data
     tf_publish_rate: 10.0  # TF publish rate
     ir_info_url: ""  # URL for IR camera info (optional)

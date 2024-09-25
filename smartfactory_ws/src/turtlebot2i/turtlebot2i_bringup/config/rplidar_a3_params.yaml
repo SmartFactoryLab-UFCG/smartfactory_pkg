@@ -2,7 +2,7 @@
 rplidar_node:
   ros__parameters:
     channel_type: serial  # Communication channel type
-    serial_port: '/dev/ttyUSB1'  # Serial port for the Lidar
+    serial_port: '/dev/rplidar'  # Serial port for the Lidar
     serial_baudrate: 256000  # Baud rate for serial communication
     frame_id: 'lidar_link'  # Frame ID for the Lidar
     inverted: false  # Invert the Lidar data

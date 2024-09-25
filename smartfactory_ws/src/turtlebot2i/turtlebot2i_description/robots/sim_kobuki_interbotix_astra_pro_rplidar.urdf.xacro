@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+    - Base      : kobuki
+    - Stacks    : interbotix
+    - 3d Sensor : astra pro plus
+    - Lidar     : rplidar
+
+    - arm : TODO: supported arms?
+    - Simulation Xacro
+-->    
+<robot name="turtlebot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="use_nominal_extrinsics" default="false" />
+  <xacro:include filename="$(find turtlebot2i_description)/urdf/sim_turtlebot_library.urdf.xacro" />
+  <xacro:sim_kobuki/>
+
+  <xacro:sim_stack_interbotix parent="base_link_kobuki"/>
+  <xacro:sim_sensor_astra_pro parent="base_link_kobuki"/>
+  <xacro:sim_sensor_rplidar parent="base_link_kobuki"/>
+  <xacro:sim_powerbank parent="base_link_kobuki"/>
+  <xacro:sim_nuc parent="base_link_kobuki"/>
+
+</robot>

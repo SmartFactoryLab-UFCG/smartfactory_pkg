@@ -23,7 +23,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-install(DIRECTORY meshes robots urdf launch
+install(DIRECTORY meshes robots urdf launch rviz
   DESTINATION share/${PROJECT_NAME}
 )
 

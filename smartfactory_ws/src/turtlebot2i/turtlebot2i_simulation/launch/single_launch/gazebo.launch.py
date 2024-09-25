@@ -40,10 +40,10 @@ def generate_launch_description():
     # Set up static transforms
     # Base to Left Wheel
     transf1 = Node(package='tf2_ros', name = 'tf_base_lwheel', executable='static_transform_publisher', output='screen',
-                    arguments=['0', '0', '0', '0', '0', '0','base_link', 'wheel_left_link'])
+                    arguments=['0', '0', '0', '0', '0', '0','base_link_kobuki', 'wheel_left_link'])
     # Base to Right Wheel
     transf2 = Node(package='tf2_ros',name='tf_base_rwheel' ,executable='static_transform_publisher', output='screen',
-                    arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'wheel_right_link'])
+                    arguments=['0', '0', '0', '0', '0', '0', 'base_link_kobuki', 'wheel_right_link'])
     
     return LaunchDescription([
         world,

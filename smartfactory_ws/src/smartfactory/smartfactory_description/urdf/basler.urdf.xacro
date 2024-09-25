@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<robot name="sensor_basler" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" /> 
+  
+  <xacro:property name="cam_basler_px" value="0.12" />
+	<xacro:property name="cam_basler_py" value="0.85" /> 
+	<xacro:property name="cam_basler_pz" value="1.56" />
+	<xacro:property name="cam_basler_or" value="0" />
+	<xacro:property name="cam_basler_op" value="0" />
+	<xacro:property name="cam_basler_oy" value="0" />
+
+  <xacro:property name="basler_cam_py" value="0.83"/>
+
+  <!-- Parameterised in part by the values in turtlebot_properties.urdf.xacro -->
+  <xacro:macro name="sensor_basler" params="parent">
+    <joint name="camera_rgb_joint_basler" type="fixed">
+      <origin xyz="${cam_basler_px} ${basler_cam_py} ${cam_basler_pz}" rpy="${M_PI/2} ${M_PI/2} 0"/> 
+      <parent link="${parent}"/>
+      <child link="camera_rgb_frame_basler" />
+    </joint>
+    <link name="camera_rgb_frame_basler"/>
+    
+    <joint name="camera_rgb_optical_joint_basler" type="fixed">
+      <origin xyz="-0.031 ${-basler_cam_py} -0.016" rpy="${M_PI/2} ${M_PI/2} 0" />
+      <parent link="camera_rgb_frame_basler" />
+      <child link="camera_rgb_optical_frame_basler" />
+    </joint>
+    <link name="camera_rgb_optical_frame_basler"/>
+    
+    <joint name="camera_joint_basler" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="camera_rgb_frame_basler"/>
+      <child link="camera_link_basler"/>
+    </joint>  
+      <link name="camera_link_basler">
+      <visual>
+       <origin xyz="0 0 0" rpy="0 0 ${-M_PI}"/>
+        <geometry>
+         <mesh filename="package://smartfactory_description/meshes/basler.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="grey">
+          <color rgba="0.5 0.5 0.5 1"/>
+        </material>
+      </visual>
+  	  <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  	    <geometry>
+  	      <box size="0.07271 0.27794 0.073"/>
+  	    </geometry>
+  	  </collision>
+      <inertial>
+        <mass value="0.564" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="0.003881243" ixy="0.0" ixz="0.0"
+                 iyy="0.000498940" iyz="0.0"
+                 izz="0.003879257" />
+      </inertial>
+    </link>
+    <gazebo reference="camera_link_basler">
+      <material>Gazebo/Grey</material>
+      <gravity>true</gravity>
+    </gazebo>
+    <!-- The fixed joints & links below are usually published by static_transformers launched by the OpenNi launch 
+         files. However, for Gazebo simulation we need them, so we add them here.
+         (Hence, don't publish them additionally!) -->
+    <joint name="camera_depth_joint_basler" type="fixed">
+      <origin xyz="0 ${0.1 * -basler_cam_py}  0" rpy="0 0 0" />
+      <parent link="camera_rgb_frame_basler" />
+      <child link="camera_depth_frame_basler" />
+    </joint>
+    <link name="camera_depth_frame_basler"/>
+
+    <joint name="camera_depth_optical_joint_basler" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+      <parent link="camera_depth_frame_basler" />
+      <child link="camera_depth_optical_frame_basler" />
+    </joint>
+    <link name="camera_depth_optical_frame_basler"/>
+
+	  <!-- basler sensor for simulation -->
+    <gazebo reference="camera_link_basler">  
+      <sensor type="depth" name="basler">
+        <always_on>true</always_on>
+        <visualize>true</visualize> 
+        <update_rate>20.0</update_rate>
+        <camera>
+          <horizontal_fov>${57.0*M_PI/180.0}</horizontal_fov>
+          <vertical_fov>${43*M_PI/180.0}</vertical_fov>
+          <image>
+            <format>B8G8R8</format>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>8.0</far>
+          </clip>
+        </camera>
+      <plugin name="basler_camera_controller" filename="libgazebo_ros_camera.so"> 
+          <cameraName>basler</cameraName>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>30.0</updateRate>
+          <imageTopicName>rgb/image_raw</imageTopicName>
+          <!-- <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <pointCloudTopicName>depth/points</pointCloudTopicName> -->
+          <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+          <!-- <depthImageCameraInfoTopicName>depth/camera_info</depthImageCamecam_basler
+      _pxraInfoTopicName> -->
+          <frameName>camera_rgb_frame_basler</frameName>
+          <baseline>0.1</baseline>
+          <distortion_k1>0</distortion_k1>
+          <distortion_k2>0</distortion_k2>
+          <distortion_k3>0</distortion_k3>
+          <distortion_t1>0</distortion_t1>
+          <distortion_t2>0</distortion_t2>
+          <pointCloudCutoff>0.4</pointCloudCutoff>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>
