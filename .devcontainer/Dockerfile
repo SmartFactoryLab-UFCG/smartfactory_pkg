@@ -69,6 +69,7 @@ RUN apt-get update && \
     ros-humble-ros-testing \
     ros-${ROS_DISTRO}-sophus \
     ros-${ROS_DISTRO}-gazebo-ros \
+    ros-${ROS_DISTRO}-gazebo-ros2-control \
     ros-${ROS_DISTRO}-gazebo-plugins \
     ament-cmake \
     ament-lint \
@@ -200,10 +201,12 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-image-publisher \
     ros-${ROS_DISTRO}-image-transport-plugins \ 
     ros-${ROS_DISTRO}-point-cloud-transport \ 
+    ros-${ROS_DISTRO}-point-cloud-interfaces \
     ros-${ROS_DISTRO}-tf2 \
     ros-${ROS_DISTRO}-tf2-eigen \
     ros-${ROS_DISTRO}-tf2-sensor-msgs \
     ros-${ROS_DISTRO}-tf-transformations \
+    ros-${ROS_DISTRO}-camera-calibration \
     ros-${ROS_DISTRO}-cv-bridge && \
     rm -rf /var/lib/apt/lists/*
 
@@ -237,6 +240,16 @@ RUN cd /libfreenect && \
     make && \
     make install && \
     ldconfig
+
+# Pylon dependencies
+COPY dependencies/libpylon /libpylon
+
+RUN cd /libpylon && \
+    apt-get update && \
+    apt-get install -y \
+    ./pylon_7.5.0.15658-deb0_amd64.deb \
+    ./pylon-supplementary-package-for-blaze-1.7.0.35c9275fa_amd64.deb && \
+    rm -rf /var/lib/apt/lists/*
 
 # Update the library path
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
