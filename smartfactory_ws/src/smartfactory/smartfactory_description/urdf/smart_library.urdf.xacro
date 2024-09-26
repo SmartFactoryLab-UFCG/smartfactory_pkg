@@ -7,5 +7,4 @@
   <xacro:include filename="$(find smartfactory_description)/urdf/smartfactory_world.urdf.xacro"/>
   <xacro:include filename="$(find smartfactory_description)/urdf/kinect.urdf.xacro"/>
   <xacro:include filename="$(find smartfactory_description)/urdf/basler.urdf.xacro"/>
-
 </robot>

@@ -26,8 +26,8 @@
   <xacro:property name="STANDOFF_UTILITY_UPPER_Z" value="${PLATE_UTILITY_BOTTOM_Z+PLATE_HEIGHT/2.0+STANDOFF_100_HEIGHT/2.0}"/>
   <xacro:property name="PLATE_UTILITY_UPPER_Z" value="${STANDOFF_UTILITY_UPPER_Z+STANDOFF_100_HEIGHT/2.0+PLATE_HEIGHT/2.0}"/>
 
-  <xacro:property name="STANDOFF_TOP_Z" value="${PLATE_UTILITY_UPPER_Z+PLATE_HEIGHT/2.0+STANDOFF_100_HEIGHT/2.0}"/>
-  <xacro:property name="PLATE_TOP_Z" value="${STANDOFF_TOP_Z+STANDOFF_100_HEIGHT/2.0+PLATE_HEIGHT/2.0}"/>
+  <xacro:property name="STANDOFF_TOP_Z" value="${PLATE_UTILITY_UPPER_Z+PLATE_HEIGHT/2.0+STANDOFF_50_HEIGHT/2.0}"/>
+  <xacro:property name="PLATE_TOP_Z" value="${STANDOFF_TOP_Z+STANDOFF_50_HEIGHT/2.0+PLATE_HEIGHT/2.0}"/>
 
   <xacro:property name="STANDOFF_FRONT_Z" value="${PLATE_MIDDLE_Z+PLATE_HEIGHT/2.0+STANDOFF_258_HEIGHT/2.0}"/>
 
@@ -300,5 +300,44 @@
       <material>Gazebo/DarkGrey</material>
       <gravity>true</gravity>
     </gazebo>
+
+    <xacro:standoff_50mm parent="${parent}" number="12" x_loc= "-0.001" y_loc= "0.162" z_loc="${STANDOFF_TOP_Z}"/>
+    <xacro:standoff_50mm parent="${parent}" number="13" x_loc= "-0.001" y_loc="-0.162" z_loc="${STANDOFF_TOP_Z}"/>
+    <xacro:standoff_50mm parent="${parent}" number="14" x_loc="-0.104" y_loc= "0.098" z_loc="${STANDOFF_TOP_Z}"/>
+    <xacro:standoff_50mm parent="${parent}" number="15" x_loc="-0.104" y_loc="-0.098" z_loc="${STANDOFF_TOP_Z}"/>
+
+    <joint name="plate_top_joint" type="fixed">
+      <origin xyz="0.0 0.0 ${PLATE_TOP_Z}" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="plate_top_link"/>
+    </joint>
+    <link name="plate_top_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot2i_description/meshes/stacks/interbotix/TurtleBot2i_TopPlate.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <xacro:insert_block name="material_dark_grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://turtlebot2i_description/meshes/stacks/interbotix/TurtleBot2i_TopPlate.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.377"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.003328" ixy="0.0" ixz="0.0"
+                 iyy="0.003328" iyz="0.0"
+                 izz="0.006656" />
+      </inertial>
+    </link>
+    <gazebo reference="plate_top_link">
+      <material>Gazebo/DarkGrey</material>
+      <!-- <selfCollide>true</selfCollide> -->
+      <gravity>true</gravity>
+    </gazebo>
+    
   </xacro:macro>
 </robot>

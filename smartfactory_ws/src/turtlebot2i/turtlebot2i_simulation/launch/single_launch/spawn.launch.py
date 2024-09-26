@@ -89,8 +89,16 @@ def generate_launch_description():
                 "-1.5"
             ],
         )
+    
+    transf1 = Node(package='tf2_ros', name = 'tf_base_lwheel', executable='static_transform_publisher', output='screen',
+                    arguments=['0', '0', '0', '0', '0', '0','base_link_kobuki', 'wheel_left_link'])
+    # Base to Right Wheel
+    transf2 = Node(package='tf2_ros',name='tf_base_rwheel' ,executable='static_transform_publisher', output='screen',
+                    arguments=['0', '0', '0', '0', '0', '0', 'base_link_kobuki', 'wheel_right_link'])
 
     return LaunchDescription([
         robot_state_publisher_node, 
         spawn,
+        transf1,
+        transf2
     ])

@@ -58,7 +58,15 @@ def generate_launch_description():
     spawn_cameras = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(smartfactory_sim, "launch",
-                         "smart_cameras.launch.py")
+                         "spawn_cameras.launch.py")
+        ),
+    )
+
+    # Include the launch file to spawn the Kinect on Gazebo
+    spawn_aruco = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(smartfactory_sim, "launch",
+                         "spawn_aruco.launch.py")
         ),
     )
 
@@ -67,12 +75,6 @@ def generate_launch_description():
 
     tf = Node(package='tf2_ros', name="tf_world_odom",executable='static_transform_publisher', output='screen',
                 arguments=['0', '0', '0', '0', '0', '0', 'world', 'odom'])
-    
-    transf1 = Node(package='tf2_ros', name = 'tf_base_lwheel', executable='static_transform_publisher', output='screen',
-                    arguments=['0', '0', '0', '0', '0', '0','base_link_kobuki', 'wheel_left_link'])
-    # Base to Right Wheel
-    transf2 = Node(package='tf2_ros',name='tf_base_rwheel' ,executable='static_transform_publisher', output='screen',
-                    arguments=['0', '0', '0', '0', '0', '0', 'base_link_kobuki', 'wheel_right_link'])
     
     rviz = Node(
         package='rviz2',
@@ -86,10 +88,9 @@ def generate_launch_description():
         gazebo,
         tf_map,
         tf,
-        transf1,
-        transf2,
         spawn_cameras,
         spawn_ur,
         spawn_turtlebot2i,
-        rviz
+        spawn_aruco,
+        # rviz
     ])

@@ -1,12 +1,4 @@
 <?xml version="1.0"?>
-<!--
-    - Base      : kobuki
-    - Stacks    : interbotix
-    - 3d Sensor : astra
-    - Lidar     : rplidar
-
-    - arm : TODO: supported arms?
--->    
 <robot name="smart_cameras" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:arg name="use_nominal_extrinsics" default="false" />
@@ -14,5 +6,4 @@
   <xacro:smartfactory_world/>
   <xacro:sensor_kinect parent="world"/>
   <xacro:sensor_basler parent="world"/>
-
 </robot>

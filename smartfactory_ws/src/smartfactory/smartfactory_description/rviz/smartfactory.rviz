@@ -225,6 +225,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        plate_top_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         plate_utility_lower_link:
           Alpha: 1
           Show Axes: false
@@ -296,6 +301,26 @@ Visualization Manager:
           Show Trail: false
           Value: true
         standoff_50mm_11_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        standoff_50mm_12_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        standoff_50mm_13_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        standoff_50mm_14_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        standoff_50mm_15_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -508,6 +533,8 @@ Visualization Manager:
           Value: false
         plate_middle_link:
           Value: false
+        plate_top_link:
+          Value: false
         plate_utility_lower_link:
           Value: false
         plate_utility_upper_link:
@@ -539,6 +566,14 @@ Visualization Manager:
         standoff_50mm_10_link:
           Value: false
         standoff_50mm_11_link:
+          Value: false
+        standoff_50mm_12_link:
+          Value: false
+        standoff_50mm_13_link:
+          Value: false
+        standoff_50mm_14_link:
+          Value: false
+        standoff_50mm_15_link:
           Value: false
         standoff_50mm_1_link:
           Value: false
@@ -642,6 +677,8 @@ Visualization Manager:
                     {}
                   plate_middle_link:
                     {}
+                  plate_top_link:
+                    {}
                   plate_utility_lower_link:
                     {}
                   plate_utility_upper_link:
@@ -671,6 +708,14 @@ Visualization Manager:
                   standoff_50mm_10_link:
                     {}
                   standoff_50mm_11_link:
+                    {}
+                  standoff_50mm_12_link:
+                    {}
+                  standoff_50mm_13_link:
+                    {}
+                  standoff_50mm_14_link:
+                    {}
+                  standoff_50mm_15_link:
                     {}
                   standoff_50mm_1_link:
                     {}
@@ -784,7 +829,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 8.68553638458252
+      Distance: 3.626826286315918
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -799,10 +844,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5902033448219299
+      Pitch: -0.10979682207107544
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.5735867023468018
+      Yaw: 5.9435882568359375
     Saved: ~
 Window Geometry:
   Basler:
