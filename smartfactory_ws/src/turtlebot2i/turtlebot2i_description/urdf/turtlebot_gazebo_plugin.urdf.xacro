@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <robot name="turtlebot_gazebo" xmlns:xacro="http://ros.org/wiki/xacro">
-  <gazebo>
-    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+  <!-- <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="ros2_control">
         <robotNamespace>/turtlebot2i</robotNamespace>
         <robotSimType>gazebo_ros2_control/DefaultRobotHWSim</robotSimType>
         <legacyModeNS>true</legacyModeNS>
     </plugin>
-  </gazebo>
+  </gazebo> -->
 </robot>

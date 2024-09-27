@@ -17,8 +17,8 @@
         "--ipc=host",
         "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw",
 		"--name=smartfactory-lab",
-    	"--device=/dev/dri"
-		// "--device=/dev/bus/usb/001",
+        "--device=/dev/dri",
+		"--device=/dev/bus/usb/001"
 		// "--device=/dev/ttyUSB0"
     ],
 	"containerEnv": {

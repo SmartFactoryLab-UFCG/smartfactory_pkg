@@ -29,7 +29,7 @@
             </clip>
         </depth_camera>
         <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-          <camera_name>camera</camera_name>
+          <camera_name>astra</camera_name>
           <alwaysOn>true</alwaysOn>
           <updateRate>10</updateRate>
           <frame_name>camera_depth_optical_frame</frame_name>
@@ -42,17 +42,17 @@
           <pointCloudCutoff>0.4</pointCloudCutoff>
           <ros>
             <namespace>/</namespace>
-            <argument>/camera/camera_info:=/color/camera_info</argument>
-            <argument>/camera/image_raw:=/color/image_raw</argument>
-            <argument>/camera/image_raw/compressed:=/color/compressed</argument>
-            <argument>/camera/image_raw/compressedDepth:=/color/compressedDepth</argument>
-            <argument>/camera/image_raw/theora:=/color/theora</argument>
-            <argument>/camera/depth/camera_info:=/depth/camera_info</argument>
-            <argument>/camera/depth/image_raw:=/depth/image_raw</argument>
-            <argument>/camera/depth/image_raw/compressed:=/depth/compressed</argument>
-            <argument>/camera/depth/image_raw/compressedDepth:=/depth/compressedDepth</argument>
-            <argument>/camera/depth/image_raw/theora:=/depth/theora</argument>
-            <argument>/camera/points:=/depth/points</argument>
+            <argument>/camera/camera_info:=/astra/color/camera_info</argument>
+            <argument>/camera/image_raw:=/astra/color/image_raw</argument>
+            <argument>/camera/image_raw/compressed:=/astra/color/compressed</argument>
+            <argument>/camera/image_raw/compressedDepth:=/astra/color/compressedDepth</argument>
+            <argument>/camera/image_raw/theora:=/astra/color/theora</argument>
+            <argument>/camera/depth/camera_info:=/astra/depth/camera_info</argument>
+            <argument>/camera/depth/image_raw:=/astra/depth/image_raw</argument>
+            <argument>/camera/depth/image_raw/compressed:=/astra/depth/compressed</argument>
+            <argument>/camera/depth/image_raw/compressedDepth:=/astra/depth/compressedDepth</argument>
+            <argument>/camera/depth/image_raw/theora:=/astra/depth/theora</argument>
+            <argument>/camera/points:=/astra/depth/points</argument>
           </ros>
         </plugin>
       </sensor>

@@ -32,12 +32,11 @@ def generate_launch_description():
         # Define paths
         turtlebot2i = FindPackageShare(package="turtlebot2i_description").find("turtlebot2i_description")
         turtlebot2i_bringup = FindPackageShare(package="turtlebot2i_bringup").find("turtlebot2i_bringup")
-        rviz_path = os.path.join(get_package_share_directory('turtlebot2i_simulation'), 'rviz', 'real_turtlebot2i.rviz')
+        rviz_path = os.path.join(turtlebot2i, 'rviz', 'turtlebot2i.rviz')
 
         # Generate URDF
         lidar_name = 'rplidar' if 'rplidar' in type_lidar_sensor else type_lidar_sensor
-        xacro_args = {'gazebo_plugins': 'false'}
-        urdf = xacro.process_file(os.path.join(turtlebot2i, 'robots', f'{type_base}_{type_stacks}_{type_3D_sensor}_{lidar_name}.urdf.xacro'), mappings=xacro_args)
+        urdf = xacro.process_file(os.path.join(turtlebot2i, 'robots', f'{type_base}_{type_stacks}_{type_3D_sensor}_{lidar_name}.urdf.xacro'))
         pretty_urdf = urdf.toprettyxml(indent='   ')
         
         # Node to publish robot state
@@ -53,7 +52,7 @@ def generate_launch_description():
 
         # Initialize RViz
         actions.append(IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(turtlebot2i, 'launch','single_launch','rviz.launch.py')),
+            PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('turtlebot2i_simulation'), 'launch','single_launch','rviz.launch.py')),
             condition=IfCondition(LaunchConfiguration("rviz")),
             launch_arguments={'rviz_scene': rviz_path}.items()
         ))
