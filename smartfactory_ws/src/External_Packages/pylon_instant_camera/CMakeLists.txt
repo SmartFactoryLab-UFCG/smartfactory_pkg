@@ -34,4 +34,9 @@ install(TARGETS
   DESTINATION lib
 )
 
+install(DIRECTORY cfg
+  DESTINATION share/${PROJECT_NAME}
+)
+
+
 ament_package()
