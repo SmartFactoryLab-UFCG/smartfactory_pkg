@@ -27,6 +27,13 @@ setup(
     name=package_name,
     version='0.0.0',
     packages=find_packages(exclude=['test']),
+    py_modules=[
+        'smartfactory_simulation.kinematics',
+        'smartfactory_simulation.Transformations',  # Certifique-se de incluir o Transformations
+        'smartfactory_simulation.aruco_pose_transformer',
+        'smartfactory_simulation.kinematics_teste1',
+        'smartfactory_simulation.kinematics_teste2'
+    ],
     data_files=data_files_to_include,
     install_requires=['setuptools'],
     zip_safe=True,
@@ -37,6 +44,11 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'aruco_pose_transformer = smartfactory_simulation.aruco_pose_transformer:main',
+            'kinematics = smartfactory_simulation.kinematics:main',
+            'kinematics_teste1= smartfactory_simulation.kinematics_teste1:main',
+            'kinematics_teste2= smartfactory_simulation.kinematics_teste2:main',
         ],
+        
     },
 )

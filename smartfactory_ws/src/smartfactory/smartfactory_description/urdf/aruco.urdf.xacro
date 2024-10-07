@@ -2,7 +2,7 @@
 <robot name="aruco" xmlns:xacro="http://ros.org/wiki/xacro">
 
     <!-- Parâmetros -->
-    <xacro:property name="cubo_mass" value="2" />  <!-- Massa do cubo -->
+    <xacro:property name="cubo_mass" value="2.0" />  <!-- Massa do cubo -->
     <link name="world"/>
     <!-- Link do cubo -->
     <link name="cubo_link">
@@ -43,8 +43,7 @@
     </gazebo>
 
     <!-- Joint fixa o cubo no ambiente -->
-    <joint name="cubo_fixed_joint" type="floating">
-    <!-- <origin xyz="1.0 2.0 0.5" rpy="0 0 0"/>  -->
+    <joint name="cubo_fixed_joint" type="floating"> 
     <parent link="world"/>
     <child link="cubo_link"/>
     </joint>
