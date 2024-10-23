@@ -8,6 +8,7 @@ from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
+from launch.conditions import IfCondition
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
@@ -21,17 +22,7 @@ def generate_launch_description():
                                             "urdf/smart_spawn.urdf.xacro"),
                               ))
     pretty_urdf = urdf.toprettyxml(indent='   ')
-    
-    # Include the launch file to spawn the Kinect on Gazebo
-    spawn_ur = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(ur, "launch", "ur10.launch.py")),
-            launch_arguments={
-            "robot_ip": "192.168.0.100",
-            "launch_rviz": "false",
-            }.items(),
-        )
-    
+        
     aruco_params_file = os.path.join(get_package_share_directory('smartfactory_bringup'),'config','aruco_parameters.yaml')
 
     with open(aruco_params_file, 'r') as file:
@@ -39,6 +30,11 @@ def generate_launch_description():
 
     config_kinect = config["/aruco_node_kinect"]["ros__parameters"]
     config_basler = config["/aruco_node_basler"]["ros__parameters"]
+
+    # Declare arguments for choosing which components to launch
+    start_basler_arg = DeclareLaunchArgument(name='start_basler', default_value='true', description='Whether to start the Basler camera')
+    start_kinect_arg = DeclareLaunchArgument(name='start_kinect', default_value='true', description='Whether to start the Kinect camera')
+    start_ur10_arg = DeclareLaunchArgument(name='start_ur10', default_value='true', description='Whether to start the UR10 robot')
 
     # declare configuration parameters'
     kinect_marker_size_arg = DeclareLaunchArgument(name='kinect_marker_size', default_value=str(config_kinect['marker_size']), description='Size of the aruco marker in meters',)
@@ -62,7 +58,19 @@ def generate_launch_description():
     kinect_output_image_topic_arg = DeclareLaunchArgument(name='kinect_output_image_topic', default_value=config_kinect['output_image_topic'], description='Name of the topic to publish the image with the detected markers', )
     basler_output_image_topic_arg = DeclareLaunchArgument(name='basler_output_image_topic', default_value=config_basler['output_image_topic'], description='Name of the topic to publish the image with the detected markers',)
 
+    # Include the launch file to spawn the Kinect on Gazebo
+    spawn_ur = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(ur, "launch", "ur10.launch.py")),
+            launch_arguments={
+            "robot_ip": "192.168.0.100",
+            "launch_rviz": "false",
+            }.items(),
+            condition = IfCondition(LaunchConfiguration('start_ur10')),
+        )
+    
     kinect_aruco_node = Node(
+        condition = IfCondition(LaunchConfiguration('start_kinect')),
         package='aruco_pose_estimation',
         executable='aruco_node.py',
         name='kinect_aruco',
@@ -83,6 +91,7 @@ def generate_launch_description():
     )
 
     basler_aruco_node = Node(
+        condition = IfCondition(LaunchConfiguration('start_basler')),
         package='aruco_pose_estimation',
         executable='aruco_node.py',
         name='basler_aruco',
@@ -114,6 +123,7 @@ def generate_launch_description():
         )
 
     kinect_node = Node(
+        condition = IfCondition(LaunchConfiguration('start_kinect')),
         package="kinect_ros2",
         executable="kinect_ros2_node",
         name="kinect_ros2",
@@ -122,6 +132,7 @@ def generate_launch_description():
     
     
     basler_node = Node(
+        condition = IfCondition(LaunchConfiguration('start_basler')),
         package='pylon_ros2_camera_wrapper',
         executable='pylon_ros2_camera_wrapper',
         name='basler',
@@ -155,12 +166,14 @@ def generate_launch_description():
         )
     
     tf_aruco_kinect = Node(
+        condition = IfCondition(LaunchConfiguration('start_kinect')),
         package='smartfactory_bringup', 
         name="tf_aruco_kinect",
         executable='kinect_aruco_pose_transformer'
         )
     
     tf_aruco_basler = Node(
+        condition = IfCondition(LaunchConfiguration('start_basler')),
         package='smartfactory_bringup', 
         name="tf_aruco_basler",
         executable='basler_aruco_pose_transformer'
@@ -174,6 +187,10 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        start_basler_arg,
+        start_kinect_arg,
+        start_ur10_arg,
+
         kinect_marker_size_arg,
         basler_marker_size_arg,
         kinect_aruco_dictionary_id_arg,
