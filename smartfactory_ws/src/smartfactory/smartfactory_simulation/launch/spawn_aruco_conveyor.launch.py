@@ -44,7 +44,7 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        namespace="aruco",
+        namespace="aruco_conveyor",
         parameters=[{
             "robot_description": pretty_urdf,
             "use_sim_time": True,
@@ -56,7 +56,7 @@ def generate_launch_description():
     spawn_entity = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-topic', 'aruco/robot_description', '-entity', 'aruco', '-x', '0', '-y', '-1', '-z', '0.478'],
+        arguments=['-topic', 'aruco_conveyor/robot_description', '-entity', 'aruco2', '-x', '0.12', '-y', '0.83', '-z', '1'],
         output='screen'
     )
 

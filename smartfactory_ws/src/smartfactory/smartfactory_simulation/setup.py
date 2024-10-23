@@ -27,6 +27,12 @@ setup(
     name=package_name,
     version='0.0.0',
     packages=find_packages(exclude=['test']),
+    py_modules=[
+        'smartfactory_simulation.kinematics',
+        'smartfactory_simulation.Transformations',  # Certifique-se de incluir o Transformations
+        'smartfactory_simulation.kinematics_teste1',
+        'smartfactory_simulation.kinematics_teste2',
+    ],
     data_files=data_files_to_include,
     install_requires=['setuptools'],
     zip_safe=True,
@@ -37,6 +43,11 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'kinematics = smartfactory_simulation.kinematics:main',
+            'Transformations = smartfactory_simulation.Transformations:main',
+            'kinematics_teste1= smartfactory_simulation.kinematics_teste1:main',
+            'kinematics_teste2= smartfactory_simulation.kinematics_teste2:main',
         ],
+        
     },
 )

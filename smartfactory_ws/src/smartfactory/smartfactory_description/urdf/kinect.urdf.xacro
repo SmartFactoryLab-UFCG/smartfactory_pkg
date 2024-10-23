@@ -2,13 +2,13 @@
 <robot name="sensor_kinect" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" /> 
   <xacro:property name="cam_px" value="-0.02" />
-	<xacro:property name="cam_py" value="-1" /> 
-	<xacro:property name="cam_pz" value="3.0" />
+	<xacro:property name="cam_py" value="-1.0" /> 
+	<xacro:property name="cam_pz" value="2.92" />
 	<xacro:property name="cam_or" value="0" />
 	<xacro:property name="cam_op" value="0" />
 	<xacro:property name="cam_oy" value="0" />
 
-  <xacro:property name="kinect_cam_py" value="-1.18"/>
+  <xacro:property name="kinect_cam_py" value="-1.011"/>
 
   <!-- Parameterised in part by the values in turtlebot_properties.urdf.xacro -->
   <xacro:macro name="sensor_kinect" params="parent">
@@ -102,7 +102,7 @@
           <pointCloudTopicName>depth/points</pointCloudTopicName>
           <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
           <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
-          <frameName>camera_depth_optical_frame_kinect</frameName>
+          <frameName>camera_rgb_frame_kinect</frameName>
           <baseline>0.1</baseline>
           <distortion_k1>0.137499</distortion_k1>
           <distortion_k2>-0.201644</distortion_k2>
@@ -110,6 +110,21 @@
           <distortion_t1>0.011024</distortion_t1>
           <distortion_t2>0.015002</distortion_t2>
           <pointCloudCutoff>0.4</pointCloudCutoff>
+
+            <ros>
+            <namespace>/</namespace>
+            <argument>/kinect/camera_info:=/camera/color/camera_info</argument>
+            <argument>/kinect/image_raw:=/camera/color/image_raw</argument>
+            <argument>/kinect/image_raw/compressed:=/camera/color/compressed</argument>
+            <argument>/kinect/image_raw/compressedDepth:=/camera/color/compressedDepth</argument>
+            <argument>/kinect/image_raw/theora:=/camera/color/theora</argument>
+            <argument>/kinect/depth/camera_info:=/camera/depth/camera_info</argument>
+            <argument>/kinect/depth/image_raw:=/camera/depth/image_raw</argument>
+            <argument>/kinect/depth/image_raw/compressed:=/camera/depth/compressed</argument>
+            <argument>/kinect/depth/image_raw/compressedDepth:=/camera/depth/compressedDepth</argument>
+            <argument>/kinect/depth/image_raw/theora:=/camera/depth/theora</argument>
+            <argument>/kinect/points:=/camera/depth/points</argument>
+          </ros>
         </plugin>
       </sensor>
     </gazebo>
