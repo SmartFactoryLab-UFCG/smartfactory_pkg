@@ -77,6 +77,14 @@ def generate_launch_description():
                          "spawn_aruco.launch.py")
         ),
     )
+     # Include the launch file to spawn the Kinect on Gazebo
+    spawn_aruco_conveyor = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(smartfactory_sim, "launch",
+                         "spawn_aruco_conveyor.launch.py")
+        ),
+    )
+
     tf_map = Node(package='tf2_ros', name="tf_map_world",executable='static_transform_publisher', output='screen',
                 arguments=['0', '0', '0', '0', '0', '0', 'map', 'world'])
 
@@ -92,5 +100,6 @@ def generate_launch_description():
         spawn_ur,
         spawn_turtlebot2i,
         rviz,
-        spawn_aruco
+        spawn_aruco,
+        spawn_aruco_conveyor
     ])

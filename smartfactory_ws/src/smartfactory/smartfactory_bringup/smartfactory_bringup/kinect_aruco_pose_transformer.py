@@ -9,7 +9,7 @@ import tf2_ros
 class ArucoPoseWorld(Node):
 
     def __init__(self):
-        super().__init__('aruco_pose_world')
+        super().__init__('kinect_aruco_pose_world')
         # Iniciando um broadcaster de transformações e um listener
         self.tf_broadcaster = TransformBroadcaster(self)
         self.tf_buffer = Buffer()
@@ -17,10 +17,10 @@ class ArucoPoseWorld(Node):
 
         # Subscrição para o tópico de poses do Aruco
         self.pose_subscriber = self.create_subscription(
-            PoseArray, '/aruco/poses', self.pose_callback, 10)
+            PoseArray, 'kinect/aruco/poses', self.pose_callback, 10)
 
         # Publicador da pose do Aruco em relação ao mundo
-        self.pose_world_publisher = self.create_publisher(PoseArray, '/aruco/poses_world', 10)
+        self.pose_world_publisher = self.create_publisher(PoseArray, 'kinect/aruco/poses_world', 10)
 
     def pose_callback(self, msg):
         pose_array_world = PoseArray()
@@ -68,7 +68,7 @@ class ArucoPoseWorld(Node):
                 t_world = TransformStamped()
                 t_world.header.stamp = self.get_clock().now().to_msg()
                 t_world.header.frame_id = 'world'
-                t_world.child_frame_id = f"aruco_{i}_world"
+                t_world.child_frame_id = f"kinect_aruco_world_{i}"
                 t_world.transform.translation.x = t_aruco_w_translation[0]
                 t_world.transform.translation.y = t_aruco_w_translation[1]
                 t_world.transform.translation.z = t_aruco_w_translation[2]

@@ -7,7 +7,9 @@
   <maintainer email="hoe@fh-wedel.de">Hermann Höhne</maintainer>
   <license>MIT</license>
   <url type="repository">https://github.com/fhwedel-hoe/pylon_usb-instant-camera</url>
+  
   <buildtool_depend>ament_cmake</buildtool_depend>
+
   <depend>rclcpp</depend>
   <depend>image_transport</depend>
   <depend>sensor_msgs</depend>

@@ -109,8 +109,7 @@ def generate_launch_description():
 
     # launch realsense camera node
     cam_feed_launch_file = PathJoinSubstitution(
-        [FindPackageShare("kinect_ros2"), "launch", "showimage.launch.py"]
-        #[FindPackageShare("kinect_ros2"), "launch", "pointcloud.launch.py"]
+        [FindPackageShare("realsense2_camera"), "launch", "rs_launch.py"]
     )
 
     camera_feed_depth_node = IncludeLaunchDescription(
@@ -164,5 +163,5 @@ def generate_launch_description():
         aruco_node, 
         camera_feed_depth_node,
         camera_feed_node,
-        rviz2_node,
+        rviz2_node
     ])
