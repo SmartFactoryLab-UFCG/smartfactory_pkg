@@ -73,12 +73,13 @@ class UR10KinematicsAction(Node):
         self.aruco_poses = None
 
         # Action Client para enviar a ação FollowJointTrajectory
-        self._action_client = ActionClient(self, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
+        self._action_client = ActionClient(self, FollowJointTrajectory, '/scaled_joint_trajectory_controller/follow_joint_trajectory')
         # Criar cliente para o serviço de IO
         self.io_client = self.create_client(SetIO, '/io_and_status_controller/set_io')
         # Assinando o tópico /joint_states para ouvir os estados das juntas
         self.joint_state_sub = self.create_subscription(JointState, '/joint_states', self.joint_state_callback, 10)      
-        self.aruco_sub = self.create_subscription(PoseArray, '/aruco/poses_world', self.aruco_pose_callback, 10)
+        self.aruco_sub = self.create_subscription(PoseArray, '/aruco/filtered_poses', self.aruco_pose_callback, 10)
+        # self.aruco_sub = self.create_subscription(PoseArray, '/aruco/poses_world', self.aruco_pose_callback, 10)
 
     def aruco_pose_callback(self, msg):
         # Callback que recebe as poses do ArUco e armazena
@@ -97,31 +98,24 @@ class UR10KinematicsAction(Node):
     
     def send_joint_angles(self):
         # Criação do Goal para a ação FollowJointTrajectory
-        # print(self.aruco_poses)
-        p_Aruco = np.array([-self.aruco_poses[0].position.x, -self.aruco_poses[0].position.y, self.aruco_poses[0].position.z-0.3])
-        # p_Aruco = np.round(p_Aruco, 4)
+        print(self.aruco_poses)
+        # Posição
+        # p_Aruco = [-(self.aruco_poses[0].position.x), -(self.aruco_poses[0].position.y), (self.aruco_poses[0].position.z-0.451)]
+        p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), (0.55)]
+        p_Aruco = [round(p, 4) for p in p_Aruco]
         print("Posição do Aruco", p_Aruco)
-
-        o_Aruco = [self.aruco_poses[0].orientation.x, self.aruco_poses[0].orientation.y, self.aruco_poses[0].orientation.z, self.aruco_poses[0].orientation.w]
+        # Orientação
+        o_Aruco = [1, 0, 0, 0]
         o_Aruco = R.from_quat(o_Aruco)
         o_Aruco = o_Aruco.as_rotvec()
-        # o_Aruco = np.round(o_Aruco, 4)
         print("Orientação do Aruco", o_Aruco)
-
-        # p1 = np.concatenate((p_Aruco, o_Aruco))
-        position = [0.004, 0.996, -0.245]
-        # orientation = [0, 0.7071068, 0.7071068, 0]
-        # orientation = [0, 0, 0, 1]
-        orientation = [0.5, 0.5, 0.5, 0.5]
-        orientation = R.from_quat(orientation)
-        orientation = orientation.as_rotvec()
-        pose = np.concatenate((position, orientation))
+        
+        # Pose
+        pose = np.concatenate((p_Aruco, o_Aruco))
         print(pose)
+        # Cinemática inversa
         self.inverse_k = self.inverse_kinematics(pose)
         print("ik:", self.inverse_k)
-
-        # p2 = p = np.concatenate(([0,0.5,0.8], o_Aruco))
-        # self.inverse_k2 = self.inverse_kinematics(p2)
 
         goal_msg = FollowJointTrajectory.Goal()
         goal_msg.trajectory.joint_names = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
@@ -129,42 +123,34 @@ class UR10KinematicsAction(Node):
         points = []
 
         # Primeiro ponto (cinemática inversa)
-        a = 0
+        a = 2
         point1 = [self.inverse_k[0][a], self.inverse_k[1][a], self.inverse_k[2][a], self.inverse_k[3][a], self.inverse_k[4][a], self.inverse_k[5][a]]
-        # point1 = [round(p, 4) for p in point1]
+        point1 = [round(p, 3) for p in point1]
         print(point1)
         point_1 = JointTrajectoryPoint()
         point_1.positions = point1
         point_1.time_from_start = Duration(seconds=10).to_msg()
         points.append(point_1)
 
-        # # Segundo ponto
-        # point2 = [self.inverse_k2[0][a], self.inverse_k2[1][a], self.inverse_k2[2][a], -self.inverse_k2[3][a], self.inverse_k2[4][a], 0 * self.inverse_k2[5][a]]
-        # point2 = [round(p, 4) for p in point2]
-        # point_2 = JointTrajectoryPoint()
-        # point_2.positions = point2
-        # point_2.time_from_start = Duration(seconds=2).to_msg()
-        # points.append(point_2)
+        # Terceiro ponto (convertido para radianos)
+        point3 = [-235, -75, 37, -58, -90, 0]
+        point3 = [np.radians(p) for p in point3]
+        point_3 = JointTrajectoryPoint()
+        point_3.positions = point3
+        point_3.time_from_start = Duration(seconds=4).to_msg()
+        points.append(point_3)
 
-        # # Terceiro ponto (convertido para radianos)
-        # point3 = [-235, -71, 37, -58, -90, 0]
-        # point3 = [np.radians(p) for p in point3]
-        # point_3 = JointTrajectoryPoint()
-        # point_3.positions = point3
-        # point_3.time_from_start = Duration(seconds=4).to_msg()
-        # points.append(point_3)
-
-        # # Quarto ponto (convertido para radianos)
-        # point4 = [-250, -57, 33, -68, -90, 32]
-        # point4 = [np.radians(p) for p in point4]
-        # point_4 = JointTrajectoryPoint()
-        # point_4.positions = point4
-        # point_4.time_from_start = Duration(seconds=2).to_msg()
-        # points.append(point_4)
+        # Quarto ponto (convertido para radianos)
+        point4 = [-250, -57, 33, -68, -90, 32]
+        point4 = [np.radians(p) for p in point4]
+        point_4 = JointTrajectoryPoint()
+        point_4.positions = point4
+        point_4.time_from_start = Duration(seconds=2).to_msg()
+        points.append(point_4)
         
         for i, point in enumerate(points):
             goal_msg.trajectory.points = [point]
-            # self.io(1.0)
+            self.io(1.0)
 
             # Enviar o ponto
             self.get_logger().info(f'Enviando ponto {i+1}...')
@@ -186,7 +172,7 @@ class UR10KinematicsAction(Node):
                 self.get_logger().info(f'Ponto {i+1} atingido com sucesso!')
             else:
 
-                self.get_logger().error(f'Falha ao atingir o ponto {i+1}, erro: {result.error_code}')
+                self.get_logger().error(f'Falha ao atingir o ponto {i+1}, erro: {result.result.error_code}')
                 return
 
             # Pausar por 10 segundos antes de enviar o próximo ponto
@@ -195,6 +181,7 @@ class UR10KinematicsAction(Node):
 
         self.get_logger().info('Desligando ventosa...')
         self.io(0.0)
+        time.sleep(5)
 
     def goal_response_callback(self, future):
         goal_handle = future.result()
