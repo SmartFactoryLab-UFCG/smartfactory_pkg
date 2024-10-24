@@ -1,0 +1,11 @@
+digraph pastafarianism {
+ordering=out;
+graph [fontname="times-roman"];
+node [fontname="times-roman"];
+edge [fontname="times-roman"];
+"Kinect ArUco Sequence" [fillcolor=orange, fontcolor=black, fontsize=9, label="Ⓜ Kinect ArUco Sequence", shape=box, style=filled];
+"Aguardar Detecção do ArUco" [fillcolor=gray, fontcolor=black, fontsize=9, label="Aguardar Detecção do ArUco", shape=ellipse, style=filled];
+"Kinect ArUco Sequence" -> "Aguardar Detecção do ArUco";
+"Capturar Pose do ArUco" [fillcolor=gray, fontcolor=black, fontsize=9, label="Capturar Pose do ArUco", shape=ellipse, style=filled];
+"Kinect ArUco Sequence" -> "Capturar Pose do ArUco";
+}
