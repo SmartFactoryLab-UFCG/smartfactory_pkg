@@ -4,3 +4,4 @@ smartfactory_ws/log
 *.pyc
 .vscode/settings.json
 smartfactory_ws/rosbags
+dependencies/libpylon/pylon-supplementary-package-for-blaze-1.7.0.35c9275fa_amd64.deb

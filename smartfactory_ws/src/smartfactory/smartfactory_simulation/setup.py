@@ -32,6 +32,9 @@ setup(
         'smartfactory_simulation.Transformations',  # Certifique-se de incluir o Transformations
         'smartfactory_simulation.kinematics_teste1',
         'smartfactory_simulation.kinematics_teste2',
+        'smartfactory_simulation.aruco_metrics',
+        'smartfactory_simulation.filtered_pose',
+        'smartfactory_simulation.plot'
     ],
     data_files=data_files_to_include,
     install_requires=['setuptools'],
@@ -47,6 +50,9 @@ setup(
             'Transformations = smartfactory_simulation.Transformations:main',
             'kinematics_teste1= smartfactory_simulation.kinematics_teste1:main',
             'kinematics_teste2= smartfactory_simulation.kinematics_teste2:main',
+            'aruco_metrics= smartfactory_simulation.aruco_metrics:main',
+            'filtered_pose= smartfactory_simulation.filtered_pose:main',
+            'plot= smartfactory_simulation.plot:main',
         ],
         
     },
