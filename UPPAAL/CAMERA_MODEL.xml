@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+</declaration>
+	<template>
+		<name x="5" y="5">camera_capture</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="-229" y="-34">
+			<name x="-272" y="-25">idle</name>
+		</location>
+		<location id="id1" x="-85" y="-76">
+			<name x="-119" y="-59">capture</name>
+		</location>
+		<location id="id2" x="102" y="-76">
+			<name x="59" y="-68">processing</name>
+		</location>
+		<location id="id3" x="348" y="-76">
+			<name x="297" y="-68">transmission</name>
+		</location>
+		<location id="id4" x="-229" y="102">
+			<name x="-263" y="119">streaming</name>
+		</location>
+		<location id="id5" x="340" y="102">
+			<name x="349" y="128">error</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id6" controllable="false">
+			<source ref="id4"/>
+			<target ref="id5"/>
+		</transition>
+		<transition id="id7">
+			<source ref="id4"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-195" y="25">stop_streeaming?</label>
+			<nail x="-204" y="34"/>
+		</transition>
+		<transition id="id8" controllable="false">
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-59" y="-195">transmission_completed?</label>
+			<nail x="348" y="-170"/>
+			<nail x="-272" y="-170"/>
+			<nail x="-272" y="-153"/>
+			<nail x="-272" y="-34"/>
+		</transition>
+		<transition id="id9">
+			<source ref="id0"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-399" y="25">start_Streaming?</label>
+			<nail x="-255" y="34"/>
+		</transition>
+		<transition id="id10" controllable="false">
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="119" y="-102">processing_completed?</label>
+		</transition>
+		<transition id="id11" controllable="false">
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-68" y="-102">capture_completed?</label>
+		</transition>
+		<transition id="id12">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-238" y="-85">start_capture?</label>
+			<label kind="comments" x="-161" y="-34">trigger received</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+</system>
+	<queries>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>
