@@ -21,6 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             'kinect_behavior_node = kinect_behavior_tree.kinect_behavior_node:main',
+            'kinect_behavior = kinect_behavior_tree.kinect_behavior:main',
+            'aruco_detecter_behavior = kinect_behavior_tree.aruco_detecter_behavior:main',
         ],
     },
 )

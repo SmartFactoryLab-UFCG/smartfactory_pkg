@@ -10,10 +10,10 @@ class ArucoFilteredPosePublisher(Node):
 
         # Assinando o tópico para receber as poses do ArUco
         self.subscription = self.create_subscription(
-            PoseArray, '/aruco/poses_world', self.pose_callback, 10)
+            PoseArray, '/kinect/aruco/poses_world', self.pose_callback, 10)
         
         # Publicador para o novo tópico de poses filtradas
-        self.publisher_ = self.create_publisher(PoseArray, '/aruco/filtered_poses', 10)
+        self.publisher_ = self.create_publisher(PoseArray, '/kinect/aruco/filtered_poses', 10)
 
         # Filtros de média móvel (para suavizar as leituras)
         self.window_size = window_size
@@ -54,7 +54,7 @@ class ArucoFilteredPosePublisher(Node):
         self.publisher_.publish(filtered_pose_array)
 
         # Para depuração: exibir no terminal o número de poses suavizadas
-        self.get_logger().info(f"Publicando {len(filtered_pose_array.poses)} poses suavizadas.")
+        # self.get_logger().info(f"Publicando {len(filtered_pose_array.poses)} poses suavizadas.")
 
     def update_window(self, window, new_value):
         """ Atualiza a janela do filtro de média móvel """

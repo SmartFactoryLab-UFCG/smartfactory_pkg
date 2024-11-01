@@ -29,12 +29,13 @@ setup(
     packages=find_packages(exclude=['test']),
     py_modules=[
         'smartfactory_simulation.kinematics',
-        'smartfactory_simulation.Transformations',  # Certifique-se de incluir o Transformations
+        'smartfactory_simulation.SM_Transformations',  # Certifique-se de incluir o Transformations
         'smartfactory_simulation.kinematics_teste1',
         'smartfactory_simulation.kinematics_teste2',
         'smartfactory_simulation.aruco_metrics',
         'smartfactory_simulation.filtered_pose',
-        'smartfactory_simulation.plot'
+        'smartfactory_simulation.plot',
+        'smartfactory_simulation.calculate_kinematics'
     ],
     data_files=data_files_to_include,
     install_requires=['setuptools'],
@@ -47,12 +48,13 @@ setup(
     entry_points={
         'console_scripts': [
             'kinematics = smartfactory_simulation.kinematics:main',
-            'Transformations = smartfactory_simulation.Transformations:main',
+            'SM_Transformations = smartfactory_simulation.SM_Transformations:main',
             'kinematics_teste1= smartfactory_simulation.kinematics_teste1:main',
             'kinematics_teste2= smartfactory_simulation.kinematics_teste2:main',
             'aruco_metrics= smartfactory_simulation.aruco_metrics:main',
             'filtered_pose= smartfactory_simulation.filtered_pose:main',
             'plot= smartfactory_simulation.plot:main',
+            'calculate_kinematics= smartfactory_simulation.calculate_kinematics:main',
         ],
         
     },

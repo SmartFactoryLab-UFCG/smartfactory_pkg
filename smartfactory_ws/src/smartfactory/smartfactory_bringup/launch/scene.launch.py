@@ -186,6 +186,13 @@ def generate_launch_description():
         arguments=['-d', os.path.join(get_package_share_directory('smartfactory_description'), 'rviz', 'smartfactory.rviz')],
     )
 
+    aruco_filtered = Node(
+        package='smartfactory_simulation',
+        executable='filtered_pose',
+        name='aruco_filtered',
+        output='screen',
+    )
+
     return LaunchDescription([
         start_basler_arg,
         start_kinect_arg,
@@ -223,4 +230,5 @@ def generate_launch_description():
         tf_aruco_basler,
         spawn_ur,
         rviz,
+        aruco_filtered
     ])

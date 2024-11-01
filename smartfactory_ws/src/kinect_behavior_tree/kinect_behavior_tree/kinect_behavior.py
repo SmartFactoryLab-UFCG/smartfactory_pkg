@@ -8,7 +8,6 @@ import py_trees.console as console
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from sensor_msgs.msg import CameraInfo
-from geometry_msgs.msg import PoseArray
 from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy
 
 class EstadoCameraPronto(py_trees.behaviour.Behaviour):
@@ -88,115 +87,25 @@ class VerifyCameraInfo(py_trees.behaviour.Behaviour):
             self.node.get_logger().warn("No recent camera info received!")
             return py_trees.common.Status.RUNNING
 
-class ArucoTreeNode(Node):
-    def __init__(self):
-        super().__init__("camera_behavior_tree_node")
-        self.info_msg = None
-        self.last_msg_time = None  # Armazena o timestamp da última mensagem recebida
-        self.last_msg_time_1 = None  # Timestamp para as mensagens de ArUco
-
-        # Subscription para informações da câmera com QoS configurado
-        qos_profile = QoSProfile(depth=10)
-        qos_profile.reliability = ReliabilityPolicy.RELIABLE
-        qos_profile.durability = DurabilityPolicy.VOLATILE
-        self.create_subscription(CameraInfo, "/camera/color/camera_info", self.camera_info_callback, qos_profile)
-
-    def camera_info_callback(self, msg):
-        self.info_msg = msg
-        self.last_msg_time = time.time()  # Atualiza o timestamp
-
-class VerifyCameraInfo(py_trees.behaviour.Behaviour):
-    def __init__(self, node, name="CameraStream?"):
-        super().__init__(name)
-        self.node = node
-        self.check_interval = 1  # Intervalo de verificação em segundos
-
-    def update(self):
-        current_time = time.time()
-        
-        # Verifica se houve uma mensagem recente (nos últimos `check_interval` segundos)
-        if self.node.last_msg_time and (current_time - self.node.last_msg_time < self.check_interval):
-            self.node.get_logger().info("Câmera transmitindo.")
-            return py_trees.common.Status.SUCCESS
-        else:
-            self.node.get_logger().warn("Falha na transmissão da câmera!")
-            return py_trees.common.Status.RUNNING
-
-class MonitorArucoPose(py_trees.behaviour.Behaviour):
-    def __init__(self, node, name="MonitorArucoPose"):
-        super().__init__(name)
-        self.node = node
-        self.pose_received = False
-        self.check_interval_1 = 1  # Intervalo de verificação em segundos
-
-        # Inscrevendo-se no tópico que publica as poses do ArUco
-        self.node.create_subscription(PoseArray, "/kinect/aruco/poses", self.pose_callback, 10)
-
-    def pose_callback(self, msg):
-        # Armazena as poses recebidas para futura publicação
-        self.node.pose_array = msg
-        self.node.last_msg_time_1 = time.time()  # Atualiza o timestamp
-        self.pose_received = True
-
-    def update(self):
-        current_time_1 = time.time()
-        if self.node.last_msg_time_1 and (current_time_1 - self.node.last_msg_time_1 < self.check_interval_1):
-            self.node.get_logger().info("Poses do ArUco recebidas.")
-            return py_trees.common.Status.SUCCESS
-        else:
-            self.node.get_logger().warn("Sem poses do ArUco!")
-            return py_trees.common.Status.FAILURE
-
-class PublishResults(py_trees.behaviour.Behaviour):
-    def __init__(self, node, name="PublishResults"):
-        super().__init__(name)
-        self.node = node
-
-    def update(self):
-        if hasattr(self.node, 'pose_array'):
-            self.node.poses_pub.publish(self.node.pose_array)
-            return py_trees.common.Status.SUCCESS
-        return py_trees.common.Status.FAILURE
-
-def create_root_aruco(node) -> py_trees.behaviour.Behaviour:
-    # root = py_trees.composites.Parallel(
-    #     name="Raiz",
-    #     policy=py_trees.common.ParallelPolicy.SuccessOnAll(synchronise=False)
-    # )
-
-    # Sequência para verificar informações da câmera
-    verify_camera_sequence = py_trees.composites.Sequence(name="Sequencia", memory=False)
-    verify_camera_sequence.add_child(VerifyCameraInfo(node))
-    verify_camera_sequence.add_child(MonitorArucoPose(node))
-
-    return verify_camera_sequence
-
-def create_root_camera() -> py_trees.behaviour.Behaviour:
-    # root = py_trees.composites.Parallel(
-    #     name="Raiz",
-    #     policy=py_trees.common.ParallelPolicy.SuccessOnAll(synchronise=False)
-    # )
+def create_root() -> py_trees.behaviour.Behaviour:
+    root = py_trees.composites.Parallel(
+        name="Raiz",
+        policy=py_trees.common.ParallelPolicy.SuccessOnAll(synchronise=False)
+    )
     # Sequência para verificar informações da câmera
     verify_camera_sequence = py_trees.composites.Sequence(name="Sequencia", memory=False)
     verify_camera_sequence.add_child(EstadoCameraPronto())
     verify_camera_sequence.add_child(StartKinectNode())
 
-    return verify_camera_sequence
-
-def create_main_tree(node) -> py_trees.behaviour.Behaviour:
-    root = py_trees.composites.Parallel(name="Raiz", policy=py_trees.common.ParallelPolicy.SuccessOnAll())
-    
-    # Adiciona as subárvores como filhos do nó raiz
-    root.add_child(create_root_camera())
-    root.add_child(create_root_aruco(node))
-    
+    # Adiciona ambas as sequências ao nó paralelo
+    root.add_child(verify_camera_sequence)
     return root
 
 def main(args=None):
     rclpy.init(args=args)
     node = KinectTreeNode()
     # Criação da árvore de comportamento
-    root = create_main_tree(node)
+    root = create_root()
 
     # Configuração da árvore para visualização e execução
     behavior_tree = py_trees_ros.trees.BehaviourTree(root=root, unicode_tree_debug=True)
