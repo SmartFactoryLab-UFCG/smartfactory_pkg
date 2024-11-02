@@ -89,22 +89,22 @@ class UR10KinematicsCalculator(Node):
 
     def calculate_inverse_kinematics(self):
         # Criação do Goal para a ação FollowJointTrajectory
-        p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), (0.55)]
+        p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), (0.118)]
         p_Aruco = [round(p, 4) for p in p_Aruco]
-        print("Posição do Aruco", p_Aruco)
+        # print("Posição do Aruco", p_Aruco)
         # Orientação
         o_Aruco = [1, 0, 0, 0]
         o_Aruco = R.from_quat(o_Aruco)
         o_Aruco = o_Aruco.as_rotvec()
-        print("Orientação do Aruco", o_Aruco)
+        # print("Orientação do Aruco", o_Aruco)
         
         # Pose
         pose = np.concatenate((p_Aruco, o_Aruco))
-        print(pose)
+        # print(pose)
         # Cinemática inversa
         self.inverse_k = self.inverse_kinematics(pose)
-        print("ik:", self.inverse_k)
-        
+        # print("ik:", self.inverse_k)
+
         a = 2
         joint_angles = [self.inverse_k[0][a], self.inverse_k[1][a], self.inverse_k[2][a], self.inverse_k[3][a], self.inverse_k[4][a], self.inverse_k[5][a]]
 
@@ -114,9 +114,9 @@ class UR10KinematicsCalculator(Node):
     def publish_joint_angles(self, joint_angles):
         # Publica os ângulos calculados em Float64MultiArray
         msg = Float64MultiArray()
-        msg.data = joint_angles.flatten().tolist()
+        msg.data = joint_angles
         self.joint_angles_pub.publish(msg)
-        self.get_logger().info("Joint angles published: " + str(msg.data))
+        # self.get_logger().info("Joint angles published: " + str(msg.data))
     
     def _DH(self, a, alpha, d, theta):
 

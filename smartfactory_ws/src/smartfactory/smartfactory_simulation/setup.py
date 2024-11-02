@@ -35,7 +35,11 @@ setup(
         'smartfactory_simulation.aruco_metrics',
         'smartfactory_simulation.filtered_pose',
         'smartfactory_simulation.plot',
-        'smartfactory_simulation.calculate_kinematics'
+        'smartfactory_simulation.calculate_kinematics',
+        'smartfactory_simulation.send_angles',
+        'smartfactory_simulation.ventosa_on',
+        'smartfactory_simulation.ventosa_off',
+        'smartfactory_simulation.send_conveyor'
     ],
     data_files=data_files_to_include,
     install_requires=['setuptools'],
@@ -55,6 +59,10 @@ setup(
             'filtered_pose= smartfactory_simulation.filtered_pose:main',
             'plot= smartfactory_simulation.plot:main',
             'calculate_kinematics= smartfactory_simulation.calculate_kinematics:main',
+            'send_angles= smartfactory_simulation.send_angles:main',
+            'ventosa_on=smartfactory_simulation.ventosa_on:main',
+            'ventosa_off=smartfactory_simulation.ventosa_off:main',
+            'send_conveyor=smartfactory_simulation.send_conveyor:main'
         ],
         
     },

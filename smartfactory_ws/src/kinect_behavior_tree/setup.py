@@ -23,6 +23,9 @@ setup(
             'kinect_behavior_node = kinect_behavior_tree.kinect_behavior_node:main',
             'kinect_behavior = kinect_behavior_tree.kinect_behavior:main',
             'aruco_detecter_behavior = kinect_behavior_tree.aruco_detecter_behavior:main',
+            'ur10_behavior = kinect_behavior_tree.ur10_behavior:main',
+            'basler_behavior_node = kinect_behavior_tree.basler_behavior_node:main',
+            'basler_behavior = kinect_behavior_tree.basler_behavior:main',
         ],
     },
 )

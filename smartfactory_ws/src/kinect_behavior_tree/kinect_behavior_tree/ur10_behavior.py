@@ -8,8 +8,12 @@ import py_trees.console as console
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from geometry_msgs.msg import PoseArray
-from sensor_msgs.msg import CameraInfo
-from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy
+from rclpy.action import ActionClient
+from std_msgs.msg import Float64MultiArray
+from sensor_msgs.msg import JointState
+from control_msgs.action import FollowJointTrajectory
+from trajectory_msgs.msg import JointTrajectoryPoint
+from rclpy.duration import Duration
 
 class ArucoPoseSubscriber(Node):
     def __init__(self):
@@ -20,7 +24,7 @@ class ArucoPoseSubscriber(Node):
         # Subscrição ao tópico de poses do ArUco
         self.aruco_sub = self.create_subscription(
             PoseArray, 
-            '/aruco/filtered_poses', 
+            '/kinect/aruco/filtered_poses', 
             self.aruco_pose_callback, 
             10
         )
@@ -28,7 +32,7 @@ class ArucoPoseSubscriber(Node):
     def aruco_pose_callback(self, msg):
         self.aruco_pose = msg
         self.last_msg_time = time.time()  # Atualiza o timestamp
-        self.get_logger().info("Pose do ArUco recebida.")
+        # self.get_logger().info("Pose do ArUco recebida.")
 
 class CheckArucoPose(py_trees.behaviour.Behaviour):
     def __init__(self, node, name="CheckArucoPose"):
@@ -46,12 +50,127 @@ class CheckArucoPose(py_trees.behaviour.Behaviour):
         else:
             self.node.get_logger().warn("Pose do ArUco não está disponível!")
             return py_trees.common.Status.RUNNING
+        
+class SendJointAnglesAction(py_trees.behaviour.Behaviour):
+    def __init__(self, node, name="VaParaObjeto"):
+        super(SendJointAnglesAction, self).__init__(name)
+        self.node = node
+
+    def initialise(self):
+        # Chama o nó `send_angles` como um subprocesso
+        self.process = subprocess.Popen(['ros2', 'run', 'smartfactory_simulation', 'send_angles'])
+        self.node.get_logger().info("Nó de envio de ângulos de junta iniciado.")
+
+    def update(self):
+        # Verifica se o processo ainda está rodando
+        if self.process.poll() is None:
+            return py_trees.common.Status.RUNNING
+        elif self.process.returncode == 0:
+            self.node.get_logger().info("Envio de ângulos concluído com sucesso.")
+            return py_trees.common.Status.SUCCESS
+        else:
+            self.node.get_logger().error("Erro no envio de ângulos.")
+            return py_trees.common.Status.FAILURE
+
+class VentosaOn(py_trees.behaviour.Behaviour):
+    def __init__(self, name="VentosaOn"):
+        super().__init__(name)
+        self.process = None
+
+    def initialise(self):
+        self.process = subprocess.Popen(['ros2', 'run', 'smartfactory_simulation', 'ventosa_on'])
+        self.feedback_message = "Ativando ventosa..."
+
+    def update(self):
+        if self.process.poll() is None:
+            return py_trees.common.Status.RUNNING
+        elif self.process.returncode == 0:
+            self.feedback_message = "Ventosa ativada com sucesso."
+            return py_trees.common.Status.SUCCESS
+        else:
+            self.feedback_message = "Erro ao ativar a ventosa."
+            return py_trees.common.Status.FAILURE
+
+    def terminate(self, new_status):
+        if self.process and self.process.poll() is None:
+            self.process.terminate()
+            self.process.wait()
+
+# Comportamento para enviar o comando da esteira
+class SendConveyor(py_trees.behaviour.Behaviour):
+    def __init__(self, name="VaParaEsteira"):
+        super().__init__(name)
+        self.process = None
+
+    def initialise(self):
+        self.process = subprocess.Popen(['ros2', 'run', 'smartfactory_simulation', 'send_conveyor'])
+        self.feedback_message = "Enviando comando para a esteira..."
+
+    def update(self):
+        if self.process.poll() is None:
+            return py_trees.common.Status.RUNNING
+        elif self.process.returncode == 0:
+            self.feedback_message = "Comando da esteira enviado com sucesso."
+            return py_trees.common.Status.SUCCESS
+        else:
+            self.feedback_message = "Erro ao enviar comando da esteira."
+            return py_trees.common.Status.FAILURE
+
+    def terminate(self, new_status):
+        if self.process and self.process.poll() is None:
+            self.process.terminate()
+            self.process.wait()
+
+# Comportamento para desativar a ventosa
+class VentosaOff(py_trees.behaviour.Behaviour):
+    def __init__(self, name="VentosaOff"):
+        super().__init__(name)
+        self.process = None
+
+    def initialise(self):
+        self.process = subprocess.Popen(['ros2', 'run', 'smartfactory_simulation', 'ventosa_off'])
+        self.feedback_message = "Desativando ventosa..."
+
+    def update(self):
+        if self.process.poll() is None:
+            return py_trees.common.Status.RUNNING
+        elif self.process.returncode == 0:
+            self.feedback_message = "Ventosa desativada com sucesso."
+            return py_trees.common.Status.SUCCESS
+        else:
+            self.feedback_message = "Erro ao desativar a ventosa."
+            return py_trees.common.Status.FAILURE
+
+    def terminate(self, new_status):
+        if self.process and self.process.poll() is None:
+            self.process.terminate()
+            self.process.wait()
+
+def create_root(node):
+    # Instancia os comportamentos na sequência especificada
+    root = py_trees.composites.Parallel(
+        name="Raiz",
+        policy=py_trees.common.ParallelPolicy.SuccessOnAll(synchronise=False)
+    )
+    check_aruco = CheckArucoPose(node)
+    # calculate_kinematics = CalculateInverseKinematics(node)
+    send_angles = SendJointAnglesAction(node)
+    ventosa_on = VentosaOn()
+    send_conveyor = SendConveyor()
+    ventosa_off = VentosaOff()
+    
+    # Configura a sequência de inicialização na árvore
+    seq = py_trees.composites.Sequence(name="Sequencia", memory=True)
+    seq.add_children([check_aruco, send_angles, ventosa_on, send_conveyor, ventosa_off])
+    
+    root.add_child(seq)
+    return root           
 
 def main(args=None):
     rclpy.init(args=args)
-    node = KinectTreeNode()
+    node = ArucoPoseSubscriber()
     # Criação da árvore de comportamento
-    root = create_root()
+    root = create_root(node)
 
     # Configuração da árvore para visualização e execução
     behavior_tree = py_trees_ros.trees.BehaviourTree(root=root, unicode_tree_debug=True)
