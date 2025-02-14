@@ -1,3 +1,4 @@
+// -------- ORGINIAL
 #ifndef KINECT_ROS2__KINECT_ROS2_COMPONENT_HPP_
 #define KINECT_ROS2__KINECT_ROS2_COMPONENT_HPP_
 
@@ -38,3 +39,48 @@ private:
 
 }
 #endif  // KINECT_ROS2__KINECT_ROS2_COMPONENT_HPP_
+
+//-----------------
+
+// #ifndef KINECT_ROS2__KINECT_ROS2_COMPONENT_HPP_
+// #define KINECT_ROS2__KINECT_ROS2_COMPONENT_HPP_
+
+// extern "C"
+// {
+//   #include "libfreenect/libfreenect.h"
+// }
+// #include "rclcpp/rclcpp.hpp"
+// #include "camera_info_manager/camera_info_manager.hpp"
+// #include "image_transport/image_transport.hpp"
+// #include "sensor_msgs/msg/camera_info.hpp"
+// #include "cv_bridge/cv_bridge.h"
+
+// namespace kinect_ros2
+// {
+
+// class KinectRosComponent : public rclcpp::Node
+// {
+// public:
+//   KinectRosComponent(const rclcpp::NodeOptions & options);
+//   ~KinectRosComponent();
+
+// private:
+//   freenect_context * fn_ctx_;
+//   std::vector<freenect_device *> kinect_devices_;
+//   std::vector<image_transport::CameraPublisher> depth_pub_;
+//   std::vector<image_transport::CameraPublisher> rgb_pub_;
+//   std::vector<sensor_msgs::msg::CameraInfo> rgb_info_;
+//   std::vector<sensor_msgs::msg::CameraInfo> depth_info_;
+
+//   rclcpp::TimerBase::SharedPtr timer_; // ⬅️ Adicionando o timer corretamente
+//   int num_devices_;
+
+//   void depth_cb(freenect_device * dev, void * depth_ptr, uint32_t timestamp);
+//   void rgb_cb(freenect_device * dev, void * rgb_ptr, uint32_t timestamp);
+
+//   void timer_callback();
+// };
+
+// }
+
+// #endif  // KINECT_ROS2__KINECT_ROS2_COMPONENT_HPP_

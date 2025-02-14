@@ -13,7 +13,7 @@ Panels:
         - /Basler1
         - /Kinect_Aruco1/Topic1
       Splitter Ratio: 0.5
-    Tree Height: 770
+    Tree Height: 354
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -71,65 +71,6 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        base_link_inertia:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        flange:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        forearm_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ft_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        shoulder_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tool0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        upper_arm_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        world:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        wrist_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wrist_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wrist_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -241,14 +182,6 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        base:
-          Value: false
-        base_link:
-          Value: false
-        base_link_inertia:
-          Value: false
-        basler_aruco_world_0:
-          Value: true
         camera_depth_frame_basler:
           Value: false
         camera_depth_frame_kinect:
@@ -269,31 +202,13 @@ Visualization Manager:
           Value: false
         camera_rgb_optical_frame_kinect:
           Value: false
-        flange:
-          Value: false
-        forearm_link:
-          Value: false
-        ft_frame:
-          Value: false
-        kinect_aruco_world_0:
+        kinect_aruco_world_0_0:
           Value: true
         map:
           Value: false
         odom:
           Value: false
-        shoulder_link:
-          Value: false
-        tool0:
-          Value: false
-        upper_arm_link:
-          Value: false
         world:
-          Value: false
-        wrist_1_link:
-          Value: false
-        wrist_2_link:
-          Value: false
-        wrist_3_link:
           Value: false
       Marker Scale: 1
       Name: TF
@@ -303,23 +218,6 @@ Visualization Manager:
       Tree:
         map:
           world:
-            base_link:
-              base:
-                {}
-              base_link_inertia:
-                shoulder_link:
-                  upper_arm_link:
-                    forearm_link:
-                      wrist_1_link:
-                        wrist_2_link:
-                          wrist_3_link:
-                            flange:
-                              tool0:
-                                {}
-                            ft_frame:
-                              {}
-            basler_aruco_world_0:
-              {}
             camera_rgb_frame_basler:
               camera_depth_frame_basler:
                 camera_depth_optical_frame_basler:
@@ -336,7 +234,7 @@ Visualization Manager:
                 {}
               camera_rgb_optical_frame_kinect:
                 {}
-            kinect_aruco_world_0:
+            kinect_aruco_world_0_0:
               {}
             odom:
               {}
@@ -471,14 +369,14 @@ Window Geometry:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 2752
+  Height: 1735
   Hide Left Dock: false
   Hide Right Dock: false
   Kinect:
     collapsed: false
   Kinect_Aruco:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000699000009d1fc020000000dfb0000001200530065006c0065006300740069006f006e00000001e10000009b000000ab00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000069000003f00000017800fffffffb0000000c004b0069006e00650063007401000004650000013d0000004500fffffffb00000018004b0069006e006500630074005f0041007200750063006f01000005ae000001fe0000004500fffffffb0000000a0049006d00610067006500000001e4000000f00000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c004200610073006c0065007201000007b80000014c0000004500fffffffb00000018004200610073006c00650072005f0041007200750063006f01000009100000012a0000004500ffffff00000001000005bc00000833fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000069000008330000012300fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200001094000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000137400000051fc0100000002fb0000000800540069006d00650100000000000013740000046000fffffffb0000000800540069006d0065010000000000000450000000000000000000000ccf000009d100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000699000005d8fc020000000dfb0000001200530065006c0065006300740069006f006e00000001e10000009b000000ab00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730100000069000002500000017800fffffffb0000000c004b0069006e00650063007401000002c5000000ba0000004500fffffffb00000018004b0069006e006500630074005f0041007200750063006f010000038b0000012c0000004500fffffffb0000000a0049006d00610067006500000001e4000000f00000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c004200610073006c0065007201000004c3000000c30000004500fffffffb00000018004200610073006c00650072005f0041007200750063006f0100000592000000af0000004500ffffff00000001000005bc00000833fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000069000008330000012300fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200001094000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000c6f00000051fc0100000002fb0000000800540069006d0065010000000000000c6f0000046000fffffffb0000000800540069006d00650100000000000004500000000000000000000005ca000005d800000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -487,6 +385,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 4980
-  X: 140
-  Y: 54
+  Width: 3183
+  X: 1112
+  Y: 304

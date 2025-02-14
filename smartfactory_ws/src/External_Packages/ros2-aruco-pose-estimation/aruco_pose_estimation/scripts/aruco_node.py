@@ -42,6 +42,8 @@ from rclpy.qos import qos_profile_sensor_data
 from cv_bridge import CvBridge
 import message_filters
 
+
+
 # Python imports
 import numpy as np
 import cv2
@@ -57,12 +59,17 @@ from geometry_msgs.msg import PoseArray
 from aruco_interfaces.msg import ArucoMarkers
 from rcl_interfaces.msg import ParameterDescriptor, ParameterType
 
+# metrics imports 
+from rclpy.time import Time
 
+#
 class ArucoNode(rclpy.node.Node):
     def __init__(self):
         super().__init__("aruco_node")
 
         self.initialize_parameters()
+        
+        self.detection_time = None #metrics
 
         # Make sure we have a valid dictionary id:
         try:
@@ -148,6 +155,8 @@ class ArucoNode(rclpy.node.Node):
             self.get_logger().warn("No camera info has been received!")
             return
 
+        self.detection_time = self.get_clock().now() #metrics
+          
         # convert the image messages to cv2 format
         cv_image = self.bridge.imgmsg_to_cv2(img_msg, desired_encoding="rgb8")
 
@@ -185,6 +194,13 @@ class ArucoNode(rclpy.node.Node):
             # Publish the results with the poses and markes positions
             self.poses_pub.publish(pose_array)
             self.markers_pub.publish(markers)
+
+             # Registra o tempo da publicação
+            publish_time = self.get_clock().now() #metrics
+
+             # Calcula o tempo entre detecção e publicação
+            processing_time = publish_time - self.detection_time
+            #self.get_logger().info(f"Tempo de detecção até publicação: {processing_time.nanoseconds / 1e6:.2f} ms")
 
         # publish the image frame with computed markers positions over the image
         self.image_pub.publish(self.bridge.cv2_to_imgmsg(frame, "rgb8"))

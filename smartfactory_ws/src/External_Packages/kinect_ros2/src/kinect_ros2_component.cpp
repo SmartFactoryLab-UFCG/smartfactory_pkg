@@ -1,3 +1,5 @@
+// ORIGINAL 
+
 #include "kinect_ros2/kinect_ros2_component.hpp"
 #include <ament_index_cpp/get_package_share_directory.hpp>
 
@@ -170,3 +172,131 @@ void KinectRosComponent::timer_callback()
 
 #include "rclcpp_components/register_node_macro.hpp"
 RCLCPP_COMPONENTS_REGISTER_NODE(kinect_ros2::KinectRosComponent)
+
+//------------------------------------------
+// #include "kinect_ros2/kinect_ros2_component.hpp"
+// #include <ament_index_cpp/get_package_share_directory.hpp>
+
+// using namespace std::chrono_literals;
+
+// namespace kinect_ros2
+// {
+
+// KinectRosComponent::KinectRosComponent(const rclcpp::NodeOptions & options)
+// : Node("kinect_ros2", options)
+// {
+//   RCLCPP_INFO(get_logger(), "Inicializando Kinect...");
+
+//   int ret = freenect_init(&fn_ctx_, NULL);
+//   if (ret < 0) {
+//     RCLCPP_ERROR(get_logger(), "Erro ao inicializar libfreenect!");
+//     rclcpp::shutdown();
+//   }
+
+//   int num_devices = freenect_num_devices(fn_ctx_);
+//   if (num_devices <= 0) {
+//     RCLCPP_ERROR(get_logger(), "Nenhum Kinect encontrado!");
+//     freenect_shutdown(fn_ctx_);
+//     rclcpp::shutdown();
+//   }
+
+//   RCLCPP_INFO(get_logger(), "Foram encontrados %d Kinect(s).", num_devices);
+//   num_devices_ = num_devices;
+
+//   for (int i = 0; i < num_devices_; i++) {
+//     freenect_device *device;
+//     ret = freenect_open_device(fn_ctx_, &device, i);
+    
+//     if (ret < 0) {
+//       RCLCPP_ERROR(get_logger(), "Erro ao abrir Kinect %d", i);
+//       continue;
+//     }
+
+//     kinect_devices_.push_back(device);
+//     RCLCPP_INFO(get_logger(), "Kinect %d aberto com sucesso!", i);
+
+//     freenect_set_depth_callback(device, [](freenect_device *dev, void *depth_ptr, uint32_t timestamp){
+//       KinectRosComponent *self = static_cast<KinectRosComponent*>(freenect_get_user(dev));
+//       self->depth_cb(dev, depth_ptr, timestamp);
+//     });
+
+//     freenect_set_video_callback(device, [](freenect_device *dev, void *rgb_ptr, uint32_t timestamp){
+//       KinectRosComponent *self = static_cast<KinectRosComponent*>(freenect_get_user(dev));
+//       self->rgb_cb(dev, rgb_ptr, timestamp);
+//     });
+
+//     freenect_set_user(device, this);
+//     freenect_start_depth(device);
+//     freenect_start_video(device);
+
+//     std::string depth_topic = "/kinect" + std::to_string(i) + "/depth/image_raw";
+//     std::string rgb_topic = "/kinect" + std::to_string(i) + "/image_raw";
+
+//     depth_pub_.push_back(image_transport::create_camera_publisher(this, depth_topic));
+//     rgb_pub_.push_back(image_transport::create_camera_publisher(this, rgb_topic));
+//   }
+
+//   timer_ = create_wall_timer(1ms, std::bind(&KinectRosComponent::timer_callback, this));
+// }
+
+// KinectRosComponent::~KinectRosComponent()
+// {
+//   for (size_t i = 0; i < kinect_devices_.size(); i++) {
+//     RCLCPP_INFO(get_logger(), "Desligando Kinect %zu", i); // ⬅️ Usando %zu para size_t
+//     freenect_stop_depth(kinect_devices_[i]);
+//     freenect_stop_video(kinect_devices_[i]);
+//     freenect_close_device(kinect_devices_[i]);
+//   }
+//   freenect_shutdown(fn_ctx_);
+// }
+
+// void KinectRosComponent::depth_cb(freenect_device * dev, void * depth_ptr, uint32_t timestamp)
+// {
+//   int device_index = -1;
+//   for (size_t i = 0; i < kinect_devices_.size(); i++) {
+//     if (kinect_devices_[i] == dev) {
+//       device_index = i;
+//       break;
+//     }
+//   }
+
+//   if (device_index == -1) return;
+
+//   RCLCPP_INFO(this->get_logger(), "Recebida imagem de profundidade do Kinect %d", device_index);
+
+//   cv::Mat depth_image(480, 640, CV_16UC1, depth_ptr);
+
+//   auto msg = cv_bridge::CvImage(std_msgs::msg::Header(), "16UC1", depth_image).toImageMsg();
+//   depth_pub_[device_index].publish(*msg, depth_info_[device_index]);
+// }
+
+// void KinectRosComponent::rgb_cb(freenect_device * dev, void * rgb_ptr, uint32_t timestamp)
+// {
+//   int device_index = -1;
+//   for (size_t i = 0; i < kinect_devices_.size(); i++) {
+//     if (kinect_devices_[i] == dev) {
+//       device_index = i;
+//       break;
+//     }
+//   }
+
+//   if (device_index == -1) return;
+
+//   RCLCPP_INFO(this->get_logger(), "Recebida imagem RGB do Kinect %d", device_index);
+
+//   cv::Mat rgb_image(480, 640, CV_8UC3, rgb_ptr);
+
+//   auto msg = cv_bridge::CvImage(std_msgs::msg::Header(), "rgb8", rgb_image).toImageMsg();
+//   rgb_pub_[device_index].publish(*msg, rgb_info_[device_index]);
+// }
+
+// void KinectRosComponent::timer_callback()
+// {
+//   freenect_process_events(fn_ctx_);
+// }
+
+// }
+
+// #include "rclcpp_components/register_node_macro.hpp"
+// RCLCPP_COMPONENTS_REGISTER_NODE(kinect_ros2::KinectRosComponent)
+
