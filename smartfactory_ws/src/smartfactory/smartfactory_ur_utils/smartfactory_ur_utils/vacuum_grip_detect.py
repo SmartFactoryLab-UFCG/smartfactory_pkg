@@ -28,8 +28,8 @@ class VacuumGripperNode(Node):
         self.publisher.publish(status_msg)
 
         # Log para monitoramento
-        estado = "OBJETO DETECTADO" if objeto_detectado else "VENTOSA VAZIA"
-        self.get_logger().info(f"Estado: {estado}")
+        #estado = "OBJETO DETECTADO" if objeto_detectado else "VENTOSA VAZIA"
+        #self.get_logger().info(f"Estado: {estado}")
 
 def main(args=None):
     rclpy.init(args=args)

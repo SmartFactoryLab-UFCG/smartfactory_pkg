@@ -36,7 +36,7 @@ def generate_launch_description():
     start_kinect_arg = DeclareLaunchArgument(name='start_kinect', default_value='true', description='Whether to start the Kinect camera')
     start_ur10_arg = DeclareLaunchArgument(name='start_ur10', default_value='true', description='Whether to start the UR10 robot')
 
-    # declare configuration parameters'
+    # declare configuration parameters' pasta config , para o start devices
     kinect_marker_size_arg = DeclareLaunchArgument(name='kinect_marker_size', default_value=str(config_kinect['marker_size']), description='Size of the aruco marker in meters',)
     basler_marker_size_arg = DeclareLaunchArgument(name='basler_marker_size', default_value=str(config_basler['marker_size']), description='Size of the aruco marker in meters',)
     kinect_aruco_dictionary_id_arg = DeclareLaunchArgument(name='kinect_aruco_dictionary_id', default_value=config_kinect['aruco_dictionary_id'], description='ID of the aruco dictionary to use',)
@@ -63,7 +63,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(ur, "launch", "ur10.launch.py")),
             launch_arguments={
-            "robot_ip": "192.168.0.101",
+            "robot_ip": "192.168.0.104",
             "launch_rviz": "false",
             }.items(),
             condition = IfCondition(LaunchConfiguration('start_ur10')),
@@ -186,12 +186,6 @@ def generate_launch_description():
         arguments=['-d', os.path.join(get_package_share_directory('smartfactory_description'), 'rviz', 'smartfactory.rviz')],
     )
 
-    # aruco_filtered = Node(
-    #     package='smartfactory_simulation',
-    #     executable='filtered_pose',
-    #     name='aruco_filtered',
-    #     output='screen',
-    # )
 
     aruco_filtered = Node(
         package='smartfactory_aruco_poses',
@@ -205,6 +199,13 @@ def generate_launch_description():
         executable='calculate_kinematics',
         name='kinematics',
         output='screen',
+    )
+
+    vacuum_grip_node = Node(
+        package='smartfactory_ur_utils',
+        executable='vacuum_grip_detect',
+        name='vacuum_gripper_node',
+        output='screen'
     )
 
     return LaunchDescription([
@@ -245,5 +246,6 @@ def generate_launch_description():
         spawn_ur,
         rviz,
         aruco_filtered,
-        kinematics
+        kinematics,
+        vacuum_grip_node
     ])

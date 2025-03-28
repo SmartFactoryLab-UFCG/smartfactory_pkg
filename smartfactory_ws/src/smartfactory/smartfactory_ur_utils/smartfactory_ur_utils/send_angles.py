@@ -33,6 +33,7 @@ class UR10Controller(Node):
         self.current_joint_positions = []
         self.joint_angles = []  # Inicializa a variável para armazenar os ângulos desejados
         self.sending_goal = False  # Variável para bloquear o envio de novas trajetórias enquanto uma está em andamento
+        self.last_error_code = None
 
     def calculated_angles_callback(self, msg):
         # Recebe os ângulos calculados
@@ -86,6 +87,7 @@ class UR10Controller(Node):
 
     def get_result_callback(self, future):
         result = future.result().result
+        self.last_error_code = result.error_code
         self.get_logger().info(f"Trajetória concluída com sucesso! Código de erro: {result.error_code}")
         
         # Trajetória concluída, desbloqueia o envio de novas trajetórias
@@ -97,8 +99,9 @@ class UR10Controller(Node):
         # self.get_logger().info(f"Posição atual das juntas: {self.current_joint_positions}")
 
         # Comparar as posições atuais com os ângulos desejados para verificar se chegou à posição
-        if self.is_goal_reached(self.current_joint_positions):
-            self.get_logger().info("Robô atingiu a posição desejada.")
+        
+        #if self.is_goal_reached(self.current_joint_positions):
+        #    self.get_logger().info("Robô atingiu a posição desejada.")
 
     def is_goal_reached(self, current_positions):
         # Tolerância de comparação para verificar se o robô atingiu os ângulos desejados
