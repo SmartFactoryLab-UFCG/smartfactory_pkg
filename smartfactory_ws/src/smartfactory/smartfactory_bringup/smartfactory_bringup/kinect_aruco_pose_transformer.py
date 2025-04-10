@@ -68,7 +68,7 @@ class ArucoPoseWorld(Node):
                 t_world = TransformStamped()
                 t_world.header.stamp = self.get_clock().now().to_msg()
                 t_world.header.frame_id = 'world'
-                t_world.child_frame_id = f"kinect_aruco_world_{i}"
+                t_world.child_frame_id = f"kinect_aruco_world_0_{i}" 
                 t_world.transform.translation.x = t_aruco_w_translation[0]
                 t_world.transform.translation.y = t_aruco_w_translation[1]
                 t_world.transform.translation.z = t_aruco_w_translation[2]

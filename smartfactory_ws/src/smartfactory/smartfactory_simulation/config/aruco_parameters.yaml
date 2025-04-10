@@ -1,0 +1,31 @@
+/aruco_node_kinect:   
+    ros__parameters:
+        # Aruco detection parameters
+        marker_size: 0.15 # Size of the markers in meters
+        aruco_dictionary_id: DICT_4X4_50 # Aruco dictionary type
+        # Input topics
+        image_topic: /camera/color/image_raw # Input image topic
+        use_depth_input: false # Use depth image for 3D pose estimation
+        depth_image_topic: /camera/color/depth/image_raw # Input depth image topic
+        camera_info_topic: /camera/color/camera_info # Input camera info topic with camera intrinsic parameters
+        camera_frame: camera_rgb_optical_frame_kinect # Camera link frame of reference
+        # Output topics
+        detected_markers_topic: kinect/aruco/markers # Output topic with detected markers (aruco poses + ids)
+        markers_visualization_topic: kinect/aruco/poses # Output topic with visualization of detected markers as pose array
+        output_image_topic: kinect/aruco/image # Output topic with visualization of detected markers drawn on image
+
+/aruco_node_basler: 
+    ros__parameters:
+        # Aruco detection parameters
+        marker_size: 0.15 # Size of the markers in meters
+        aruco_dictionary_id: DICT_4X4_50 # Aruco dictionary type
+        # Input topics
+        image_topic: /basler/image_rect # Input image topic
+        use_depth_input: false # Use depth image for 3D pose estimation
+        depth_image_topic: /basler/depth/image_raw # Input depth image topic
+        camera_info_topic:  /basler/camera_info # Input camera info topic with camera intrinsic parameters
+        camera_frame: camera_rgb_optical_frame_basler # Camera link frame of reference
+        # Output topics
+        detected_markers_topic: basler/aruco/markers # Output topic with detected markers (aruco poses + ids)
+        markers_visualization_topic: basler/aruco/poses # Output topic with visualization of detected markers as pose array
+        output_image_topic: basler/aruco/image # Output topic with visualization of detected markers drawn on image

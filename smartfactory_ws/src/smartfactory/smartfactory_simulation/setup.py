@@ -3,6 +3,7 @@ import os
 from glob import glob
 
 package_name = 'smartfactory_simulation'
+
 def package_files(directory):
     """Recursively gather all files under a directory."""
     paths = []
@@ -18,7 +19,8 @@ data_files_to_include = [
     ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
     ('share/' + package_name, ['package.xml']),
     (os.path.join('share', package_name, 'world'), glob(os.path.join('world', '*.*'), recursive=True)),
-    (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.launch.py')))
+    (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.launch.py'))),
+    (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
 ]
 
 data_files_to_include += package_files('models')
@@ -28,13 +30,8 @@ setup(
     version='0.0.0',
     packages=find_packages(exclude=['test']),
     py_modules=[
-        'smartfactory_simulation.kinematics',
-        'smartfactory_simulation.Transformations',  # Certifique-se de incluir o Transformations
-        'smartfactory_simulation.kinematics_teste1',
-        'smartfactory_simulation.kinematics_teste2',
-        'smartfactory_simulation.aruco_metrics',
-        'smartfactory_simulation.filtered_pose',
-        'smartfactory_simulation.plot'
+        'smartfactory_simulation.back_aruco',
+      
     ],
     data_files=data_files_to_include,
     install_requires=['setuptools'],
@@ -46,13 +43,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'kinematics = smartfactory_simulation.kinematics:main',
-            'Transformations = smartfactory_simulation.Transformations:main',
-            'kinematics_teste1= smartfactory_simulation.kinematics_teste1:main',
-            'kinematics_teste2= smartfactory_simulation.kinematics_teste2:main',
-            'aruco_metrics= smartfactory_simulation.aruco_metrics:main',
-            'filtered_pose= smartfactory_simulation.filtered_pose:main',
-            'plot= smartfactory_simulation.plot:main',
+            'back_aruco=smartfactory_simulation.back_aruco:main',
+         
         ],
         
     },

@@ -1,3 +1,4 @@
+//------------ ORIGINAL -----------------------
 #include "rclcpp/rclcpp.hpp"
 #include "kinect_ros2/kinect_ros2_component.hpp"
 #include "class_loader/class_loader.hpp"
@@ -63,3 +64,5 @@ int main(int argc, char * argv[])
 
   return 0;
 }
+
+

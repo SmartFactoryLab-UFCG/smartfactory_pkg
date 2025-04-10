@@ -36,7 +36,7 @@ def generate_launch_description():
     start_kinect_arg = DeclareLaunchArgument(name='start_kinect', default_value='true', description='Whether to start the Kinect camera')
     start_ur10_arg = DeclareLaunchArgument(name='start_ur10', default_value='true', description='Whether to start the UR10 robot')
 
-    # declare configuration parameters'
+    # declare configuration parameters' pasta config , para o start devices
     kinect_marker_size_arg = DeclareLaunchArgument(name='kinect_marker_size', default_value=str(config_kinect['marker_size']), description='Size of the aruco marker in meters',)
     basler_marker_size_arg = DeclareLaunchArgument(name='basler_marker_size', default_value=str(config_basler['marker_size']), description='Size of the aruco marker in meters',)
     kinect_aruco_dictionary_id_arg = DeclareLaunchArgument(name='kinect_aruco_dictionary_id', default_value=config_kinect['aruco_dictionary_id'], description='ID of the aruco dictionary to use',)
@@ -63,7 +63,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(ur, "launch", "ur10.launch.py")),
             launch_arguments={
-            "robot_ip": "192.168.0.100",
+            "robot_ip": "192.168.0.104",
             "launch_rviz": "false",
             }.items(),
             condition = IfCondition(LaunchConfiguration('start_ur10')),
@@ -90,26 +90,26 @@ def generate_launch_description():
         emulate_tty=True
     )
 
-    basler_aruco_node = Node(
-        condition = IfCondition(LaunchConfiguration('start_basler')),
-        package='aruco_pose_estimation',
-        executable='aruco_node.py',
-        name='basler_aruco',
-        parameters=[{
-            "marker_size": LaunchConfiguration('basler_marker_size'),
-            "aruco_dictionary_id": LaunchConfiguration('basler_aruco_dictionary_id'),
-            "image_topic": LaunchConfiguration('basler_image_topic'),
-            "use_depth_input": LaunchConfiguration('basler_use_depth_input'),
-            "depth_image_topic": LaunchConfiguration('basler_depth_image_topic'),
-            "camera_info_topic": LaunchConfiguration('basler_camera_info_topic'),
-            "camera_frame": LaunchConfiguration('basler_camera_frame'),
-            "detected_markers_topic": LaunchConfiguration('basler_detected_markers_topic'),
-            "markers_visualization_topic": LaunchConfiguration('basler_markers_visualization_topic'),
-            "output_image_topic": LaunchConfiguration('basler_output_image_topic'),
-        }],
-        output='screen',
-        emulate_tty=True
-    )
+    # basler_aruco_node = Node(
+    #     condition = IfCondition(LaunchConfiguration('start_basler')),
+    #     package='aruco_pose_estimation',
+    #     executable='aruco_node.py',
+    #     name='basler_aruco',
+    #     parameters=[{
+    #         "marker_size": LaunchConfiguration('basler_marker_size'),
+    #         "aruco_dictionary_id": LaunchConfiguration('basler_aruco_dictionary_id'),
+    #         "image_topic": LaunchConfiguration('basler_image_topic'),
+    #         "use_depth_input": LaunchConfiguration('basler_use_depth_input'),
+    #         "depth_image_topic": LaunchConfiguration('basler_depth_image_topic'),
+    #         "camera_info_topic": LaunchConfiguration('basler_camera_info_topic'),
+    #         "camera_frame": LaunchConfiguration('basler_camera_frame'),
+    #         "detected_markers_topic": LaunchConfiguration('basler_detected_markers_topic'),
+    #         "markers_visualization_topic": LaunchConfiguration('basler_markers_visualization_topic'),
+    #         "output_image_topic": LaunchConfiguration('basler_output_image_topic'),
+    #     }],
+    #     output='screen',
+    #     emulate_tty=True
+    # )
 
     description = Node(
             package="robot_state_publisher",
@@ -121,7 +121,7 @@ def generate_launch_description():
                 "publish_frequency": 30.0
                 }]
         )
-
+    
     kinect_node = Node(
         condition = IfCondition(LaunchConfiguration('start_kinect')),
         package="kinect_ros2",
@@ -129,26 +129,26 @@ def generate_launch_description():
         name="kinect_ros2",
         namespace="/camera/color"
         )
+
     
-    
-    basler_node = Node(
-        condition = IfCondition(LaunchConfiguration('start_basler')),
-        package='pylon_ros2_camera_wrapper',
-        executable='pylon_ros2_camera_wrapper',
-        name='basler',
-        output='screen',
-        respawn=False,
-        emulate_tty=True,
-        parameters=[
-            os.path.join(get_package_share_directory('smartfactory_bringup'), 'config', 'basler_parameters.yaml'),
-            {
-                'gige/mtu_size': 1500,
-                'startup_user_set': 'CurrentSetting',
-                'enable_status_publisher': True,
-                'enable_current_params_publisher': True
-            }
-        ]
-    )
+    # basler_node = Node(
+    #     condition = IfCondition(LaunchConfiguration('start_basler')),
+    #     package='pylon_ros2_camera_wrapper',
+    #     executable='pylon_ros2_camera_wrapper',
+    #     name='basler',
+    #     output='screen',
+    #     respawn=False,
+    #     emulate_tty=True,
+    #     parameters=[
+    #         os.path.join(get_package_share_directory('smartfactory_bringup'), 'config', 'basler_parameters.yaml'),
+    #         {
+    #             'gige/mtu_size': 1500,
+    #             'startup_user_set': 'CurrentSetting',
+    #             'enable_status_publisher': True,
+    #             'enable_current_params_publisher': True
+    #         }
+    #     ]
+    # )
 
     tf_map = Node(
         package='tf2_ros', 
@@ -172,12 +172,12 @@ def generate_launch_description():
         executable='kinect_aruco_pose_transformer'
         )
     
-    tf_aruco_basler = Node(
-        condition = IfCondition(LaunchConfiguration('start_basler')),
-        package='smartfactory_bringup', 
-        name="tf_aruco_basler",
-        executable='basler_aruco_pose_transformer'
-        )
+    # tf_aruco_basler = Node(
+    #     condition = IfCondition(LaunchConfiguration('start_basler')),
+    #     package='smartfactory_bringup', 
+    #     name="tf_aruco_basler",
+    #     executable='basler_aruco_pose_transformer'
+    #     )
         
     rviz = Node(
         package='rviz2',
@@ -186,8 +186,30 @@ def generate_launch_description():
         arguments=['-d', os.path.join(get_package_share_directory('smartfactory_description'), 'rviz', 'smartfactory.rviz')],
     )
 
+
+    aruco_filtered = Node(
+        package='smartfactory_aruco_poses',
+        executable='filtered_pose',
+        name='aruco_filtered',
+        output='screen',
+    )
+    kinematics = Node(
+        #package='smartfactory_simulation',
+        package='smartfactory_ur_utils',
+        executable='calculate_kinematics',
+        name='kinematics',
+        output='screen',
+    )
+
+    vacuum_grip_node = Node(
+        package='smartfactory_ur_utils',
+        executable='vacuum_grip_detect',
+        name='vacuum_gripper_node',
+        output='screen'
+    )
+
     return LaunchDescription([
-        start_basler_arg,
+        #start_basler_arg,
         start_kinect_arg,
         start_ur10_arg,
 
@@ -216,11 +238,14 @@ def generate_launch_description():
         tf,
         description,
         kinect_node,
-        basler_node,
+        #basler_node,
         kinect_aruco_node,
-        basler_aruco_node,
+        #basler_aruco_node,
         tf_aruco_kinect,
-        tf_aruco_basler,
+        #tf_aruco_basler,
         spawn_ur,
         rviz,
+        aruco_filtered,
+        kinematics,
+        vacuum_grip_node
     ])

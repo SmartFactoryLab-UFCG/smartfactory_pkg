@@ -456,6 +456,16 @@ int freenect_num_devices(freenect_context *ctx)
 {
 	// Always 1 device
 	return 1;
+
+	//para mulltiplos 
+// 	int freenect_num_devices(freenect_context *ctx)
+// {
+//     return libusb_get_device_list(ctx->usb.ctx, NULL); // Obtém a contagem real
+// }
+
+
+
+
 }
 
 int freenect_open_device(freenect_context *ctx, freenect_device **dev, int index)

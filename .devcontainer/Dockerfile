@@ -97,6 +97,7 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     sudo \
     terminator \
+    usbutils \
     vim \
     wget \
     xterm \
@@ -241,6 +242,20 @@ RUN cd /libfreenect && \
     make install && \
     ldconfig
 
+
+# #realsense 
+# RUN apt-get update && apt-get install -y \
+#     librealsense2-dkms \
+#     librealsense2-utils \
+#     librealsense2-dev \
+#     librealsense2-dbg
+
+# # Instala pacotes ROS para a RealSense
+# RUN apt-get install -y \
+#     ros-${ROS_DISTRO}-realsense2-camera \
+#     ros-${ROS_DISTRO}-realsense2-description
+
+
 # Pylon dependencies
 COPY dependencies/libpylon /libpylon
 
@@ -260,7 +275,10 @@ RUN apt-get update && \
     pip3 install opencv-python opencv-contrib-python transforms3d && \
     apt-get install -y \
     ros-${ROS_DISTRO}-cv-bridge \
-    ros-${ROS_DISTRO}-image-transport && \
+    ros-${ROS_DISTRO}-image-transport \
+    ros-humble-image-pipeline  \
+    ros-humble-ur-msgs \
+    ros-humble-pcl-ros && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
@@ -301,11 +319,11 @@ WORKDIR $WORKSPACE
 # Copy the ROS workspace into the container
 COPY smartfactory_ws/ $WORKSPACE/
 
-RUN rosdep init || echo "rosdep already initialized" && \
-    sudo rosdep fix-permissions && \
-    rosdep update && \
-    rosdep install --from-paths src --ignore-src -r -y && \
-    rm -rf /var/lib/apt/lists/*
+# RUN rosdep init || echo "rosdep already initialized" && \
+#     sudo rosdep fix-permissions && \
+#     rosdep update && \
+#     rosdep install --from-paths src --ignore-src -r -y && \
+#     rm -rf /var/lib/apt/lists/*
 
 # RUN apt-get update && \
 #     rm -rf build/ install/ log/ && \
