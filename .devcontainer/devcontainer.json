@@ -26,8 +26,10 @@
 		"-v", "/var/run/wpa_supplicant:/var/run/wpa_supplicant",
         "-v", "/sys/class/net:/sys/class/net",
 		"-v", "/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro",
-  		"-v", "/usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d:ro"
-       // "--device=/dev/video0:/dev/video0"
+  		"-v", "/usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d:ro",
+		"--device=/dev/video0:/dev/video0",
+    	"--device=/dev/video1:/dev/video1"
+    	// "--device=/dev/video2:/dev/video2"
     ],
 	"containerEnv": {
 		"QT_X11_NO_MITSHM": "1",

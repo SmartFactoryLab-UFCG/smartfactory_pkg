@@ -190,7 +190,7 @@ RUN apt-get update && apt-get install -y \
     openjdk-11-jdk \
     pkg-config\
     ros-${ROS_DISTRO}-cv-bridge
-
+    
 # Kinect prerequisites
 RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-image-proc \
@@ -208,32 +208,6 @@ RUN apt-get install -y \
 #        python3-opencv && \
 #    pip3 install --no-cache-dir transforms3d && \
 #    rm -rf /var/lib/apt/lists/*
-
-# UR Packages
-RUN apt-get install -y \
-    ros-${ROS_DISTRO}-ros2-controllers-test-nodes \
-    ros-${ROS_DISTRO}-hardware-interface-testing \
-    ros-${ROS_DISTRO}-moveit-configs-utils \
-    ros-${ROS_DISTRO}-moveit-kinematics \
-    ros-${ROS_DISTRO}-moveit-planners \
-    ros-${ROS_DISTRO}-moveit-planners-chomp \
-    ros-${ROS_DISTRO}-moveit-ros-move-group \
-    ros-${ROS_DISTRO}-moveit-ros-visualization \
-    ros-${ROS_DISTRO}-moveit-servo \
-    ros-${ROS_DISTRO}-moveit-simple-controller-manager \
-    ros-${ROS_DISTRO}-warehouse-ros-sqlite \
-    ros-${ROS_DISTRO}-joint-state-publisher-gui \
-    liburdfdom-tools \
-    socat
-
-RUN apt-get install -y \
-    ros-${ROS_DISTRO}-ur \
-    ros-${ROS_DISTRO}-ur-client-library \
-    ros-${ROS_DISTRO}-ur-description \
-    ros-${ROS_DISTRO}-ur-msgs \
-    ros-${ROS_DISTRO}-ur-robot-driver \
-    ros-${ROS_DISTRO}-ur-moveit-config
-
 
 # MoveIt install
 RUN apt-get install -y jupyter-notebook
@@ -337,5 +311,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends apt-utils && \
 ENV DEBIAN_FRONTEND=
 
 CMD ["bash"]
-
 
