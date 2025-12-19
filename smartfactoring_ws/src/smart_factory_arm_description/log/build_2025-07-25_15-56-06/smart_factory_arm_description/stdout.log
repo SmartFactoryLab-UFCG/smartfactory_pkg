@@ -1,0 +1,68 @@
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 2.5.4 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ur_robot_driver: 3.3.3 (/workspaces/ind-5/ros2-ws/jazzy_ws/install/ur_robot_driver/share/ur_robot_driver/cmake)
+-- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Found rmw_implementation_cmake: 7.3.2 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 8.4.2 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found eigen3_cmake_module: 0.3.0 (/opt/ros/jazzy/share/eigen3_cmake_module/cmake)
+-- Found Eigen3: TRUE (found version "3.4.0") 
+-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+-- Configuring done (3.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description
+-- Install configuration: "Release"
+-- Execute custom install script
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Extensor_UR10.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra Schunk com sensor.obj
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Completa_Extensor.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Completa_Extensor_Corrected.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Completa_Extensor_No_Suction_Cup.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Schunk_Complete.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Schunk_No_Suction_Cup.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Gripper_Base.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Suction_Base.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Suction_Cup_Bottom.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Suction_Cup_Top.stl
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/launch/gripper_launch.launch.py
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/urdf/custom_gripper.urdf.xacro
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/urdf/smart_factory_arm.urdf.xacro
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/urdf/vacuum_gazebo.urdf.xacro
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/ament_index/resource_index/package_run_dependencies/smart_factory_arm_description
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/ament_index/resource_index/parent_prefix_path/smart_factory_arm_description
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/ament_prefix_path.sh
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/ament_prefix_path.dsv
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/path.sh
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/path.dsv
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.bash
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.sh
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.zsh
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.dsv
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/package.dsv
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/ament_index/resource_index/packages/smart_factory_arm_description
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/cmake/smart_factory_arm_descriptionConfig.cmake
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/cmake/smart_factory_arm_descriptionConfig-version.cmake
+-- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/package.xml

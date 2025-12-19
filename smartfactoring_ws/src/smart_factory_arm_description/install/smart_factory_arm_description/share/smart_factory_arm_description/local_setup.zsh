@@ -1,0 +1,1 @@
+/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description/ament_cmake_environment_hooks/local_setup.zsh

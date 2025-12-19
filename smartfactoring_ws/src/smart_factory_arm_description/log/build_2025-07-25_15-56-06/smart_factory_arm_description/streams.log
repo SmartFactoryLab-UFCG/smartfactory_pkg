@@ -1,0 +1,74 @@
+[0.019s] Invoking command in '/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/workspaces/ind-5/ros2-ws/jazzy_ws/install/turtlebot2_commander:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description -DCMAKE_BUILD_TYPE=Release -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description
+[0.103s] -- The C compiler identification is GNU 13.3.0
+[0.181s] -- The CXX compiler identification is GNU 13.3.0
+[0.206s] -- Detecting C compiler ABI info
+[0.355s] -- Detecting C compiler ABI info - done
+[0.365s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.365s] -- Detecting C compile features
+[0.365s] -- Detecting C compile features - done
+[0.380s] -- Detecting CXX compiler ABI info
+[0.527s] -- Detecting CXX compiler ABI info - done
+[0.544s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.544s] -- Detecting CXX compile features
+[0.545s] -- Detecting CXX compile features - done
+[0.559s] -- Found ament_cmake: 2.5.4 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.851s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[0.954s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[1.098s] -- Found ur_robot_driver: 3.3.3 (/workspaces/ind-5/ros2-ws/jazzy_ws/install/ur_robot_driver/share/ur_robot_driver/cmake)
+[1.266s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[1.301s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[1.357s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.400s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.798s] -- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+[1.911s] -- Found rmw_implementation_cmake: 7.3.2 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[1.932s] -- Found rmw_fastrtps_cpp: 8.4.2 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[1.990s] -- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+[2.102s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.13")  
+[2.106s] -- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+[2.143s] -- Found FastRTPS: /opt/ros/jazzy/include (Required is at least version "2.13") 
+[2.147s] -- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+[2.157s] -- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+[2.178s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[3.007s] -- Found eigen3_cmake_module: 0.3.0 (/opt/ros/jazzy/share/eigen3_cmake_module/cmake)
+[3.008s] -- Found Eigen3: TRUE (found version "3.4.0") 
+[3.008s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[3.376s] -- Configuring done (3.3s)
+[3.385s] -- Generating done (0.0s)
+[3.390s] -- Build files have been written to: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description
+[3.405s] Invoked command in '/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/workspaces/ind-5/ros2-ws/jazzy_ws/install/turtlebot2_commander:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description -DCMAKE_BUILD_TYPE=Release -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description
+[3.406s] Invoking command in '/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/workspaces/ind-5/ros2-ws/jazzy_ws/install/turtlebot2_commander:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description -- -j16 -l16
+[3.483s] Invoked command in '/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/workspaces/ind-5/ros2-ws/jazzy_ws/install/turtlebot2_commander:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description -- -j16 -l16
+[3.499s] Invoking command in '/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/workspaces/ind-5/ros2-ws/jazzy_ws/install/turtlebot2_commander:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description
+[3.513s] -- Install configuration: "Release"
+[3.513s] -- Execute custom install script
+[3.513s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Extensor_UR10.stl
+[3.529s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra Schunk com sensor.obj
+[3.549s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Completa_Extensor.stl
+[3.565s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Completa_Extensor_Corrected.stl
+[3.579s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Completa_Extensor_No_Suction_Cup.stl
+[3.593s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Schunk_Complete.stl
+[3.606s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Garra_Schunk_No_Suction_Cup.stl
+[3.620s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Gripper_Base.stl
+[3.641s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Suction_Base.stl
+[3.657s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Suction_Cup_Bottom.stl
+[3.670s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/meshes/Suction_Cup_Top.stl
+[3.683s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/launch/gripper_launch.launch.py
+[3.697s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/urdf/custom_gripper.urdf.xacro
+[3.711s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/urdf/smart_factory_arm.urdf.xacro
+[3.727s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/urdf/vacuum_gazebo.urdf.xacro
+[3.748s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/ament_index/resource_index/package_run_dependencies/smart_factory_arm_description
+[3.762s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/ament_index/resource_index/parent_prefix_path/smart_factory_arm_description
+[3.777s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/ament_prefix_path.sh
+[3.791s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/ament_prefix_path.dsv
+[3.804s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/path.sh
+[3.819s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/environment/path.dsv
+[3.840s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.bash
+[3.859s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.sh
+[3.874s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.zsh
+[3.888s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/local_setup.dsv
+[3.902s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/package.dsv
+[3.916s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/ament_index/resource_index/packages/smart_factory_arm_description
+[3.936s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/cmake/smart_factory_arm_descriptionConfig.cmake
+[3.954s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/cmake/smart_factory_arm_descriptionConfig-version.cmake
+[3.968s] -- Symlinking: /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/install/smart_factory_arm_description/share/smart_factory_arm_description/package.xml
+[3.984s] Invoked command in '/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/workspaces/ind-5/ros2-ws/jazzy_ws/install/turtlebot2_commander:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description
