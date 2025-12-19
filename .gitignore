@@ -1,7 +1,7 @@
-ros2_ws/install
-ros2_ws/build
-ros2_ws/log
-ros2_ws/rosbags/*
+smartfactoring_ws/install
+smartfactoring_ws/build
+smartfactoring_ws/log
+smartfactoring_ws/rosbags/*
 *.pyc
 .vscode/settings.json
 *.pt
