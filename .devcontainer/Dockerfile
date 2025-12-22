@@ -51,6 +51,9 @@ RUN apt-get update && apt-get install -y \
     wget \
     xterm \
     wireless-tools \
+    usbutils \
+    liburdfdom-tools \
+    socat \
     && rm -rf /var/lib/apt/lists/*
 
 # Environment variables for ROS 2
@@ -104,7 +107,11 @@ RUN sudo apt-get update && \
     ros-${ROS_DISTRO}-force-torque-sensor-broadcaster \
     ros-${ROS_DISTRO}-pose-broadcaster \
     ros-${ROS_DISTRO}-position-controllers \
-    ros-${ROS_DISTRO}-velocity-controllers
+    ros-${ROS_DISTRO}-velocity-controllers \
+    ros-${ROS_DISTRO}-pinocchio \
+    ros-${ROS_DISTRO}-moveit-task-constructor-core \
+    ros-${ROS_DISTRO}-warehouse-ros-sqlite \
+    ros-${ROS_DISTRO}-test-msgs 
 
 ################
 # Gazebo
@@ -188,7 +195,7 @@ RUN apt-get update && apt-get install -y \
     libusb-1.0-0-dev \
     nlohmann-json3-dev \
     openjdk-11-jdk \
-    pkg-config\
+    pkg-config \
     ros-${ROS_DISTRO}-cv-bridge
     
 # Kinect prerequisites
@@ -200,7 +207,6 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y \
     ros-${ROS_DISTRO}-plotjuggler-ros \
     ros-${ROS_DISTRO}-tf-transformations
-
 
 # ArUco prerequisites 
 #RUN apt-get update && \
@@ -244,9 +250,6 @@ RUN apt-get install -y \
     ros-${ROS_DISTRO}-ros-gz-sim-demos \
     ros-${ROS_DISTRO}-theora-image-transport \
     ros-${ROS_DISTRO}-zstd-image-transport
-
-
-
 
 # Code Style formating
 RUN apt-get update && \
@@ -305,8 +308,6 @@ RUN usermod -aG video $USERNAME
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils && \
     apt-get -y autoremove && \
     apt-get -y clean
-
-
 
 ENV DEBIAN_FRONTEND=
 

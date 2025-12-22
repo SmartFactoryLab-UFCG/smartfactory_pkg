@@ -1,1 +1,0 @@
-/workspaces/ind-5/ros2-ws/jazzy_ws/src/smart_factory_arm_description/build/smart_factory_arm_description/ament_cmake_core/smart_factory_arm_descriptionConfig.cmake

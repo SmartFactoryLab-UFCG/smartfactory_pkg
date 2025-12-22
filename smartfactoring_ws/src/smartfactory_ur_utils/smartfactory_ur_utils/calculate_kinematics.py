@@ -89,9 +89,9 @@ class UR10KinematicsCalculator(Node):
 
     def calculate_inverse_kinematics(self):
         # Criação do Goal para a ação FollowJointTrajectory
-        # p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), (0.117)]
+
         z = self.aruco_poses[0].position.z - 0.75 + 0.445
-        p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), (0.028)]
+        p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), z]
         p_Aruco = [round(p, 4) for p in p_Aruco]
         # print("Posição do Aruco", p_Aruco)
         # Orientação

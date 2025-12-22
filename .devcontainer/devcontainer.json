@@ -16,7 +16,7 @@
         "--security-opt", "seccomp=unconfined",
         "--network=host",
         "--ipc=host",
-		// "--privileged",
+		"--privileged",
 		"--runtime=nvidia",
 		"--gpus", "all",
         "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw",
@@ -35,8 +35,7 @@
 		"DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
 		"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
 		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
-		"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
-		"LIBGL_ALWAYS_SOFTWARE": "1" // Needed for software rendering of opengl
+		"PULSE_SERVER": "${localEnv:PULSE_SERVER}"
 	},
 	// "postStartCommand": "chmod +x ./startup-script.sh && ./startup-script.sh", #TODO
     // Set *default* container specific settings.json values on container create.
