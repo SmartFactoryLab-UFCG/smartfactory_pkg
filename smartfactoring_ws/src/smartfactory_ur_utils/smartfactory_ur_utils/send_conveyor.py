@@ -15,8 +15,8 @@ class UR10MoveToAngles(Node):
         self._action_client = ActionClient(self, FollowJointTrajectory, '/scaled_joint_trajectory_controller/follow_joint_trajectory')
         
         # Define os ângulos de destino em graus
-        self.target_angles1 = [-235, -75, 37, -58, -90, 0]
-        self.target_angles2 = [-250, -57, 33, -68, -90, 32]
+        self.target_angles1 = [-95, -59, 25, -74, -90, 0]
+        self.target_angles2 = [-170.36, -59.52, 16.99, -47.03, -90.52, 18.60]
         # Converte para radianos
         self.target_angles1 = [np.radians(angle) for angle in self.target_angles1]
         self.target_angles2 = [np.radians(angle) for angle in self.target_angles2]

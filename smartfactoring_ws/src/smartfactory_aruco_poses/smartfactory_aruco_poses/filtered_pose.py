@@ -1,57 +1,70 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Pose, PoseArray
+from geometry_msgs.msg import Pose, PoseArray, PoseStamped
 import numpy as np
 
 class ArucoFilteredPosePublisher(Node):
     def __init__(self, window_size=10):
         super().__init__('aruco_filtered_pose_publisher')
 
-        # Assinando o tópico para receber as poses do ArUco
+        self.declare_parameter('input_pose_topic', '/kinect/aruco/target_pose_world')
+        self.declare_parameter('output_pose_array_topic', '/kinect/aruco/filtered_poses')
+        self.declare_parameter('output_pose_topic', '/kinect/aruco/filtered_pose')
+
+        self.input_pose_topic = (
+            self.get_parameter('input_pose_topic').get_parameter_value().string_value
+        )
+        self.output_pose_array_topic = (
+            self.get_parameter('output_pose_array_topic').get_parameter_value().string_value
+        )
+        self.output_pose_topic = (
+            self.get_parameter('output_pose_topic').get_parameter_value().string_value
+        )
+
+        # Assinando o tópico para receber a pose do ArUco target já em world frame
         self.subscription = self.create_subscription(
-            PoseArray, '/kinect/aruco/poses_world', self.pose_callback, 10)
+            PoseStamped, self.input_pose_topic, self.pose_callback, 10)
         
-        # Publicador para o novo tópico de poses filtradas
-        self.publisher_ = self.create_publisher(PoseArray, '/kinect/aruco/filtered_poses', 10)
+        # Publicadores para as poses filtradas
+        self.publisher_pose_array = self.create_publisher(PoseArray, self.output_pose_array_topic, 10)
+        self.publisher_pose = self.create_publisher(PoseStamped, self.output_pose_topic, 10)
 
         # Filtros de média móvel (para suavizar as leituras)
         self.window_size = window_size
-        self.pose_windows = {}  # Dicionário para armazenar janelas de dados por ID de ArUco
+        self.pose_windows = {'x': [], 'y': [], 'z': []}
 
     def pose_callback(self, msg):
-        # Cria um PoseArray para armazenar as poses filtradas
+        pose = msg.pose
+
+        # Adicionar as novas leituras às janelas de filtro
+        self.update_window(self.pose_windows['x'], pose.position.x)
+        self.update_window(self.pose_windows['y'], pose.position.y)
+        self.update_window(self.pose_windows['z'], pose.position.z)
+
+        # Calcula a média móvel para suavizar os dados
+        x_smooth = float(np.mean(self.pose_windows['x']))
+        y_smooth = float(np.mean(self.pose_windows['y']))
+        z_smooth = float(np.mean(self.pose_windows['z']))
+
+        # Criar uma nova Pose suavizada
+        filtered_pose = Pose()
+        filtered_pose.position.x = x_smooth
+        filtered_pose.position.y = y_smooth
+        filtered_pose.position.z = z_smooth
+        filtered_pose.orientation = pose.orientation  # Mantém a orientação original
+
+        filtered_pose_msg = PoseStamped()
+        filtered_pose_msg.header = msg.header
+        filtered_pose_msg.pose = filtered_pose
+
+        # Cria um PoseArray para manter compatibilidade com consumidores existentes
         filtered_pose_array = PoseArray()
-        filtered_pose_array.header = msg.header  # Mantém o mesmo header
+        filtered_pose_array.header = msg.header
+        filtered_pose_array.poses.append(filtered_pose)
 
-        # Iterar sobre as poses recebidas
-        for i, pose in enumerate(msg.poses):
-            # A chave será o índice da pose no array (pode ser modificado conforme sua aplicação)
-            if i not in self.pose_windows:
-                self.pose_windows[i] = {'x': [], 'y': [], 'z': []}
-
-            # Adicionar as novas leituras às janelas de filtro
-            self.update_window(self.pose_windows[i]['x'], pose.position.x)
-            self.update_window(self.pose_windows[i]['y'], pose.position.y)
-            self.update_window(self.pose_windows[i]['z'], pose.position.z)
-
-            # Calcula a média móvel para suavizar os dados
-            x_smooth = np.mean(self.pose_windows[i]['x'])
-            y_smooth = np.mean(self.pose_windows[i]['y'])
-            z_smooth = np.mean(self.pose_windows[i]['z'])
-
-            # Criar uma nova Pose suavizada
-            filtered_pose = Pose()
-            filtered_pose.position.x = x_smooth
-            filtered_pose.position.y = y_smooth
-            filtered_pose.position.z = z_smooth
-            filtered_pose.orientation = pose.orientation  # Mantém a orientação original
-
-            # Adicionar a pose suavizada no PoseArray
-            filtered_pose_array.poses.append(filtered_pose)
-
-        # Publica o PoseArray filtrado no novo tópico
-        self.publisher_.publish(filtered_pose_array)
+        self.publisher_pose.publish(filtered_pose_msg)
+        self.publisher_pose_array.publish(filtered_pose_array)
 
         # Para depuração: exibir no terminal o número de poses suavizadas
         # self.get_logger().info(f"Publicando {len(filtered_pose_array.poses)} poses suavizadas.")

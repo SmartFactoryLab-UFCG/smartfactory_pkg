@@ -142,19 +142,19 @@ class SendConveyorMotion(Node):
             'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint'
         ]
 
-        target_angles1 = [-235, -75, 37, -58, -90, 0]
-        target_angles2 = [-250, -57, 33, -68, -90, 32]
+        target_angles1 = [-95, -59, 25, -74, -90, 0]
+        target_angles2 = [-170.36, -59.52, 16.99, -47.03, -90.52, 18.60]
 
         target_angles1 = [np.radians(a) for a in target_angles1]
         target_angles2 = [np.radians(a) for a in target_angles2]
 
         point1 = JointTrajectoryPoint()
         point1.positions = target_angles1
-        point1.time_from_start = Duration(seconds=5).to_msg()
+        point1.time_from_start = Duration(seconds=2).to_msg()
 
         point2 = JointTrajectoryPoint()
         point2.positions = target_angles2
-        point2.time_from_start = Duration(seconds=10).to_msg()
+        point2.time_from_start = Duration(seconds=5).to_msg()
 
         trajectory = JointTrajectory()
         trajectory.joint_names = joint_names
@@ -194,9 +194,6 @@ class SendConveyorMotion(Node):
             self.get_logger().info("Movimento para esteira concluído com sucesso.")
         else:
             self.get_logger().error(f"Erro ao mover para esteira. Código: {result.error_code}")
-
-
-
 
 class SendConveyorAction(py_trees.behaviour.Behaviour):
     def __init__(self, motion_node: SendConveyorMotion, name="SendConveyorAction"):

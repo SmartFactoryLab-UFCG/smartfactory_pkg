@@ -90,8 +90,10 @@ class UR10KinematicsCalculator(Node):
     def calculate_inverse_kinematics(self):
         # Criação do Goal para a ação FollowJointTrajectory
 
-        z = self.aruco_poses[0].position.z - 0.75 + 0.445
-        p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), z]
+        z = self.aruco_poses[0].position.z
+        # print(z)
+        # p_Aruco = [-(self.aruco_poses[0].position.x+0.04), -(self.aruco_poses[0].position.y-0.1), 0.3]
+        p_Aruco = [-(self.aruco_poses[0].position.x + 0.08), -(self.aruco_poses[0].position.y + 0.015), 0.21]
         p_Aruco = [round(p, 4) for p in p_Aruco]
         # print("Posição do Aruco", p_Aruco)
         # Orientação
@@ -191,13 +193,13 @@ class UR10KinematicsCalculator(Node):
         psi = np.arctan2(p05[1], p05[0])
         p05xy = np.sqrt(p05[1]*p05[1] + p05[0]*p05[0])
         if (d4 > p05xy):
-            print ("[WARNING] No solution for Theta1: d4 > P05xy")
-            print ("[WARNING] Creating aproximation highly inaccurate")
+            # print ("[WARNING] No solution for Theta1: d4 > P05xy")
+            # print ("[WARNING] Creating aproximation highly inaccurate")
             d4 = p05xy - 1e-10
         try:
             phi = np.arccos(d4 / p05xy)
         except:
-            print("[ERROR] Division by zero: " + str(p05xy))
+            # print("[ERROR] Division by zero: " + str(p05xy))
             return None
         theta[0, 0:4] = np.radians(90) + psi + phi
         theta[0, 4:8] = np.radians(90) + psi - phi
@@ -210,18 +212,18 @@ class UR10KinematicsCalculator(Node):
             try:
                 T10 = inv(self._DH(a1, alpha1, d1, theta[0,c]))
             except:
-                print("[ERROR] Could not find inverse: " + str(self._DH(a1, alpha1, d1, theta[0,c])))
+                # print("[ERROR] Could not find inverse: " + str(self._DH(a1, alpha1, d1, theta[0,c])))
                 return None
             T16 = T10 * gd
             p16z = T16[2,3]
             try:
                 if (((p16z-d4)/d6) > 1):
-                    print ("[WARNING] No solution for Theta5: (p16z-d4)/d6) > 1")
-                    print ("[WARNING] Creating aproximation highly inaccurate")
+                    # print ("[WARNING] No solution for Theta5: (p16z-d4)/d6) > 1")
+                    # print ("[WARNING] Creating aproximation highly inaccurate")
                     d6 = (p16z-d4) + 1e-10
                 t5 = np.arccos((p16z-d4)/d6)
             except:
-                print("[ERROR] Division by zero: " + str(d6))
+                # print("[ERROR] Division by zero: " + str(d6))
                 return None
             theta[4, c:c+2] = t5
             theta[4, c+2:c+4] = -t5
@@ -235,7 +237,7 @@ class UR10KinematicsCalculator(Node):
             try:
                 T61 = inv(gd) * T01
             except:
-                print("[ERROR] Could not find inverse: " + str(gd))
+                # print("[ERROR] Could not find inverse: " + str(gd))
                 return None
             T61zy = T61[1, 2]
             T61zx = T61[0, 2]
@@ -255,13 +257,13 @@ class UR10KinematicsCalculator(Node):
                 T65 = inv(self._DH(a6, alpha6, d6, theta[5,c]))
                 T54 = inv(self._DH(a5, alpha5, d5, theta[4,c]))
             except T10:
-                print("[ERROR] Could not find inverse: Theta3, inverse 1, " + str(T10))
+                # print("[ERROR] Could not find inverse: Theta3, inverse 1, " + str(T10))
                 return None
             except T65:
-                print("[ERROR] Could not find inverse: Theta3, inverse 2, " + str(T65))
+                # print("[ERROR] Could not find inverse: Theta3, inverse 2, " + str(T65))
                 return None
             except T54:
-                print("[ERROR] Could not find inverse: Theta3, inverse 3, " + str(T54))
+                # print("[ERROR] Could not find inverse: Theta3, inverse 3, " + str(T54))
                 return None
             T14 = T10 * gd * T65 * T54
             p13 = T14 * np.mat([[0], [-d4], [0], [1]])
@@ -269,8 +271,8 @@ class UR10KinematicsCalculator(Node):
             p13norm2 = norm(p13) * norm(p13)
             arg = (p13norm2-a2*a2-a3*a3)/(2*a2*a3)
             if (arg > 1 or arg < -1):
-                print ("[WARNING] No solution for Theta3: arg < -1 or arg > 1")
-                print ("[WARNING] Creating aproximation highly inaccurate")
+                # print ("[WARNING] No solution for Theta3: arg < -1 or arg > 1")
+                # print ("[WARNING] Creating aproximation highly inaccurate")
                 if (arg >1):
                     arg = 1 - 1e-10
                 else:
@@ -289,13 +291,13 @@ class UR10KinematicsCalculator(Node):
                 T65 = inv(self._DH(a6, alpha6, d6, theta[5,c]))
                 T54 = inv(self._DH(a5, alpha5, d5, theta[4,c]))
             except T10:
-                print("[ERROR] Could not find inverse: Theta2 inverse 1, " + str(T10))
+                # print("[ERROR] Could not find inverse: Theta2 inverse 1, " + str(T10))
                 return None
             except T65:
-                print("[ERROR] Could not find inverse: Theta2, inverse 2, " + str(T65))
+                # print("[ERROR] Could not find inverse: Theta2, inverse 2, " + str(T65))
                 return None
             except T54:
-                print("[ERROR] Could not find inverse: Theta2, inverse 3, " + str(T54))
+                # print("[ERROR] Could not find inverse: Theta2, inverse 3, " + str(T54))
                 return None
             T14 = T10 * gd * T65 * T54
             p13 = T14 * np.mat([[0], [-d4], [0], [1]]) - np.mat([[0], [0], [0], [1]])
@@ -305,10 +307,10 @@ class UR10KinematicsCalculator(Node):
                 T32 = inv(self._DH(a3, alpha3, d3, theta[2,c]))
                 T21 = inv(self._DH(a2, alpha2, d2, theta[1,c]))
             except T10:
-                print("[ERROR] Could not find inverse: Theta4 inverse 1, " + str(T32))
+                # print("[ERROR] Could not find inverse: Theta4 inverse 1, " + str(T32))
                 return None
             except T65:
-                print("[ERROR] Could not find inverse: Theta4, inverse 2, " + str(T21))
+                # print("[ERROR] Could not find inverse: Theta4, inverse 2, " + str(T21))
                 return None
             T34 = T32 * T21 * T14
             theta[3, c] = np.arctan2(T34[1,0], T34[0,0])

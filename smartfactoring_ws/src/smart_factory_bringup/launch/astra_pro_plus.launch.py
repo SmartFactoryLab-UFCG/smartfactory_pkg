@@ -51,6 +51,6 @@ def generate_launch_description():
     # Return the launch description containing both nodes
     return LaunchDescription([
         camera_node,
-        compressed_image,
-        compressed_depth
+        # compressed_image,
+        # compressed_depth
     ])
