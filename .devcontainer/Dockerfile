@@ -54,6 +54,7 @@ RUN apt-get update && apt-get install -y \
     usbutils \
     liburdfdom-tools \
     socat \
+    udev \
     && rm -rf /var/lib/apt/lists/*
 
 # Environment variables for ROS 2

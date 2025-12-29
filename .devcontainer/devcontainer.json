@@ -28,7 +28,10 @@
 		"-v", "/var/run/wpa_supplicant:/var/run/wpa_supplicant",
         "-v", "/sys/class/net:/sys/class/net",
 		"-v", "/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro",
-  		"-v", "/usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d:ro"
+  		"-v", "/usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d:ro",
+		"-v", "/run/udev:/run/udev:ro",
+		"-v", "/etc/udev/rules.d:/etc/udev/rules.d:ro"
+
     ],
 	"containerEnv": {
 		"QT_X11_NO_MITSHM": "1",
