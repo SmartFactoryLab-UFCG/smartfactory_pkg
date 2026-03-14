@@ -168,7 +168,7 @@ def generate_launch_description():
         kinect_node,
         rsp_custom,
         rviz,
-        kinect_aruco_node,
+        # kinect_aruco_node,
         astra_aruco_node,
         tf_aruco_kinect,
         tf_map,

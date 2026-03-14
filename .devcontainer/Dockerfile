@@ -1,36 +1,43 @@
 FROM ubuntu:24.04 AS smartfactoring_jazzy
 
-# Remove default user Ubuntu from UID 1000
-RUN touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu
+# Retry transient apt downloads during large ROS installs.
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries
+
+# Some Ubuntu-derived bases include a default UID 1000 user, the official image does not.
+RUN if id -u ubuntu >/dev/null 2>&1; then \
+      touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu; \
+    fi
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install language
-RUN apt-get update && apt-get install -y \
+# Locale
+RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     && locale-gen en_US.UTF-8 \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
-# Install timezone
+# Timezone
 RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime \
-    && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
-    && apt-get install -y tzdata \
+    && apt-get install -y --no-install-recommends tzdata \
     && dpkg-reconfigure --frontend noninteractive tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Install common programs
-RUN apt-get update && apt-get install -y \
+# Common packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
     bash-completion \
     build-essential \
+    ca-certificates \
     cmake \
     curl \
     evince \
     gdb \
     git \
+    gnupg \
     gnupg2 \
     htop \
     iftop \
@@ -47,39 +54,37 @@ RUN apt-get update && apt-get install -y \
     sudo \
     traceroute \
     terminator \
+    udev \
+    usbutils \
     vim \
     wget \
-    xterm \
     wireless-tools \
-    usbutils \
+    xterm \
     liburdfdom-tools \
     socat \
-    udev \
     && rm -rf /var/lib/apt/lists/*
 
-# Environment variables for ROS 2
+# ROS 2 environment
 ENV ROS_DISTRO=jazzy
 ENV AMENT_PREFIX_PATH=/opt/ros/${ROS_DISTRO}
 ENV COLCON_PREFIX_PATH=/opt/ros/${ROS_DISTRO}
 ENV LD_LIBRARY_PATH=/opt/ros/${ROS_DISTRO}/lib
 ENV PATH=/opt/ros/${ROS_DISTRO}/bin:$PATH
-ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python3.11/site-packages
+ENV PYTHONPATH=/opt/ros/${ROS_DISTRO}/lib/python3.12/site-packages
 ENV ROS_PYTHON_VERSION=3
 ENV ROS_VERSION=2
 
-# install prerequisites, add universe
+# Install prerequisites and enable universe
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       software-properties-common \
-      ca-certificates \
-      && \
-    add-apt-repository universe
+      ca-certificates && \
+    add-apt-repository universe && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install ROS2
-# download, unpack & install the ros2-apt-source helper package
+# Install ROS 2 apt source helper
 RUN set -eux; \
-    ROS_APT_SOURCE_VERSION="$(curl -s \
-      https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest \
+    ROS_APT_SOURCE_VERSION="$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest \
       | grep -F '"tag_name"' \
       | awk -F\" '{print $4}')" && \
     curl -fsSL -o /tmp/ros2-apt-source.deb \
@@ -87,20 +92,23 @@ RUN set -eux; \
     dpkg -i /tmp/ros2-apt-source.deb && \
     rm /tmp/ros2-apt-source.deb
 
-# now you have the ROS2 APT repo & key installed, next:
+# Install ROS 2 base packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      ros-${ROS_DISTRO}-desktop \
+      ros-${ROS_DISTRO}-desktop && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
       ros-dev-tools && \
     rm -rf /var/lib/apt/lists/*
 
-RUN sudo apt-get update
+# Initialize rosdep only once
 RUN rosdep init || echo "rosdep already initialized"
-RUN rosdep update
 
 # Install ROS 2 dependencies
-RUN sudo apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-behaviortree-cpp \
     ros-${ROS_DISTRO}-camera-info-manager \
     ros-${ROS_DISTRO}-image-publisher \
@@ -112,121 +120,85 @@ RUN sudo apt-get update && \
     ros-${ROS_DISTRO}-pinocchio \
     ros-${ROS_DISTRO}-moveit-task-constructor-core \
     ros-${ROS_DISTRO}-warehouse-ros-sqlite \
-    ros-${ROS_DISTRO}-test-msgs 
+    ros-${ROS_DISTRO}-test-msgs \
+    && rm -rf /var/lib/apt/lists/*
 
 ################
-# Gazebo
+# User
 ################
-# install packages
-RUN apt-get update && apt-get install -q -y \
-    gnupg \
-  && wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
-  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null \
-  && apt-get update && apt-get install -y -q \
-    gz-harmonic \
-  && rm -rf /var/lib/apt/lists/*
-
-# Get sources
-RUN wget https://raw.githubusercontent.com/gazebo-tooling/gazebodistro/refs/heads/master/collection-harmonic.yaml \
-  && vcs import < collection-harmonic.yaml \
-  # Get dependencies
-  && sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
-  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null \
-  && sudo apt-get update \
-  && sudo apt -y install \
-      $(sort -u $(find . -iname 'packages-'`lsb_release -cs`'.apt' -o -iname 'packages.apt' | grep -v '/\.git/') | sed '/gz\|sdf/d' | tr '\n' ' ')
-
-################
-# Initialization
-################
-RUN rosdep init || echo "rosdep already initialized"
 
 ARG USERNAME=smartfactoring_jazzy
 ARG USER_UID=1000
-ARG USER_GID=$USER_UID
+ARG USER_GID=1000
 
-# Create a non-root user
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    # Add sudo support for the non-root user
-    && apt-get update \
-    && apt-get install -y sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
-    && chmod 0440 /etc/sudoers.d/$USERNAME \
-    && rm -rf /var/lib/apt/lists/*
+# Create non-root user
+RUN groupadd --gid ${USER_GID} ${USERNAME} \
+    && useradd -m -s /bin/bash --uid ${USER_UID} --gid ${USER_GID} ${USERNAME} \
+    && echo "${USERNAME} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} \
+    && chmod 0440 /etc/sudoers.d/${USERNAME}
 
-# Set up autocompletion for user
-RUN apt-get install -y git-core \
-    && echo "if [ -f /opt/ros/${ROS_DISTRO}/setup.bash ]; then source /opt/ros/${ROS_DISTRO}/setup.bash; fi" >> /home/$USERNAME/.bashrc \
-    && echo "if [ -f /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash ]; then source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash; fi" >> /home/$USERNAME/.bashrc
+# Configure shell for user
+RUN echo "if [ -f /opt/ros/${ROS_DISTRO}/setup.bash ]; then source /opt/ros/${ROS_DISTRO}/setup.bash; fi" >> /home/${USERNAME}/.bashrc \
+    && echo "if [ -f /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash ]; then source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash; fi" >> /home/${USERNAME}/.bashrc \
+    && chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
 
 ################
-# Expose the nvidia driver to allow opengl 
-# Dependencies for glvnd and X11.
+# NVIDIA / OpenGL
 ################
-RUN apt-get update && apt-get install -y -qq --no-install-recommends \
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libegl1 \
+    libgl1 \
     libglvnd0 \
     libglx0 \
-    libgl1 \
+    libx11-6 \
     libxext6 \
-    libx11-6
+    && rm -rf /var/lib/apt/lists/*
 
-# Env vars for the nvidia-container-runtime.
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute
 ENV QT_X11_NO_MITSHM=1
-
-## Install CUDA toolkit
-## Not necessary if nvidia-container-toolkit is installed in host machine
-# RUN apt-get update && apt-get install -y \
-#     cuda-toolkit-11-8 \
-#     && rm -rf /var/lib/apt/lists/*
 
 ################
 # ROS 2 and hardware prerequisites
 ################
 
 # Orbbec prerequisites
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libeigen3-dev \
     libgflags-dev \
     libgoogle-glog-dev \
     libudev-dev \
     libusb-1.0-0-dev \
     nlohmann-json3-dev \
-    openjdk-11-jdk \
+    default-jdk \
     pkg-config \
-    ros-${ROS_DISTRO}-cv-bridge
-    
+    ros-${ROS_DISTRO}-cv-bridge \
+    && rm -rf /var/lib/apt/lists/*
+
 # Kinect prerequisites
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-image-proc \
     ros-${ROS_DISTRO}-tracetools-image-pipeline \
-    ros-${ROS_DISTRO}-depth-image-proc
+    ros-${ROS_DISTRO}-depth-image-proc \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-plotjuggler-ros \
-    ros-${ROS_DISTRO}-tf-transformations
+    ros-${ROS_DISTRO}-tf-transformations \
+    && rm -rf /var/lib/apt/lists/*
 
-# ArUco prerequisites 
-#RUN apt-get update && \
-#    apt-get install -y \
-#        python3-opencv && \
-#    pip3 install --no-cache-dir transforms3d && \
-#    rm -rf /var/lib/apt/lists/*
-
-# MoveIt install
-RUN apt-get install -y jupyter-notebook
-
-RUN apt-get install -y \
+# MoveIt and related tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    jupyter-notebook \
     ros-${ROS_DISTRO}-moveit \
     ros-${ROS_DISTRO}-moveit-msgs \
     ros-${ROS_DISTRO}-moveit-resources \
     ros-${ROS_DISTRO}-moveit-visual-tools \
-    ros-${ROS_DISTRO}-rviz-visual-tools
+    ros-${ROS_DISTRO}-rviz-visual-tools \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-ament-clang-format \
     ros-${ROS_DISTRO}-ros-testing \
     ros-${ROS_DISTRO}-picknik-twist-controller \
@@ -238,10 +210,11 @@ RUN apt-get install -y \
     ros-${ROS_DISTRO}-topic-tools \
     ros-${ROS_DISTRO}-ament-cmake-google-benchmark \
     ros-${ROS_DISTRO}-graph-msgs \
-    ros-${ROS_DISTRO}-ros2-control
+    ros-${ROS_DISTRO}-ros2-control \
+    && rm -rf /var/lib/apt/lists/*
 
-# Other
-RUN apt-get install -y \
+# Other ROS packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-gz-ros2-control \
     ros-${ROS_DISTRO}-ros2-control-cmake \
     ros-${ROS_DISTRO}-compressed-depth-image-transport \
@@ -250,41 +223,43 @@ RUN apt-get install -y \
     ros-${ROS_DISTRO}-ros-gz \
     ros-${ROS_DISTRO}-ros-gz-sim-demos \
     ros-${ROS_DISTRO}-theora-image-transport \
-    ros-${ROS_DISTRO}-zstd-image-transport
+    ros-${ROS_DISTRO}-zstd-image-transport \
+    && rm -rf /var/lib/apt/lists/*
 
-# Code Style formating
-RUN apt-get update && \
-    apt-get install -y pylint && \
-    rm -rf /var/lib/apt/lists/*
+# Lint / formatting
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pylint \
+    ros-${ROS_DISTRO}-ament-lint \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y ros-${ROS_DISTRO}-ament-lint
+################
+# Native libraries
+################
 
-# Copy the libuvc directory from your host to the Docker image
 COPY dependencies/libuvc /libuvc
-
-# Build and install libuvc from the copied source
 RUN cd /libuvc && \
     mkdir build && \
     cd build && \
     cmake .. && \
-    make && \
+    make -j"$(nproc)" && \
     make install
 
 COPY dependencies/libfreenect /libfreenect
-
 RUN cd /libfreenect && \
     mkdir build && \
     cd build && \
     cmake .. && \
-    make && \
+    make -j"$(nproc)" && \
     make install && \
     ldconfig
-    
-# Update the library path
-ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-# Graphics Environment for Gazebo
-RUN apt-get update && apt-get install -y \
+ENV LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH}
+
+################
+# Graphics environment for Gazebo
+################
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
     mesa-utils \
     libgl1-mesa-dri \
     libglapi-mesa \
@@ -293,24 +268,21 @@ RUN apt-get update && apt-get install -y \
     libxcursor1 \
     libxcomposite1 \
     libxi6 \
-    libxtst6
+    libxtst6 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Standard init procedure
+################
+# Final setup
+################
+
 ENV DEBIAN_FRONTEND=
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc
+RUN usermod -aG video ${USERNAME}
 
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/.bashrc
-
-RUN usermod -aG video $USERNAME
-
-################
-# Colcon Build - Build inside dockerfile to assure integration
-# Temporary solution. This build and test will be moved to CI.
-################
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils && \
-    apt-get -y autoremove && \
-    apt-get -y clean
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-ENV DEBIAN_FRONTEND=
-
+WORKDIR /workspaces
 CMD ["bash"]
-
