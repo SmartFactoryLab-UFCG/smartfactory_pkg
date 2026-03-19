@@ -47,7 +47,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             [os.path.join(ur, "launch", "ur10.launch.py")]),
             launch_arguments={
-                "robot_ip":"192.168.0.104",
+                "robot_ip":"192.168.0.112",
                 "launch_rviz":"false",
             }.items(),
             condition=IfCondition(LaunchConfiguration('ur10'))
@@ -168,7 +168,7 @@ def generate_launch_description():
         kinect_node,
         rsp_custom,
         rviz,
-        # kinect_aruco_node,
+        kinect_aruco_node,
         astra_aruco_node,
         tf_aruco_kinect,
         tf_map,

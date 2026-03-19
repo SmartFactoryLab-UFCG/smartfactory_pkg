@@ -18,6 +18,7 @@ ros-jazzy-ros1-bridge/log
 **/*.log
 **/*.pyc
 .vscode
+dependencies/libfreenect/build
 .git
 LICENSE
 README.md

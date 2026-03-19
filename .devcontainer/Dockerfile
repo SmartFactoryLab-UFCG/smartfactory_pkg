@@ -226,6 +226,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-zstd-image-transport \
     && rm -rf /var/lib/apt/lists/*
 
+# Aruco prerequisites
+
+RUN apt-get update && \
+    # ROS Jazzy's cv_bridge is built against NumPy 1.x, so keep pip OpenCV on a NumPy 1.x ABI.
+    pip3 install --break-system-packages --ignore-installed "numpy<2" "opencv-python<4.12" "opencv-contrib-python<4.12" transforms3d && \
+    apt-get install -y \
+    ros-${ROS_DISTRO}-cv-bridge \
+    ros-${ROS_DISTRO}-image-transport \
+    ros-${ROS_DISTRO}-image-pipeline  \
+    ros-${ROS_DISTRO}-ur-msgs \
+    ros-${ROS_DISTRO}-pcl-ros && \
+    rm -rf /var/lib/apt/lists/*
+
 # Lint / formatting
 RUN apt-get update && apt-get install -y --no-install-recommends \
     pylint \

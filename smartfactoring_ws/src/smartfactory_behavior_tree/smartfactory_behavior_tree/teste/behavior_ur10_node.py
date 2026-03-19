@@ -9,9 +9,11 @@ from rclpy.node import Node
 from std_msgs.msg import Bool
 from geometry_msgs.msg import PoseArray
 from smartfactory_ur_utils.send_angles import UR10Controller
+from smartfactory_behavior_tree.ur10.ur10_motion import SendConveyorMotion, SendConveyorAction
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import String  # Mudamos para String
 from rclpy.action import ActionClient
+from ur_msgs.srv import SetIO
 
 def run_ros2_command(package, executable):
     """
@@ -174,25 +176,53 @@ class VentosaOnAction(py_trees.behaviour.Behaviour):
 
         return py_trees.common.Status.RUNNING
 class VentosaOn(py_trees.behaviour.Behaviour):
-    def __init__(self, name="VentosaOn"):
+    def __init__(self, node, name="VentosaOn"):
         super().__init__(name)
-        self.process = None
+        self.node = node
+        self.io_client = self.node.create_client(SetIO, '/io_and_status_controller/set_io')
+        self.future1 = None
+        self.future2 = None
 
     def initialise(self):
-        self.process = run_ros2_command('smartfactory_ur_utils', 'ventosa_on')
+        request_pin_1 = SetIO.Request()
+        request_pin_1.fun = 1
+        request_pin_1.pin = 1
+        request_pin_1.state = 1.0
+
+        request_pin_2 = SetIO.Request()
+        request_pin_2.fun = 1
+        request_pin_2.pin = 2
+        request_pin_2.state = 1.0
+
+        if not self.io_client.wait_for_service(timeout_sec=5.0):
+            self.node.get_logger().error("❌ Serviço /io_and_status_controller/set_io não disponível.")
+            self.future1 = None
+            self.future2 = None
+            return
+
+        self.future1 = self.io_client.call_async(request_pin_1)
+        self.future2 = self.io_client.call_async(request_pin_2)
 
     def update(self):
-        if self.process.poll() is None:
-            return py_trees.common.Status.RUNNING
-        elif self.process.returncode == 0:
-            return py_trees.common.Status.SUCCESS
-        else:
+        if self.future1 is None or self.future2 is None:
             return py_trees.common.Status.FAILURE
 
-    def terminate(self, new_status):
-        if self.process and self.process.poll() is None:
-            self.process.terminate()
-            self.process.wait()
+        if not self.future1.done() or not self.future2.done():
+            return py_trees.common.Status.RUNNING
+
+        try:
+            result1 = self.future1.result()
+            result2 = self.future2.result()
+        except Exception as e:
+            self.node.get_logger().error(f"❌ Erro ao acionar a ventosa: {e}")
+            return py_trees.common.Status.FAILURE
+
+        if result1.success and result2.success:
+            self.node.get_logger().info("✅ Ventosa ativada com sucesso!")
+            return py_trees.common.Status.SUCCESS
+
+        self.node.get_logger().error("❌ Falha ao ativar a ventosa.")
+        return py_trees.common.Status.FAILURE
 
 # class SendConveyor(py_trees.behaviour.Behaviour):
 #     def __init__(self, name="VaParaEsteira"):
@@ -217,46 +247,73 @@ class VentosaOn(py_trees.behaviour.Behaviour):
 #             self.process.wait()
 
 class VentosaOff(py_trees.behaviour.Behaviour):
-    def __init__(self, name="VentosaOff"):
+    def __init__(self, node, name="VentosaOff"):
         super().__init__(name)
-        self.process = None
+        self.node = node
+        self.io_client = self.node.create_client(SetIO, '/io_and_status_controller/set_io')
+        self.future1 = None
+        self.future2 = None
 
     def initialise(self):
-        self.process = run_ros2_command('smartfactory_ur_utils', 'ventosa_off')
+        request_pin_1 = SetIO.Request()
+        request_pin_1.fun = 1
+        request_pin_1.pin = 1
+        request_pin_1.state = 0.0
+
+        request_pin_2 = SetIO.Request()
+        request_pin_2.fun = 1
+        request_pin_2.pin = 2
+        request_pin_2.state = 0.0
+
+        if not self.io_client.wait_for_service(timeout_sec=5.0):
+            self.node.get_logger().error("❌ Serviço /io_and_status_controller/set_io não disponível.")
+            self.future1 = None
+            self.future2 = None
+            return
+
+        self.future1 = self.io_client.call_async(request_pin_1)
+        self.future2 = self.io_client.call_async(request_pin_2)
         
     def update(self):
-        if self.process.poll() is None:
-            return py_trees.common.Status.RUNNING
-        elif self.process.returncode == 0:
-            return py_trees.common.Status.SUCCESS
-        else:
+        if self.future1 is None or self.future2 is None:
             return py_trees.common.Status.FAILURE
 
-    def terminate(self, new_status):
-        if self.process and self.process.poll() is None:
-            self.process.terminate()
-            self.process.wait()
+        if not self.future1.done() or not self.future2.done():
+            return py_trees.common.Status.RUNNING
 
-def create_root(ur10_controller, node):
+        try:
+            result1 = self.future1.result()
+            result2 = self.future2.result()
+        except Exception as e:
+            self.node.get_logger().error(f"❌ Erro ao desligar a ventosa: {e}")
+            return py_trees.common.Status.FAILURE
+
+        if result1.success and result2.success:
+            self.node.get_logger().info("✅ Ventosa desligada com sucesso!")
+            return py_trees.common.Status.SUCCESS
+
+        self.node.get_logger().error("❌ Falha ao desligar a ventosa.")
+        return py_trees.common.Status.FAILURE
+
+def create_root(ur10_controller, send_conveyor_motion, node):
     root = py_trees.composites.Sequence(name="Raiz", memory=True)
 
     check_aruco = CheckArucoPose(node)
     send_angles = MoveUR10ToPose(ur10_controller, node)
     check_vacuum_sensor = CheckUltrasonicGripper(node)
-    ventosa_on = VentosaOn()
-    #send_conveyor = SendConveyor()
-    ventosa_off = VentosaOff()
+    ventosa_on = VentosaOn(node)
+    send_conveyor = SendConveyorAction(send_conveyor_motion)
+    ventosa_off = VentosaOff(node)
 
     seq = py_trees.composites.Sequence(name="Sequencia", memory=True)
     seq.add_children([
-        check_aruco, send_angles, check_vacuum_sensor, 
-        ventosa_on, ventosa_off
+        check_aruco,
+        send_angles,
+        ventosa_on,
+        check_vacuum_sensor,
+        send_conveyor,
+        ventosa_off,
     ])
-
-    #     seq.add_children([
-    #     check_aruco, send_angles, check_vacuum_sensor, 
-    #     ventosa_on, send_conveyor, ventosa_off
-    # ])
     root.add_child(seq)
     return root
 
@@ -266,7 +323,8 @@ def main(args=None):
     rclpy.init(args=args)
     node = ArucoPoseSubscriber()
     ur10_controller = UR10Controller()
-    root = create_root(ur10_controller,node)
+    send_conveyor_motion = SendConveyorMotion()
+    root = create_root(ur10_controller, send_conveyor_motion, node)
 
     behavior_tree = py_trees_ros.trees.BehaviourTree(root=root, unicode_tree_debug=True)
 
@@ -284,6 +342,7 @@ def main(args=None):
     executor = rclpy.executors.MultiThreadedExecutor()
     executor.add_node(node)
     executor.add_node(ur10_controller) 
+    executor.add_node(send_conveyor_motion)
     executor.add_node(behavior_tree.node)
 
     try:
@@ -294,11 +353,9 @@ def main(args=None):
         behavior_tree.shutdown()
         node.destroy_node()
         ur10_controller.destroy_node()
+        send_conveyor_motion.destroy_node()
         rclpy.shutdown()
 
 if __name__ == "__main__":
     main()
-
-
-
 
