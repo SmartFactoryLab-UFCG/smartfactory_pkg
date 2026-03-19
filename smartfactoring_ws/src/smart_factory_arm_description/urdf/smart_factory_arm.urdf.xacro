@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<robot name="smartfactory_arm" xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:arg name="gazebo" default="false" />
+  <xacro:include filename="$(find ur_robot_driver)/urdf/ur.urdf.xacro"/>
+  <xacro:include filename="$(find smart_factory_arm_description)/urdf/custom_gripper.urdf.xacro"/>
+  <xacro:include filename="$(find smart_factory_arm_description)/urdf/vacuum_gazebo.urdf.xacro"/>
+  <xacro:custom_gripper parent="$(arg tf_prefix)flange"/>
+  <xacro:if value="$(arg gazebo)">
+    <xacro:vacuum_plugin 
+      reference="left_suction"
+      namespace="/"
+      control_topic="gripper/control"
+      state_topic="gripper/state"/>
+    <xacro:vacuum_plugin 
+      reference="right_suction"
+      namespace="/"
+      control_topic="gripper/control"
+      state_topic="gripper/state"/>
+  </xacro:if>
+
+</robot>

@@ -12,32 +12,30 @@
     "remoteUser" : "smartfactoring_jazzy",
     "runArgs": [
         // This will allow you to use a ptrace-based debugger like C++, Go, and Rust.
-        "--cap-add=SYS_PTRACE",
-        "--security-opt", "seccomp=unconfined",
-        "--network=host",
-        "--ipc=host",
-		// "--privileged",
-		"--runtime=nvidia",
-		"--gpus", "all",
+		"--cap-add=SYS_PTRACE",
+		"--security-opt", "seccomp=unconfined",
+		"--network=host",
+		"--ipc=host",
+		"--privileged",
         "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw",
-		"--name=smartfactoring_jazzy",
         "--device=/dev/dri",
 		"--device=/dev/bus/usb/001",
+		"--device-cgroup-rule=c 81:* rmw",
+		"-v", "/dev/v4l:/dev/v4l",
 		"-v", "/var/run/wpa_supplicant:/var/run/wpa_supplicant",
         "-v", "/sys/class/net:/sys/class/net",
 		"-v", "/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro",
   		"-v", "/usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d:ro",
-		"--device=/dev/video0:/dev/video0",
-    	"--device=/dev/video1:/dev/video1"
-    	// "--device=/dev/video2:/dev/video2"
+		"-v", "/run/udev:/run/udev:ro",
+		"-v", "/etc/udev/rules.d:/etc/udev/rules.d:ro"
+
     ],
 	"containerEnv": {
 		"QT_X11_NO_MITSHM": "1",
 		"DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
 		"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
 		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
-		"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
-		"LIBGL_ALWAYS_SOFTWARE": "1" // Needed for software rendering of opengl
+		"PULSE_SERVER": "${localEnv:PULSE_SERVER}"
 	},
 	// "postStartCommand": "chmod +x ./startup-script.sh && ./startup-script.sh", #TODO
     // Set *default* container specific settings.json values on container create.

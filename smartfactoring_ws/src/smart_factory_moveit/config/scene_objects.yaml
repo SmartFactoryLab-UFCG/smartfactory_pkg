@@ -1,0 +1,64 @@
+# config/scene_objects.yaml
+
+objects:
+  - id: "Treadmill"
+    frame_id: "world"            # optional
+    primitives:
+      - type: box                     # Main box
+        dimensions: [1.7, 0.75, 1.02]      
+        pose:
+          position:    [0.0,  0.875,   -0.13]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Lateral Support
+        dimensions: [0.04, 0.04, 0.11]
+        pose:
+          position:    [0.06, 1.235,  0.435]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Lateral Support
+        dimensions: [0.04, 0.04, 0.11]
+        pose:
+          position:    [0.06,  0.52,   0.435]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Lateral Support
+        dimensions: [0.04, 0.04, 0.11]
+        pose:
+          position:    [0.54,  1.235,   0.435]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Lateral Support
+        dimensions: [0.04, 0.04, 0.11]
+        pose:
+          position:    [0.54,  0.52,   0.435]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Lateral Support
+        dimensions: [0.04, 0.04, 0.11]
+        pose:
+          position:    [-0.45,  1.235,   0.435]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Lateral Support
+        dimensions: [0.04, 0.04, 0.11]
+        pose:
+          position:    [-0.45,  0.52,   0.435]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Basler base
+        dimensions: [0.08, 0.04, 0.58]
+        pose:
+          position:    [0.12,  1.205,   0.67]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Basler base
+        dimensions: [0.08, 0.42, 0.04]
+        pose:
+          position:    [0.12,  1.02,   0.94]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+      - type: box                     # Basler
+        dimensions: [0.12, 0.16, 0.14]
+        pose:
+          position:    [0.12,  0.825,   0.96]
+          orientation: [1.0,  0.0,   0.0, 0.0]
+  - id: "Box"
+    frame_id: "base"            # optional
+    primitives:
+      - type: box                     # Main box
+        dimensions: [0.4, 0.4, 0.33]      
+        pose:
+          position:    [-0.07072,  0.89057,   -0.4825]
+          orientation: [1.0,  0.0,   0.0, 0.0]

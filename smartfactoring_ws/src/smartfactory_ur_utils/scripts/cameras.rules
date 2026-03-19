@@ -1,0 +1,6 @@
+# Astra Pro Plus (ajuste idProduct se diferir do seu dump)
+SUBSYSTEM=="video4linux", ATTR{idVendor}=="2bc5", ATTR{idProduct}=="050f", SYMLINK+="astra_rgb"
+SUBSYSTEM=="video4linux", ATTR{idVendor}=="2bc5", ATTR{idProduct}=="060f", SYMLINK+="astra_depth"
+
+# Kinect v1 camera (libfreenect)
+SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02ae", SYMLINK+="kinect_cam_usb"
