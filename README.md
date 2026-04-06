@@ -1,86 +1,123 @@
-## smartfactory_pkg
+# Smart Factory Package Repository
 
-Monorepo/workspace do SmartFactory (ROS 2 Jazzy). O workspace ROS 2 fica em `smartfactoring_ws/`.
+Monorepo for the Smart Factory manipulation project based on ROS 2 Jazzy.
 
-## Como executar (bringup + Behavior Tree)
+This repository contains the code, simulation assets, experimental material, and documentation used in the study:
 
-### 1) Build
+**Closed-loop grasp verification via structured multi-sensor reasoning under occlusion**
+
+The main ROS 2 workspace is located in `smartfactoring_ws/`.
+
+## Repository overview
+
+This repository supports a UR10-based pick-and-place scenario in which grasp execution happens under partial observability. The project compares:
+
+- an `open-loop` baseline that executes the nominal manipulation sequence;
+- a `closed-loop` execution architecture that verifies task outcomes through a Behavior Tree and multi-sensor evidence.
+
+The central contribution, consistent with the paper, is not a new perception or planning algorithm. It is the execution logic that verifies whether a grasp, transport, and placement actually succeeded under occlusion.
+
+## Main repository structure
+
+- `smartfactoring_ws/`
+  Main ROS 2 workspace containing the runtime stack and in-house packages.
+- `smartfactoring_isaac/`
+  Isaac Sim scene assets and simulation environment files.
+- `dependencies/`
+  Additional third-party dependencies stored outside the ROS 2 source tree.
+- `ros-jazzy-ros1-bridge/`
+  ROS bridge-related workspace artifacts.
+
+## Main workspace packages
+
+The main in-house packages inside `smartfactoring_ws/src/` are:
+
+- `smart_factory_bringup`
+- `smart_factory_arm_description`
+- `smartfactory_description`
+- `smartfactory_aruco_poses`
+- `smartfactory_ur_utils`
+- `smartfactory_behavior_tree`
+- `smart_factory_moveit`
+- `external_pkgs`
+
+See the workspace-level documentation for details:
+
+- [smartfactoring_ws/README.md](/workspaces/smartfactory_pkg/smartfactoring_ws/README.md)
+
+## Architecture summary
+
+At a high level, the implemented runtime pipeline is:
+
+1. cameras publish observations of the workspace
+2. ArUco nodes estimate marker poses
+3. pose utilities filter the target pose
+4. kinematics utilities generate UR10 joint targets
+5. the robot executes motion via ROS 2 control interfaces
+6. suction and marker signals are evaluated during execution
+7. a Behavior Tree decides whether to continue, fail, or recover
+
+This reflects the closed-loop execution model described in the article: task progression depends on verified environmental state changes, not only on whether an action was sent.
+
+## Quick start
+
+### 1. Build the ROS 2 workspace
 
 ```bash
 cd /workspaces/smartfactory_pkg/smartfactoring_ws
 source /opt/ros/jazzy/setup.bash
-colcon build --symlink-install
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --symlink-install --executor sequential
 source install/setup.bash
 ```
 
-### 2) Subir a cena (bringup)
+### 2. Start the main bringup
 
-Em um terminal:
+In one terminal:
 
 ```bash
+cd /workspaces/smartfactory_pkg/smartfactoring_ws
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
 ros2 launch smart_factory_bringup smart_factory_scene.launch.py
 ```
 
-Argumentos do launch (default `true`): `rviz`, `kinect`, `astra`, `ur10`
+### 3. Run one of the execution modes
 
-```bash
-ros2 launch smart_factory_bringup smart_factory_scene.launch.py rviz:=false
-ros2 launch smart_factory_bringup smart_factory_scene.launch.py kinect:=true astra:=false
-ros2 launch smart_factory_bringup smart_factory_scene.launch.py ur10:=false
-```
-
-### 3) Rodar a Behavior Tree (pick and place)
-
-Em outro terminal:
+In another terminal:
 
 ```bash
 cd /workspaces/smartfactory_pkg/smartfactoring_ws
 source install/setup.bash
+```
+
+Open-loop baseline:
+
+```bash
+ros2 run smartfactory_behavior_tree behavior_pick_and_place
+```
+
+Closed-loop execution:
+
+```bash
 ros2 run smartfactory_behavior_tree pick_and_place
 ```
 
-Documentação da BT (detalhada): `smartfactoring_ws/src/smartfactory_behavior_tree/readme.md`
+## Where to look next
 
-## O que o bringup faz
+- Workspace overview:
+  [smartfactoring_ws/README.md](/workspaces/smartfactory_pkg/smartfactoring_ws/README.md)
+- Bringup package:
+  [smart_factory_bringup/README.md](/workspaces/smartfactory_pkg/smartfactoring_ws/src/smart_factory_bringup/README.md)
+- Behavior Tree package:
+  [smartfactory_behavior_tree/README.md](/workspaces/smartfactory_pkg/smartfactoring_ws/src/smartfactory_behavior_tree/README.md)
+- UR10 utilities:
+  [smartfactory_ur_utils/README.md](/workspaces/smartfactory_pkg/smartfactoring_ws/src/smartfactory_ur_utils/README.md)
+- Isaac Sim assets:
+  [smartfactoring_isaac/README.md](/workspaces/smartfactory_pkg/smartfactoring_isaac/README.md)
 
-Launch: `smartfactoring_ws/src/smart_factory_bringup/launch/smart_factory_scene.launch.py`
+## Notes
 
-Ele inicia (condicionalmente):
-- UR10 (`ur_robot_driver`) e `robot_state_publisher` do braço
-- Kinect + Astra
-- `aruco_pose_estimation` para Kinect e Astra (tópicos `*/aruco/markers`)
-- TF/descrições (`robot_state_publisher` de câmeras, `map -> world`)
-- `smartfactory_aruco_poses/filtered_pose` (filtragem/suavização)
-- `smartfactory_ur_utils/calculate_kinematics` (gera `/ur10/calculated_joint_angles`)
-- `smartfactory_ur_utils/vacuum_grip_detect` (gera `/vacuum_gripper_status`)
-- RViz (config `smart_factory_scene.rviz`)
-
-## Como a Behavior Tree funciona (resumo)
-
-Supervisor: `smartfactoring_ws/src/smartfactory_behavior_tree/smartfactory_behavior_tree/supervisores/pick_and_place.py`
-
-Estrutura (alto nível):
-
-- **Raiz = Selector**
-  - **Ramo A (peça presente)**: executa `pick + carry + release`.
-  - **Ramo B (sem peça)**: loga/aguarda até uma peça aparecer.
-
-Ramo A (sequência simplificada):
-- `CheckArucoPose` (topo/target): habilita o ciclo quando o marcador do topo está detectado.
-- `MoveUR10`: envia trajetória via action usando `/ur10/calculated_joint_angles`.
-- `VentosaOn` + `CheckUltrasonicGripper`: aciona a ventosa e valida com `/vacuum_gripper_status`.
-- `WaitAstraId5`: confirma que a Astra vê os marcadores laterais (id=5) de forma estável.
-- `CarryToConveyor` (**Parallel**):
-  - `SendConveyorAction`: move o UR10 para a região da esteira.
-  - `MonitorCarry`: monitora redundâncias durante o movimento (falha se vácuo cair, se Astra perder id=5, e registra evidência do Kinect id=0).
-- `VentosaOff` + `ConfirmPlaced`: desliga a ventosa, confirma vácuo liberado e usa “id=5 visto → id=5 some” como evidência de que a esteira levou a peça.
-
-Referência completa: `smartfactoring_ws/src/smartfactory_behavior_tree/README.md`
-
-## Como o projeto funciona (resumo)
-
-Pipeline típico:
-- Percepção (AruCo) → pose(s) → cinemática → UR10 executa trajetória → ventosa pega/solta
-- `smartfactory_behavior_tree` coordena o fluxo com redundância usando:
-  - Kinect/Astra `*/aruco/markers` (`aruco_interfaces/msg/ArucoMarkers`)
-  - sensor de vácuo em `/vacuum_gripper_status`
+- The repository mixes runtime code, simulation assets, vendored dependencies, and experimental artifacts.
+- Some values in the current implementation, such as hardware IP addresses, offsets, thresholds, and topic assumptions, are specific to the original experimental setup.

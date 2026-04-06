@@ -2,6 +2,7 @@ smartfactoring_ws/install
 smartfactoring_ws/build
 smartfactoring_ws/log
 smartfactoring_ws/rosbags/*
+ros-jazzy-ros1-bridge/log
 *.pyc
 .vscode/settings.json
 *.pt
