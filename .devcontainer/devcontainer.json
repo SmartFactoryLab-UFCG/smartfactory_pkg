@@ -4,50 +4,67 @@
 	"build": {
 		"args": {
 			"WORKSPACE": "${containerWorkspaceFolder}"
-		}
+		},
+		"target": "smartfactoring_jazzy"
 	},
     "dockerFile": "Dockerfile",
     // This will launch the container as a non-root user
-    "remoteUser" : "smartfactory-lab",
-   	"runArgs": [
+    "remoteUser" : "smartfactoring_jazzy",
+    "runArgs": [
         // This will allow you to use a ptrace-based debugger like C++, Go, and Rust.
-        "--cap-add=SYS_PTRACE",
-        "--security-opt", "seccomp=unconfined",
-        "--network=host",
-        "--ipc=host",
+		"--cap-add=SYS_PTRACE",
+		"--security-opt", "seccomp=unconfined",
+		"--network=host",
+		"--ipc=host",
+		"--privileged",
         "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw",
-		"--name=smartfactory-lab",
         "--device=/dev/dri",
-		"--device=/dev/bus/usb/001"
-		// "--device=/dev/ttyUSB0"
+		"--device=/dev/bus/usb/001",
+		"--device-cgroup-rule=c 81:* rmw",
+		"-v", "/dev/v4l:/dev/v4l",
+		"-v", "/var/run/wpa_supplicant:/var/run/wpa_supplicant",
+        "-v", "/sys/class/net:/sys/class/net",
+		"-v", "/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro",
+  		"-v", "/usr/share/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d:ro",
+		"-v", "/run/udev:/run/udev:ro",
+		"-v", "/etc/udev/rules.d:/etc/udev/rules.d:ro"
+
     ],
 	"containerEnv": {
 		"QT_X11_NO_MITSHM": "1",
 		"DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
 		"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
 		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
-		"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
-		"LIBGL_ALWAYS_SOFTWARE": "1" // Needed for software rendering of opengl
+		"PULSE_SERVER": "${localEnv:PULSE_SERVER}"
 	},
 	// "postStartCommand": "chmod +x ./startup-script.sh && ./startup-script.sh", #TODO
     // Set *default* container specific settings.json values on container create.
 	"customizations": {
 		"vscode": {
 			"extensions": [
+                "alessandrosofia.ros2-topic-viewer",
 				"althack.ament-task-provider",
+                "ban.spellright",
 				"betwo.b2-catkin-tools",
-				"DotJoshJohnson.xml",
-				"microhobby.bitbake2",
+				"dotjoshjohnson.xml",
 				"ms-azuretools.vscode-docker",
-				"ms-iot.vscode-ros",
+                "ms-azuretools.vscode-containers",
+                "ms-python.debugpy",
 				"ms-python.python",
+				"ms-python.pylint",
+                "ms-python.vscode-pylance",
 				"ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
+                "ms-vscode.cpptools-themes",
 				"ms-vscode.cmake-tools",
+				"ranch-hand-robotics.rde-pack",
 				"redhat.vscode-yaml",
 				"smilerobotics.urdf",
 				"streetsidesoftware.code-spell-checker",
+                "streetsidesoftware.code-spell-checker-portuguese-brazilian",
 				"twxs.cmake",
 				"yzhang.markdown-all-in-one",
+                "yocto-project.yocto-bitbake",
 				"zachflower.uncrustify"
 			]
 		}

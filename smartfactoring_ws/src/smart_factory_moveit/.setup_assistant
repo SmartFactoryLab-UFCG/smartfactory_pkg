@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: smart_factory_arm_description
+    relative_path: urdf/smart_factory_arm.urdf
+  srdf:
+    relative_path: config/smartfactory_arm.srdf
+  package_settings:
+    author_name: Felipe Nascimento
+    author_email: felipe.nascimento@virtus.ufcg.edu.br
+    generated_timestamp: 1756152755
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

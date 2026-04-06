@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:macro name="vacuum_plugin" params="reference namespace:=/ control_topic state_topic">
+    <gazebo reference="${reference}">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo>
+        <plugin name="ros_vacuum_gripper" filename="libROSVacuumGripperPlugin.so">
+        <grasp_check>
+            <detach_steps>40</detach_steps>
+            <attach_steps>1</attach_steps>
+            <min_contact_count>250</min_contact_count>
+        </grasp_check>
+
+        <suction_cup_link>${reference}</suction_cup_link>
+
+        <!-- ROS -->
+        <robot_namespace>${namespace}</robot_namespace>
+        <control_topic>${control_topic}</control_topic>
+        <state_topic>${state_topic}</state_topic>
+        </plugin>
+    </gazebo>
+</xacro:macro>
+
+</robot>

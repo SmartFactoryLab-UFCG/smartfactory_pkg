@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="$(arg name)">
+
+  <!-- robot name parameter -->
+  <xacro:arg name="name" default="ur10"/>
+
+  <xacro:include filename="$(find smart_factory_moveit)/srdf/smartfactory_arm.srdf"/>
+
+  <xacro:ur_srdf/>
+
+</robot>

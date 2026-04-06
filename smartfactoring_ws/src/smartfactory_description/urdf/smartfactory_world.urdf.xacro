@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot name="smartfactory" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="smartfactory_world">
+  <!-- Definindo o link world -->
+  <link name="world"/>
+
+  <!-- Adicione outros links e joints do seu robô abaixo -->
+</xacro:macro>
+</robot>

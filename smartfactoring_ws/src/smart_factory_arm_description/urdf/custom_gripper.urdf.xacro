@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<robot name="custom_gripper" xmlns:xacro="http://ros.org/wiki/xacro">
+    
+  <xacro:property name="extender_radius" value="0.03"/>
+  <xacro:property name="extender_length" value="0.2535"/>
+  <xacro:property name="gripper_wrist_length" value="0.205"/>
+  <xacro:property name="gripper_wrist_height" value="0.025"/>
+  <xacro:property name="gripper_middle_length" value="0.205"/>
+  <xacro:property name="gripper_middle_height" value="0.025"/>
+  <xacro:property name="finger_length" value="0.04"/>
+  <xacro:property name="finger_height" value="0.07"/>
+
+  <xacro:macro name="custom_gripper" params="parent">
+
+    <joint name="extender_joint" type="fixed">
+      <parent link="${parent}" />
+      <child link="extender" />
+      <origin xyz="-0.005 0 0" rpy="0 ${pi/2} 0" />
+    </joint>
+
+    <link name="extender">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}"/>
+        <geometry>
+          <mesh filename="package://smart_factory_arm_description/meshes/Garra_Completa_Extensor_Corrected.stl"/>
+        </geometry>
+        <material name="light_grey">
+          <color rgba="0.6 0.6 0.6 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${extender_length/2}" rpy="0 0 ${pi}"/>
+        <geometry>
+          <cylinder radius="${extender_radius}" length="${extender_length}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.7" />
+        <origin xyz="0 0 ${extender_length/2}" />
+        <inertia ixx="0.003906131" ixy="0.0" ixz="0.0" 
+                 iyy="0.003906131" iyz="0.0"
+                 izz="0.000315" />
+      </inertial>
+    </link>
+
+    <joint name="gripper_wrist_joint" type="fixed">
+      <parent link="extender" />
+      <child link="gripper_wrist" />
+      <origin xyz="0 0 ${extender_length}" rpy="0 0 0" />
+    </joint>
+
+    <link name="gripper_wrist">
+      <collision>
+        <origin xyz="0 0.0025 ${gripper_wrist_height/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="${gripper_wrist_height} ${gripper_wrist_length} ${gripper_wrist_height}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.35" />
+        <origin xyz="0 0.0025 ${gripper_wrist_height/2}" />
+        <inertia ixx="0.001243958" ixy="0.0" ixz="0.0" 
+                 iyy="0.000036458" iyz="0.0"
+                 izz="0.001243958" />
+      </inertial>
+    </link>
+
+    <joint name="gripper_middle_joint" type="fixed">
+      <parent link="gripper_wrist" />
+      <child link="gripper_middle" />
+      <origin xyz="0 0 ${gripper_wrist_height}" rpy="0 0 ${pi/2}" />
+    </joint>
+
+    <link name="gripper_middle">
+      <collision>
+        <origin xyz="0 0.0035 ${gripper_middle_height/2}" rpy="0 0 0"/>
+        <geometry>
+            <box size="${gripper_middle_height*2} 
+                       ${gripper_middle_length} 
+                       ${gripper_middle_height}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.35" />
+        <origin xyz="0 0.0035 ${gripper_middle_height/2}" />
+        <inertia ixx="0.001243958" ixy="0.0" ixz="0.0" 
+                 iyy="0.000036458" iyz="0.0"
+                 izz="0.001243958" />
+      </inertial>
+    </link>
+
+    <joint name="left_finger_joint" type="fixed">
+      <parent link="gripper_middle" />
+      <child link="left_finger" />
+      <origin xyz="0 -${(gripper_middle_length/2) - (finger_length/2) -0.0035} 
+                   ${gripper_middle_height/3}" rpy="0 0 ${pi/2}" />
+    </joint>
+
+    <link name="left_finger">
+      <collision>
+        <origin xyz="0 ${finger_length/2} ${finger_height/2}" rpy="0 0 0"/>
+        <geometry>
+            <box size="${finger_length} ${finger_length} ${finger_height}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.05" />
+        <origin xyz="0 ${finger_length/2} ${finger_height/2}" />
+        <inertia ixx="0.000025417" ixy="0.0" ixz="0.0" 
+                 iyy="0.000025417" iyz="0.0"
+                 izz="0.000001667" />
+      </inertial>
+    </link>
+
+    <joint name="right_finger_joint" type="fixed">
+      <parent link="gripper_middle" />
+      <child link="right_finger" />
+      <origin xyz="0 ${(gripper_middle_length/2) - (finger_length/2) + 0.0035} 
+                   ${gripper_middle_height/3}" rpy="0 0 ${pi/2}" />
+    </joint>
+
+    <link name="right_finger">
+      <collision>
+        <origin xyz="0 ${finger_length/2} ${finger_height/2}" rpy="0 0 0"/>
+        <geometry>
+            <box size="${finger_length} ${finger_length} ${finger_height}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.05" />
+        <origin xyz="0 ${finger_length/2} ${finger_height/2}" />
+        <inertia ixx="0.000025417" ixy="0.0" ixz="0.0" 
+                 iyy="0.000025417" iyz="0.0"
+                 izz="0.000001667" />
+      </inertial>
+    </link>
+
+    <joint name="left_suction_joint" type="fixed">
+      <parent link="left_finger" />
+      <child link="left_suction" />
+      <origin xyz="0 0 ${finger_height}" rpy="0 0 ${pi/2}" />
+    </joint>
+
+    <link name="left_suction">
+    </link>
+
+    <joint name="right_suction_joint" type="fixed">
+      <parent link="right_finger" />
+      <child link="right_suction" />
+      <origin xyz="0 0 ${finger_height}" rpy="0 0 ${pi/2}" />
+    </joint>
+
+    <link name="right_suction">
+    </link>
+
+  </xacro:macro>
+</robot>
