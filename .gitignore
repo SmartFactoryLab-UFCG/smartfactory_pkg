@@ -1,8 +1,9 @@
-smartfactory_ws/install
-smartfactory_ws/build
-smartfactory_ws/log
+smartfactoring_ws/install
+smartfactoring_ws/build
+smartfactoring_ws/log
+smartfactoring_ws/rosbags/*
+ros-jazzy-ros1-bridge/log
 *.pyc
 .vscode/settings.json
-smartfactory_ws/rosbags
-dependencies/libpylon/pylon-supplementary-package-for-blaze-1.7.0.35c9275fa_amd64.deb
-dependencies/libpylon/pylon_7.5.0.15658-deb0_amd64.deb
+.vscode
+*.pt
