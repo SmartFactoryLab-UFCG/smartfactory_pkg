@@ -5,4 +5,5 @@ smartfactoring_ws/rosbags/*
 ros-jazzy-ros1-bridge/log
 *.pyc
 .vscode/settings.json
+.vscode
 *.pt

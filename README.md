@@ -59,6 +59,19 @@ At a high level, the implemented runtime pipeline is:
 
 This reflects the closed-loop execution model described in the article: task progression depends on verified environmental state changes, not only on whether an action was sent.
 
+## Visual material
+
+The repository also includes visual support material in `docs/`:
+
+- `docs/camera_views_before_after_occlusion.png`
+  Comparison of the global and top camera views before and after object occlusion during grasping.
+- `docs/closed_loop_execution.mp4`
+  Video of the closed-loop experiment execution.
+
+Preview image:
+
+![Global and top camera views before and after occlusion](./docs/camera_views_before_after_occlusion.png)
+
 ## Quick start
 
 ### 1. Build the ROS 2 workspace
